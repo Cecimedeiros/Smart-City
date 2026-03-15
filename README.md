@@ -3,13 +3,13 @@
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
 ## Índice
-- [Problema Central](#ProblemaCentral)
-- [Alinhamento com políticas públicas](#Alinhamentocompolíticaspúblicas)
-- [Objetivo da solução](#Objetivodasolução)
-- [Principais usuários](#Principaisusuários)
-- [Funcionalidades mínimas esperadas (MVP)](#Funcionalidadesmínimasesperadas(MVP))
-- [Stack tecnológica (front-end e back-end)](#Stacktecnológicafront-endeback-end)
-- [Desenvolvedoras](#Desenvolvedoras)
+- [Problema Central](#-problema-central)
+- [Alinhamento com políticas públicas](#-alinhamento-com-politicas-publicas)
+- [Objetivo da solução](#-objetivo-da-solucao)
+- [Principais usuários](#-principais-usuarios)
+- [Funcionalidades mínimas esperadas (MVP)](#️-funcionalidades-minimas-esperadas-mvp)
+- [Stack tecnológica (front-end e back-end)](#️-stack-tecnologica-front-end-e-back-end)
+- [Desenvolvedoras](#desenvolvedoras)
 
 ## ⚠️ Problema Central
 A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão pública e reduz a eficiência no atendimento à população.
@@ -86,7 +86,7 @@ Exemplos de métricas:
 | Zustand      | Redis                 |
 | API Fake     | Cron Jobs             |
      
-# Desenvolvedoras
+## Desenvolvedoras
 - [Beatriz Paredes](https://www.linkedin.com/in/beatriz-paredes-do-nascimento-91664a182/)
 - [Catarina Loureiro](https://www.linkedin.com/in/catarina-virginia-lima-loureiro-xavier-439731338/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
 - [Cecília Medeiros](https://www.linkedin.com/in/medeiroscecilia22/)
