@@ -2,20 +2,11 @@
 # Plataforma de Gestão de Demandas Urbanas (Smart City)
 ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
-## Índice
-- [Problema Central](#-problema-central)
-- [Alinhamento com políticas públicas](#-alinhamento-com-politicas-publicas)
-- [Objetivo da solução](#-objetivo-da-solucao)
-- [Principais usuários](#-principais-usuarios)
-- [Funcionalidades mínimas esperadas (MVP)](#️-funcionalidades-minimas-esperadas-mvp)
-- [Stack tecnológica (front-end e back-end)](#️-stack-tecnologica-front-end-e-back-end)
-- [Desenvolvedoras](#desenvolvedoras)
-
-## Problema Central
+## ⚠️ Problema Central
 A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão pública e reduz a eficiência no atendimento à população.
 
 
-## Alinhamento com políticas públicas
+## 📖 Alinhamento com políticas públicas
 
 A proposta dialoga com diretrizes brasileiras de transformação digital no setor público.
 
@@ -28,7 +19,7 @@ Entre elas está a **Lei nº 14.129/2021 — Lei do Governo Digital**, que estab
 
 A proposta também se relaciona com a **Estratégia Nacional de Governo Digital**, que incentiva o uso de tecnologias digitais para melhorar a relação entre governo e cidadão.
 
-## Objetivo da solução
+## 🎯 Objetivo da solução
 Neste projeto, construiremos uma aplicação web capaz de:
 
 - Centralizar o registro de demandas urbanas;
@@ -36,7 +27,7 @@ Neste projeto, construiremos uma aplicação web capaz de:
 - Oferecer visibilidade para gestores públicos;
 - Aumentar a transparência no atendimento à população.
 
-## Principais usuários:
+## 👥 Principais usuários:
 
     1. Cidadão
 
@@ -54,7 +45,7 @@ Neste projeto, construiremos uma aplicação web capaz de:
         - Atualizar o status das demandas;
         - Acompanhar indicadores operacionais.
 
-## Funcionalidades mínimas esperadas (MVP)
+## ⚙️ Funcionalidades mínimas esperadas (MVP)
 
 Ao longo do projeto, implementaremos no mínimo as seguintes funcionalidades:
 
@@ -75,7 +66,7 @@ Exemplos de métricas:
 - Tempo médio de atendimento;
 - Distribuição de demandas por categoria.
 
-## Stack tecnológica (front-end e back-end): 
+## 👩‍💻 Stack tecnológica (front-end e back-end): 
 
 |  Front-End   | Back-End + Integração |
 |--------------|-----------------------|
@@ -86,7 +77,7 @@ Exemplos de métricas:
 | Zustand      | Redis                 |
 | API Fake     | Cron Jobs             |
      
-## Desenvolvedoras
+## 🗣️ Desenvolvedoras
 - [Beatriz Paredes](https://www.linkedin.com/in/beatriz-paredes-do-nascimento-91664a182/)
 - [Catarina Loureiro](https://www.linkedin.com/in/catarina-virginia-lima-loureiro-xavier-439731338/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
 - [Cecília Medeiros](https://www.linkedin.com/in/medeiroscecilia22/)
