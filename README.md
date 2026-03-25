@@ -1,88 +1,193 @@
+<h1 align="center">
+  🏙️ Plataforma de Gestão de Demandas Urbanas (Smart City)
+</h1>
 
-# Plataforma de Gestão de Demandas Urbanas (Smart City)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+<p align="center">
+  <img alt="Status" src="https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=for-the-badge">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+</p>
 
-## ⚠️ Problema Central
+<p align="center">
+  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores públicos.
+</p>
+
+---
+
+## 🌍 Visão Geral
+
+A plataforma busca melhorar a comunicação entre o cidadão e a gestão pública, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
+
+### 🎯 O Problema Central
 A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão pública e reduz a eficiência no atendimento à população.
 
-
-## 📖 Alinhamento com políticas públicas
-
-A proposta dialoga com diretrizes brasileiras de transformação digital no setor público.
-
-Entre elas está a **Lei nº 14.129/2021 — Lei do Governo Digital**, que estabelece princípios como:
-
-- Eficiência administrativa;
+### 🏛️ Alinhamento com Políticas Públicas
+A proposta dialoga com as diretrizes de transformação digital no setor público, em especial a **Lei nº 14.129/2021 (Lei do Governo Digital)**, estabelecendo princípios como:
+- Eficiência administrativa e desburocratização;
 - Transparência;
-- Desburocratização;
-- so de soluções digitais para melhorar serviços públicos.
+- Uso de soluções digitais para melhorar os serviços públicos.
 
-A proposta também se relaciona com a **Estratégia Nacional de Governo Digital**, que incentiva o uso de tecnologias digitais para melhorar a relação entre governo e cidadão.
+Relaciona-se também com a **Estratégia Nacional de Governo Digital**, incentivando o uso de tecnologias para melhorar a relação entre o governo e o cidadão.
 
-## 🎯 Objetivo da solução
-Neste projeto, construiremos uma aplicação web capaz de:
+---
 
-- Centralizar o registro de demandas urbanas;
-- Permitir o acompanhamento das solicitações;
-- Oferecer visibilidade para gestores públicos;
-- Aumentar a transparência no atendimento à população.
+## ✅ Objetivos Específicos
+- **Centralizar** o registro de demandas urbanas.
+- **Permitir** o acompanhamento claro das solicitações.
+- **Oferecer** visibilidade operacional para gestores públicos.
+- **Aumentar** a transparência no atendimento à população.
+- **Organizar** o fluxo de demandas com base na prioridade, data e status.
 
-## 👥 Principais usuários:
+---
 
-    1. Cidadão
+## 👥 Perfis de Usuário
 
-        Usuário responsável por:
+### 🧑‍💼 Cidadão
+Responsável por:
+- [x] Registrar demandas urbanas.
+- [x] Visualizar a lista de demandas.
+- [x] Consultar detalhes da sua solicitação.
+- [x] Acompanhar o status das solicitações.
 
-        - Registrar demandas urbanas;
-        - Acompanhar o status das solicitações.
+### 🏢 Gestor Público
+Responsável por:
+- [x] Visualizar demandas registradas de forma global.
+- [x] Filtrar solicitações e atualizar o status manualmente.
+- [x] Acessar o painel administrativo (Dashboard).
+- [x] Acompanhar indicadores operacionais cruciais.
 
-    2. Gestor público
+---
 
-        Usuário responsável por:
+## 🚀 Funcionalidades do MVP
 
-        - Visualizar demandas registradas;
-        - Filtrar solicitações;
-        - Atualizar o status das demandas;
-        - Acompanhar indicadores operacionais.
+- [ ] Cadastro e autenticação de usuários;
+- [ ] Criação e listagem de demandas urbanas;
+- [ ] Visualização detalhada de cada demanda;
+- [ ] Sistema de filtros avançados (data, categoria, local, canal, prioridade e status);
+- [ ] Atualização manual de status (exclusivo para gestores);
+- [ ] Visualizações em formato de Lista e **Kanban**;
+- [ ] Painel administrativo para gestores (Métricas e KPIs);
+- [ ] Integração com API *fake* para simulação de dados.
 
-## ⚙️ Funcionalidades mínimas esperadas (MVP)
+---
 
-Ao longo do projeto, implementaremos no mínimo as seguintes funcionalidades:
+## 📊 Indicadores Operacionais (Gestão)
+O painel administrativo acompanha, no mínimo:
+1. **Volume:** Quantidade total de demandas registradas;
+2. **Eficiência:** Tempo médio de atendimento;
+3. **Distribuição:** Demandas por categoria;
+4. **Geografia:** Demandas por região.
 
-- [ ] Cadastro de usuários;
-- [ ] Autenticação de usuários;
-- [ ] Registro de demandas urbanas;
-- [ ] Definição de categoria da demanda;
-- [ ] Descrição da solicitação;
-- [ ] Registro de localização;
-- [ ] Acompanhamento do status da demanda;
-- [ ] Painel administrativo para gestores;
-- [ ] Filtros por tipo, região e status;
-- [ ] Visualização de métricas básicas.
+---
 
-Exemplos de métricas:
+## 🖥️ Telas do Projeto
 
-- Quantidade de demandas registradas;
-- Tempo médio de atendimento;
-- Distribuição de demandas por categoria.
+### 🥇 Prioridade Alta
+| Tela | Descrição |
+|---|---|
+| **Página Inicial (Cidadão)** | Destaque para o fluxo do cidadão, listagem de demandas, sistema de filtros e acesso à área do gestor. |
+| **Página Inicial (Gestor)** | Listagem geral, filtros avançados, acesso ao painel administrativo e ações de edição/atualização de status. |
+| **Formulário de Demanda** | Coleta de dados da ocorrência (local, descrição, categoria, canal, etc.). |
+| **Detalhes da Demanda** | Visualização completa de todos os dados de um registro específico. |
+| **Painel Administrativo** | Dashboard focado em métricas operacionais para os gestores. |
+| **Sistema de Filtros** | Combinação de filtros por tipo, região, status, data, canal e prioridade. |
 
-## 👩‍💻 Stack tecnológica (front-end e back-end): 
+### 🥈 Prioridade Secundária
+| Tela | Descrição |
+|---|---|
+| **Login e Cadastro** | Acesso segmentado (`Sou cidadão` ou `Sou gestor`) com email e senha. |
 
-|  Front-End   | Back-End + Integração |
-|--------------|-----------------------|
-| TypeScript   | Node.js               |
-| Next.js      | Express               |
-| Chakra UI    | Prisma ORM            |
-| Tailwind CSS | JWT e Cookies         |
-| Zustand      | Redis                 |
-| API Fake     | Cron Jobs             |
-     
-## 🗣️ Desenvolvedoras
-- [Beatriz Paredes](https://www.linkedin.com/in/beatriz-paredes-do-nascimento-91664a182/)
-- [Catarina Loureiro](https://www.linkedin.com/in/catarina-virginia-lima-loureiro-xavier-439731338/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
-- [Cecília Medeiros](https://www.linkedin.com/in/medeiroscecilia22/)
-- [Isabella Batista](https://www.linkedin.com/in/isabella-b-a096452b2/)
-- [Melissa Filgueiras](https://www.linkedin.com/in/melissafilgueiras/)
+---
 
+## ⚙️ Stack Tecnológica
 
-     
+| Camada | Tecnologias Utilizadas |
+| :--- | :--- |
+| **Front-end** | `TypeScript`, `Next.js`, `Chakra UI`, `Tailwind CSS`, `Zustand` |
+| **Back-end & Integração** | `Node.js`, `Express`, `Prisma ORM` |
+| **Autenticação & Dados** | `JWT`, `Cookies`, `Redis`, `Cron Jobs`, `API Fake` |
+
+---
+
+## 🏗️ Arquitetura Front-end
+
+A proposta prioriza uma estrutura simples, escalável e de fácil manutenção, com separação clara de responsabilidades.
+
+<details>
+<summary><b>📂 Estrutura de Pastas (Clique para expandir)</b></summary>
+
+```text
+src/
+  app/
+    (public)/
+      page.tsx
+      login/page.tsx
+      cadastro/page.tsx
+      demandas/
+        nova/page.tsx
+        [id]/page.tsx
+    (gestor)/
+      gestor/
+        page.tsx
+        dashboard/page.tsx
+        kanban/page.tsx
+        demandas/[id]/page.tsx
+    layout.tsx
+    providers.tsx
+
+  components/
+    auth/
+    demands/
+    dashboard/
+    layout/
+
+  services/
+    api.ts
+    auth.service.ts
+    demands.service.ts
+    dashboard.service.ts
+
+  stores/
+    auth.store.ts
+    filter.store.ts
+
+  hooks/
+    useAuth.ts
+    useDemands.ts
+    useDashboard.ts
+
+  types/
+    auth.ts
+    demand.ts
+    dashboard.ts
+    api.ts
+
+  lib/
+    constants.ts
+    formatters.ts
+    guards.ts
+
+  mocks/
+    fake-data.ts
+
+```
+
+</details>
+
+👩‍💻 Equipe de Desenvolvimento
+Projeto em desenvolvimento por uma equipe em formação.
+
+Integrantes atuais:
+
+Beatriz Paredes
+
+Catarina Loureiro
+
+Cecília Medeiros
+
+Isabella Batista
+
+Jose Leandro De Morais Alves Luz
+
+Melissa Filgueiras
