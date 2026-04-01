@@ -102,8 +102,8 @@ export default function Page() {
           </div>
 
           {/* Secção de Filtros */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold mb-4">Filtros</h3>
+          <div className="mb-8 text-black">
+            <h3 className="text-xl font-bold mb-4 ">Filtros</h3>
             <div className="flex gap-4 items-end">
               <Select
                 label="Status"
@@ -168,7 +168,7 @@ export default function Page() {
 
           {/* Lista de Demandas */}
           <div>
-            <h3 className="text-xl font-bold mb-4">
+            <h3 className="text-xl font-bold mb-4 text-black">
               Demandas ({filteredDemands.length})
             </h3>
             <div className="flex flex-col gap-4">
