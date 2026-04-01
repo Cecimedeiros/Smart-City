@@ -1,22 +1,28 @@
-import type { MetadataRoute } from "next";
+import { ImageResponse } from "next/og";
 
-export default function Icon(): MetadataRoute.Icon {
-  return {
-    type: "image/svg+xml",
-    body: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 128 128"
-        role="img"
-        aria-label="Smart City"
+export default function Icon() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          fontSize: 88,
+          background: "#0B1220",
+          color: "#38BDF8",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 24,
+        }}
       >
-        <rect width="128" height="128" rx="24" fill="#0B1220" />
-        <path
-          d="M34 94V52l18-10v52H34Zm24 0V34l18-10v70H58Zm24 0V62l18-10v42H82Z"
-          fill="#38BDF8"
-        />
-      </svg>
+        SC
+      </div>
     ),
-  };
+    {
+      width: 128,
+      height: 128,
+    }
+  );
 }
 
