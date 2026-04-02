@@ -176,18 +176,10 @@ src/
 </details>
 
 👩‍💻 Equipe de Desenvolvimento
-Projeto em desenvolvimento por uma equipe em formação.
 
-Integrantes atuais:
-
-Beatriz Paredes
-
-Catarina Loureiro
-
-Cecília Medeiros
-
-Isabella Batista
-
-Jose Leandro De Morais Alves Luz
-
-Melissa Filgueiras
+- Beatriz Paredes
+- Catarina Loureiro
+- Cecília Medeiros
+- Isabella Batista
+- Jose Leandro De Morais Alves Luz
+- Gabriel Souza
