@@ -47,7 +47,7 @@ Relaciona-se também com a **Estratégia Nacional de Governo Digital**, incentiv
 Responsável por:
 - [x] Registrar demandas urbanas.
 - [x] Visualizar a lista de demandas.
-- [x] Consultar detalhes da sua solicitação.
+- [x] Consultar detalhes das solicitações.
 - [x] Acompanhar o status das solicitações.
 
 ### 🏢 Gestor Público

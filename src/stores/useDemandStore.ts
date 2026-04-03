@@ -1,27 +1,27 @@
 import { create } from "zustand";
-import { Demand, DemandFilters, DemandStatus, DemandCategory, DemandPriority, DemandRegion } from "@/types/demand";
+import { Demand, DemandFilters } from "@/types/demand";
 
-// Mock data com demandas simuladas
+// 1. Aqui ficam seus dados de exemplo (os Mocks)
 const MOCK_DEMANDS: Demand[] = [
-  {
+ {
     id: "1",
-    title: "Buraco na via - Centro",
-    location: "Centro",
-    category: "infraestrutura",
-    status: "aberta",
-    priority: "alta",
-    region: "norte",
-    description: "Buraco grande na via principal",
+    title: "Grande concentração de lixo",
+    location: "Parque da Macaxeira",
+    category: "Coleta de lixo",
+    status: "Aberta",
+    priority: "Alta",
+    region: "Região Metropolitana do Recife",
+    description: "Muito lixo na frente do parque",
     createdAt: "2026-03-15",
   },
   {
     id: "2",
-    title: "Iluminação deficiente",
+    title: "Poste com a lâmpada queimada",
     location: "Bairro Vila",
-    category: "iluminacao",
-    status: "em_analise",
-    priority: "media",
-    region: "sul",
+    category: "Iluminação Pública",
+    status: "Em_analise",
+    priority: "Media",
+    region: "Sertão",
     description: "Falta de iluminação em vários pontos",
     createdAt: "2026-03-20",
   },
@@ -29,32 +29,32 @@ const MOCK_DEMANDS: Demand[] = [
     id: "3",
     title: "Árvore caída",
     location: "Parque Municipal",
-    category: "poda",
-    status: "aberta",
-    priority: "alta",
-    region: "leste",
+    category: "Outros Empecilhos",
+    status: "Aberta",
+    priority: "Alta",
+    region: "Região Metropolitana do Recife",
     description: "Árvore caída bloqueando a passagem",
     createdAt: "2026-03-18",
   },
   {
     id: "4",
-    title: "Fuga de água",
+    title: "Cratera",
     location: "Rua das Flores",
-    category: "saneamento",
-    status: "em_analise",
-    priority: "media",
-    region: "oeste",
-    description: "Vazamento de água na tubulação principal",
+    category: "Manutenção de vias",
+    status: "Em_analise",
+    priority: "Media",
+    region: "Outra",
+    description: "Buraco enorme do meio da rua",
     createdAt: "2026-03-19",
   },
   {
     id: "5",
     title: "Poça de água na calçada",
     location: "Avenida Principal",
-    category: "saneamento",
-    status: "aberta",
-    priority: "baixa",
-    region: "norte",
+    category: "Saneamento",
+    status: "Aberta",
+    priority: "Baixa",
+    region: "Agreste",
     description: "Acúmulo de água prejudicando pedestres",
     createdAt: "2026-03-17",
   },
@@ -62,25 +62,28 @@ const MOCK_DEMANDS: Demand[] = [
     id: "6",
     title: "Semáforo com defeito",
     location: "Avenida Brasil",
-    category: "infraestrutura",
-    status: "em_analise",
-    priority: "alta",
-    region: "sul",
+    category: "Sinalização de Trânsito",
+    status: "Em_analise",
+    priority: "Alta",
+    region: "Região Metropolitana do Recife",
     description: "Semáforo não está funcionando",
     createdAt: "2026-03-16",
   },
+
 ];
 
 interface DemandStore {
   demands: Demand[];
   filters: DemandFilters;
+  addDemand: (newDemand: Demand) => void; 
+  
   setFilters: (filters: Partial<DemandFilters>) => void;
   resetFilters: () => void;
   getFilteredDemands: () => Demand[];
   getDemandStats: () => {
     total: number;
-    byCategory: Record<DemandCategory, number>;
-    byRegion: Record<DemandRegion, number>;
+    byCategory: Record<string, number>;
+    byRegion: Record<string, number>;
   };
 }
 
@@ -95,30 +98,25 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
   demands: MOCK_DEMANDS,
   filters: defaultFilters,
 
-  setFilters: (newFilters: Partial<DemandFilters>) =>
+  addDemand: (newDemand: Demand) =>
     set((state) => ({
-      filters: {
-        ...state.filters,
-        ...newFilters,
-      },
+      demands: [newDemand, ...state.demands],
     })),
 
-  resetFilters: () =>
-    set({
-      filters: defaultFilters,
-    }),
+  setFilters: (newFilters: Partial<DemandFilters>) =>
+    set((state) => ({
+      filters: { ...state.filters, ...newFilters },
+    })),
+
+  resetFilters: () => set({ filters: defaultFilters }),
 
   getFilteredDemands: () => {
     const state = get();
     return state.demands.filter((demand) => {
-      if (state.filters.status && demand.status !== state.filters.status)
-        return false;
-      if (state.filters.category && demand.category !== state.filters.category)
-        return false;
-      if (state.filters.region && demand.region !== state.filters.region)
-        return false;
-      if (state.filters.priority && demand.priority !== state.filters.priority)
-        return false;
+      if (state.filters.status && demand.status !== state.filters.status) return false;
+      if (state.filters.category && demand.category !== state.filters.category) return false;
+      if (state.filters.region && demand.region !== state.filters.region) return false;
+      if (state.filters.priority && demand.priority !== state.filters.priority) return false;
       return true;
     });
   },
@@ -126,27 +124,14 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
   getDemandStats: () => {
     const state = get();
     const demands = state.demands;
-
     const total = demands.length;
 
-    const byCategory: Record<string, number> = {
-      infraestrutura: 0,
-      saneamento: 0,
-      outra: 0,
-      iluminacao: 0,
-      poda: 0,
-    };
-
-    const byRegion: Record<string, number> = {
-      norte: 0,
-      sul: 0,
-      leste: 0,
-      oeste: 0,
-    };
+    const byCategory: Record<string, number> = {};
+    const byRegion: Record<string, number> = {};
 
     demands.forEach((demand) => {
-      byCategory[demand.category]++;
-      byRegion[demand.region]++;
+      byCategory[demand.category] = (byCategory[demand.category] || 0) + 1;
+      byRegion[demand.region] = (byRegion[demand.region] || 0) + 1;
     });
 
     return { total, byCategory, byRegion };

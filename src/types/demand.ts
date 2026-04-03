@@ -1,7 +1,7 @@
-export type DemandStatus = "aberta" | "em_analise" | "resolvida";
-export type DemandCategory = "infraestrutura" | "saneamento" | "outra" | "iluminacao" | "poda";
-export type DemandPriority = "alta" | "media" | "baixa";
-export type DemandRegion = "norte" | "sul" | "leste" | "oeste";
+export type DemandStatus = "Aberta" | "Em_analise" | "Resolvida";
+export type DemandCategory = "Iluminação Pública" | "Manutenção de vias" | "Saneamento" | "Coleta de lixo" | "Fiscalização" | "Segurança" | "Sinalização de Trânsito" | "Outros Empecilhos";
+export type DemandPriority = "Alta" | "Media" | "Baixa";
+export type DemandRegion = "Região Metropolitana do Recife" | "Zona da Mata" | "Agreste" | "Sertão" | "Outra";
 
 export interface Demand {
   id: string;
