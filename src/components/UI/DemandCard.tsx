@@ -7,23 +7,28 @@ interface DemandCardProps {
 }
 
 const statusConfig: Record<DemandStatus, { color: string; label: string }> = {
-  aberta: { color: "bg-red-600", label: "Aberta" },
-  em_analise: { color: "bg-amber-500", label: "Em Análise" },
-  resolvida: { color: "bg-green-600", label: "Resolvida" },
+  Aberta: { color: "bg-red-600", label: "Aberta" },
+  Em_analise: { color: "bg-amber-500", label: "Em Análise" },
+  Resolvida: { color: "bg-green-600", label: "Resolvida" },
 };
 
 const priorityLabel: Record<DemandPriority, string> = {
-  alta: "Alta",
-  media: "Média",
-  baixa: "Baixa",
+  Alta: "Alta",
+  Media: "Média",
+  Baixa: "Baixa",
 };
 
 const categoryLabel: Record<string, string> = {
-  infraestrutura: "Infraestrutura",
-  saneamento: "Saneamento",
-  outra: "Outra",
-  iluminacao: "Iluminação",
-  poda: "Poda",
+  "Infraestrutura": "Infraestrutura",
+  "Saneamento": "Saneamento",
+  "Outra": "Outra",
+  "Iluminação Pública": "Iluminação Pública",
+  "Manutenção de vias": "Manutenção de vias",
+  "Coleta de lixo": "Coleta de lixo",
+  "Fiscalização": "Fiscalização",
+  "Segurança": "Segurança",
+  "Sinalização de Trânsito": "Sinalização de Trânsito",
+  "Outros Empecilhos": "Outros Empecilhos",
 };
 
 export function DemandCard({ demand, onViewDetails }: DemandCardProps) {

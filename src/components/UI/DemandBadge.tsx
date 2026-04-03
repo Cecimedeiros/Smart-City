@@ -11,15 +11,15 @@ interface DemandBadgeProps {
 }
 
 const colorMap: Record<DemandPriority, string> = {
-  alta: "bg-red-500",
-  media: "bg-yellow-400",
-  baixa: "bg-green-500",
+  Alta: "bg-red-500",
+  Media: "bg-yellow-400",
+  Baixa: "bg-green-500",
 };
 
 const labelMap: Record<DemandPriority, string> = {
-  alta: "Alta",
-  media: "Média",
-  baixa: "Baixa",
+  Alta: "Alta",
+  Media: "Média",
+  Baixa: "Baixa",
 };
 
 export default function DemandBadge({ priority, showLabel = false }: DemandBadgeProps) {

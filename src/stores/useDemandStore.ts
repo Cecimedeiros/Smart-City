@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Demand, DemandFilters } from "@/types/demand";
+import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/demand";
 
 // 1. Aqui ficam seus dados de exemplo (os Mocks)
 const MOCK_DEMANDS: Demand[] = [
@@ -13,6 +13,11 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Região Metropolitana do Recife",
     description: "Muito lixo na frente do parque",
     createdAt: "2026-03-15",
+    fotoUrl: "",
+    endereco: "Parque da Macaxeira, Recife - PE",
+    solicitante: "João Silva",
+    dataRegistro: "15/03/2026 às 10:30",
+    detalhes: "Grande quantidade de lixo acumulado na entrada do parque, atraindo animais e causando incômodo aos visitantes.",
   },
   {
     id: "2",
@@ -24,6 +29,11 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Sertão",
     description: "Falta de iluminação em vários pontos",
     createdAt: "2026-03-20",
+    fotoUrl: "",
+    endereco: "Rua Central, Bairro Vila",
+    solicitante: "Maria Santos",
+    dataRegistro: "20/03/2026 às 14:15",
+    detalhes: "Poste com lâmpada queimada deixando a região sem iluminação durante a noite.",
   },
   {
     id: "3",
@@ -35,6 +45,11 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Região Metropolitana do Recife",
     description: "Árvore caída bloqueando a passagem",
     createdAt: "2026-03-18",
+    fotoUrl: "",
+    endereco: "Parque Municipal, Av. Principal",
+    solicitante: "Pedro Costa",
+    dataRegistro: "18/03/2026 às 08:45",
+    detalhes: "Árvore caída completamente bloqueando a passagem de pedestres e veículos.",
   },
   {
     id: "4",
@@ -46,6 +61,11 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Outra",
     description: "Buraco enorme do meio da rua",
     createdAt: "2026-03-19",
+    fotoUrl: "",
+    endereco: "Rua das Flores, nº 500",
+    solicitante: "Ana Paula",
+    dataRegistro: "19/03/2026 às 11:20",
+    detalhes: "Cratera de grandes dimensões no meio da rua causando risco de acidentes.",
   },
   {
     id: "5",
@@ -57,6 +77,11 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Agreste",
     description: "Acúmulo de água prejudicando pedestres",
     createdAt: "2026-03-17",
+    fotoUrl: "",
+    endereco: "Avenida Principal, próximo à Praça",
+    solicitante: "Carlos Mendes",
+    dataRegistro: "17/03/2026 às 09:00",
+    detalhes: "Acúmulo de água na calçada dificultando a passagem de pedestres.",
   },
   {
     id: "6",
@@ -68,14 +93,23 @@ const MOCK_DEMANDS: Demand[] = [
     region: "Região Metropolitana do Recife",
     description: "Semáforo não está funcionando",
     createdAt: "2026-03-16",
+    fotoUrl: "",
+    endereco: "Avenida Brasil, nº 1200",
+    solicitante: "Fabio Oliveira",
+    dataRegistro: "16/03/2026 às 13:30",
+    detalhes: "Semáforo completamente com defeito prejudicando o fluxo de trânsito.",
   },
-
 ];
 
 interface DemandStore {
   demands: Demand[];
   filters: DemandFilters;
-  addDemand: (newDemand: Demand) => void; 
+  selectedDemand: Demand | null;
+  addDemand: (newDemand: Demand) => void;
+  getDemandById: (id: string) => Demand | undefined;
+  setSelectedDemand: (demand: Demand | null) => void;
+  updateDemandStatus: (id: string, newStatus: DemandStatus) => void;
+  updateDemandPriority: (id: string, newPriority: DemandPriority) => void;
   
   setFilters: (filters: Partial<DemandFilters>) => void;
   resetFilters: () => void;
@@ -97,10 +131,43 @@ const defaultFilters: DemandFilters = {
 export const useDemandStore = create<DemandStore>((set, get) => ({
   demands: MOCK_DEMANDS,
   filters: defaultFilters,
+  selectedDemand: null,
 
   addDemand: (newDemand: Demand) =>
     set((state) => ({
       demands: [newDemand, ...state.demands],
+    })),
+
+  getDemandById: (id: string) => {
+    const state = get();
+    return state.demands.find((demand) => demand.id === id);
+  },
+
+  setSelectedDemand: (demand: Demand | null) =>
+    set({
+      selectedDemand: demand,
+    }),
+
+  updateDemandStatus: (id: string, newStatus: DemandStatus) =>
+    set((state) => ({
+      demands: state.demands.map((demand) =>
+        demand.id === id ? { ...demand, status: newStatus } : demand
+      ),
+      selectedDemand:
+        state.selectedDemand?.id === id
+          ? { ...state.selectedDemand, status: newStatus }
+          : state.selectedDemand,
+    })),
+
+  updateDemandPriority: (id: string, newPriority: DemandPriority) =>
+    set((state) => ({
+      demands: state.demands.map((demand) =>
+        demand.id === id ? { ...demand, priority: newPriority } : demand
+      ),
+      selectedDemand:
+        state.selectedDemand?.id === id
+          ? { ...state.selectedDemand, priority: newPriority }
+          : state.selectedDemand,
     })),
 
   setFilters: (newFilters: Partial<DemandFilters>) =>

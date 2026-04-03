@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Logo from "@/components/UI/Logo";
+import { Button } from "@/components/UI/Button";
 
 export default function CadastroPage() {
+  const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState<"cidadao" | "gestor">("cidadao");
   const [codigoAcesso, setCodigoAcesso] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,16 +21,27 @@ export default function CadastroPage() {
       alert("As senhas não coincidem!");
       return;
     }
-    console.log("Cadastro:", { nome, email, senha, tipoUsuario, codigoAcesso });
+    if (tipoUsuario === "gestor" && !codigoAcesso) {
+      alert("Código de acesso é obrigatório para gestores!");
+      return;
+    }
+
+    setLoading(true);
+    setTimeout(() => {
+      console.log("Cadastro:", { nome, email, senha, tipoUsuario, codigoAcesso });
+      alert("Cadastro realizado com sucesso!");
+      router.push("/login");
+      setLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
       {/* Foto da cidade como fundo */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/recife.jpg')" }}
-   />
+      />
 
       {/* Gradiente roxo→laranja por cima */}
       <div
@@ -37,16 +51,23 @@ export default function CadastroPage() {
         }}
       />
 
-      {/* Logo no topo esquerdo */}
-      <div className="absolute top-8 left-8 z-20">
-        <Logo variant="white" />
-      </div>
+      {/* Navbar */}
+      <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="text-2xl font-bold text-white">Smart City</div>
+        </Link>
+        <Link href="/">
+          <Button variant="outline" size="md" className="text-white border-white">
+            ← Voltar
+          </Button>
+        </Link>
+      </nav>
 
       {/* Card branco centralizado */}
-      <div className="relative z-10 w-full max-w-sm mx-4">
+      <div className="relative z-10 w-full max-w-sm mx-4 mt-20">
         <div className="bg-white rounded-2xl shadow-xl px-8 py-8">
 
-          <h1 className="text-2xl font-bold text-center text-[#8528FF] mb-6">
+          <h1 className="text-2xl font-bold text-center text-purple-600 mb-6">
             Criar conta
           </h1>
 
@@ -61,7 +82,7 @@ export default function CadastroPage() {
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8528FF] focus:border-transparent placeholder:text-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
 
@@ -74,7 +95,7 @@ export default function CadastroPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8528FF] focus:border-transparent placeholder:text-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
 
@@ -88,7 +109,7 @@ export default function CadastroPage() {
                 onChange={(e) => setSenha(e.target.value)}
                 required
                 minLength={8}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8528FF] focus:border-transparent placeholder:text-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
 
@@ -101,7 +122,7 @@ export default function CadastroPage() {
                 value={confirmarSenha}
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8528FF] focus:border-transparent placeholder:text-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent placeholder:text-gray-400"
               />
             </div>
 
@@ -116,7 +137,7 @@ export default function CadastroPage() {
                     value="cidadao"
                     checked={tipoUsuario === "cidadao"}
                     onChange={() => setTipoUsuario("cidadao")}
-                    className="accent-[#8528FF]"
+                    className="accent-purple-600"
                   />
                   Cidadão
                 </label>
@@ -127,7 +148,7 @@ export default function CadastroPage() {
                     value="gestor"
                     checked={tipoUsuario === "gestor"}
                     onChange={() => setTipoUsuario("gestor")}
-                    className="accent-[#8528FF]"
+                    className="accent-purple-600"
                   />
                   Gestor
                 </label>
@@ -137,29 +158,33 @@ export default function CadastroPage() {
             {/* Código de acesso — apenas para Gestor */}
             {tipoUsuario === "gestor" && (
               <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-gray-700">Código de acesso</label>
                 <input
                   type="text"
-                  placeholder="Código de acesso"
+                  placeholder="Código fornecido pelo administrador"
                   value={codigoAcesso}
                   onChange={(e) => setCodigoAcesso(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#8528FF] focus:border-transparent placeholder:text-gray-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent placeholder:text-gray-400"
                 />
               </div>
             )}
 
             {/* Botão de cadastro */}
-            <button
+            <Button
               type="submit"
-              className="w-full py-3 mt-2 rounded-lg font-semibold text-white text-sm bg-[#8528FF] hover:bg-[#7020e0] active:bg-[#5c1ab8] transition-colors duration-200 cursor-pointer"
+              variant="primary"
+              size="md"
+              className="w-full mt-2"
+              disabled={loading}
             >
-              Criar Conta
-            </button>
+              {loading ? "Criando conta..." : "Criar Conta"}
+            </Button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <p className="text-center text-sm text-gray-600 mt-4">
             Já tem conta?{" "}
-            <Link href="/login" className="text-gray-600 hover:text-[#8528FF] font-medium transition-colors">
+            <Link href="/login" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
               Fazer login
             </Link>
           </p>

@@ -69,7 +69,12 @@ export function FormDemanda() {
       status: "Aberta", // Fixo pois é nova
       priority: "Media", // Fixo pois removemos o campo
       description: formData.descricao,
-      createdAt: new Date().toLocaleDateString('pt-BR')
+      createdAt: new Date().toLocaleDateString('pt-BR'),
+      fotoUrl: "",
+      endereco: formData.endereco,
+      solicitante: "Utilizador", // Pode ser preenchido com dados do utilizador
+      dataRegistro: new Date().toLocaleString('pt-BR'),
+      detalhes: formData.descricao,
     }
 
     addDemand(novaDenuncia)
@@ -81,7 +86,7 @@ export function FormDemanda() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-[2rem] shadow-xl w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-4xl shadow-xl w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
       
       {/* COLUNA ESQUERDA */}
       <div className="flex flex-col gap-5">
@@ -137,7 +142,7 @@ export function FormDemanda() {
         {/* Área Principal de Imagem */}
        <div 
         onClick={() => fileInputRef.current?.click()}
-        className="relative flex-grow border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center overflow-hidden hover:border-purple-400 transition-colors cursor-pointer"
+        className="relative grow border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center overflow-hidden hover:border-purple-400 transition-colors cursor-pointer"
         >
         {images[0] ? (
             <>

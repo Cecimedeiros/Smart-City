@@ -13,6 +13,11 @@ export interface Demand {
   region: DemandRegion;
   description?: string;
   createdAt?: string;
+  fotoUrl?: string;
+  endereco: string;
+  solicitante: string;
+  dataRegistro: string;
+  detalhes: string;
 }
 
 export interface DemandFilters {

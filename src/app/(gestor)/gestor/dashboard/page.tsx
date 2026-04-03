@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useDemandStore } from "@/stores/useDemandStore";
 import { DemandFilters } from "@/types/demand";
 import { Button } from "@/components/UI/Button";
@@ -8,6 +9,7 @@ import { Select } from "@/components/UI/Select";
 import { DemandCard } from "@/components/UI/DemandCard";
 
 export default function Page() {
+  const router = useRouter();
   const { filters, setFilters, resetFilters, getFilteredDemands, getDemandStats } =
     useDemandStore();
   const filteredDemands = getFilteredDemands();
@@ -20,7 +22,7 @@ export default function Page() {
 
   const handleViewDetails = (demandId: string) => {
     setSelectedDemandId(demandId);
-    console.log("Viewing demand:", demandId);
+    router.push(`/gestor/demandas/${demandId}`);
   };
 
   const handleApplyFilters = () => {
