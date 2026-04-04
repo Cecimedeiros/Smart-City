@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/UI/Button";
 
 export default function Page() {
@@ -10,17 +9,15 @@ export default function Page() {
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="text-purple-600 font-bold hover:text-purple-700 transition"
+          <button
+            className="text-purple-600 font-bold hover:text-purple-700 transition cursor-not-allowed opacity-60"
+            disabled
           >
             Entrar
-          </Link>
-          <Link href="/cadastro">
-            <Button variant="primary" size="md">
-              Cadastrar
-            </Button>
-          </Link>
+          </button>
+          <Button variant="primary" size="md" disabled>
+            Cadastrar
+          </Button>
         </div>
       </nav>
 
@@ -39,11 +36,9 @@ export default function Page() {
             <p className="text-gray-600 mb-6">
               Registre suas demandas e acompanhe o status em tempo real
             </p>
-            <Link href="/cadastro" className="block">
-              <Button variant="primary" size="md" className="w-full">
-                Cadastrar como Cidadão
-              </Button>
-            </Link>
+            <Button variant="primary" size="md" className="w-full" disabled>
+              Cadastrar como Cidadão
+            </Button>
           </div>
 
           {/* Card Gestor */}
@@ -53,19 +48,17 @@ export default function Page() {
             <p className="text-gray-600 mb-6">
               Gerencie e acompanhe todas as demandas da cidade
             </p>
-            <Link href="/login" className="block">
-              <Button variant="primary" size="md" className="w-full">
-                Acessar Dashboard
-              </Button>
-            </Link>
+            <Button variant="primary" size="md" className="w-full" disabled>
+              Acessar Dashboard
+            </Button>
           </div>
         </div>
 
         <p className="text-gray-600 mt-12">
           Já tem cadastro?{" "}
-          <Link href="/login" className="text-purple-600 font-bold hover:underline">
+          <button className="text-purple-600 font-bold hover:underline cursor-not-allowed opacity-60" disabled>
             Faça login aqui
-          </Link>
+          </button>
         </p>
       </div>
     </div>
