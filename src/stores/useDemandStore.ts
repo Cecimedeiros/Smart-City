@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/demand";
 
-// 1. Aqui ficam seus dados de exemplo (os Mocks)
+
 const MOCK_DEMANDS: Demand[] = [
  {
     id: "1",
@@ -180,10 +180,10 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
   getFilteredDemands: () => {
     const state = get();
     return state.demands.filter((demand) => {
-      if (state.filters.status && demand.status !== state.filters.status) return false;
-      if (state.filters.category && demand.category !== state.filters.category) return false;
-      if (state.filters.region && demand.region !== state.filters.region) return false;
-      if (state.filters.priority && demand.priority !== state.filters.priority) return false;
+      if (state.filters.status && demand.status.trim() !== state.filters.status.trim()) return false;
+      if (state.filters.category && demand.category.trim() !== state.filters.category.trim()) return false;
+      if (state.filters.region && demand.region.trim() !== state.filters.region.trim()) return false;
+      if (state.filters.priority && demand.priority.trim() !== state.filters.priority.trim()) return false;
       return true;
     });
   },

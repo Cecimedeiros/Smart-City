@@ -17,12 +17,12 @@ export default function Page() {
         </div>
       </nav>
 
-      {/* Main Content */}
+      
       <div className="max-w-6xl mx-auto px-4 py-12">
         <h2 className="text-4xl font-bold text-gray-800 mb-8">Painel de Gestão</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Card Dashboard */}
+          
           <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition">
             <div className="mb-4 text-5xl">📊</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Dashboard</h3>
@@ -36,7 +36,7 @@ export default function Page() {
             </Link>
           </div>
 
-          {/* Card Kanban */}
+          
           <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition">
             <div className="mb-4 text-5xl">📋</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Kanban</h3>

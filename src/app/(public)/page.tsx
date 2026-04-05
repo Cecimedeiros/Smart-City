@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/UI/Button";
 
 export default function Page() {
@@ -10,21 +9,19 @@ export default function Page() {
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="text-purple-600 font-bold hover:text-purple-700 transition"
+          <button
+            className="text-purple-600 font-bold hover:text-purple-700 transition cursor-not-allowed opacity-60"
+            disabled
           >
             Entrar
-          </Link>
-          <Link href="/cadastro">
-            <Button variant="primary" size="md">
-              Cadastrar
-            </Button>
-          </Link>
+          </button>
+          <Button variant="primary" size="md" disabled>
+            Cadastrar
+          </Button>
         </div>
       </nav>
 
-      {/* Hero Section */}
+      
       <div className="max-w-6xl mx-auto px-4 py-20 text-center">
         <h2 className="text-5xl font-bold text-gray-900 mb-4">Bem-vindo ao Smart City</h2>
         <p className="text-xl text-gray-600 mb-8">
@@ -32,43 +29,38 @@ export default function Page() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-          {/* Card Cidadão */}
+          
           <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
             <div className="mb-4 text-4xl">👤</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Para Cidadãos</h3>
             <p className="text-gray-600 mb-6">
               Registre suas demandas e acompanhe o status em tempo real
             </p>
-            <Link href="/cadastro" className="block">
-              <Button variant="primary" size="md" className="w-full">
-                Cadastrar como Cidadão
-              </Button>
-            </Link>
+            <Button variant="primary" size="md" className="w-full" disabled>
+              Cadastrar como Cidadão
+            </Button>
           </div>
 
-          {/* Card Gestor */}
+          
           <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
             <div className="mb-4 text-4xl">📋</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Para Gestores</h3>
             <p className="text-gray-600 mb-6">
               Gerencie e acompanhe todas as demandas da cidade
             </p>
-            <Link href="/login" className="block">
-              <Button variant="primary" size="md" className="w-full">
-                Acessar Dashboard
-              </Button>
-            </Link>
+            <Button variant="primary" size="md" className="w-full" disabled>
+              Acessar Dashboard
+            </Button>
           </div>
         </div>
 
         <p className="text-gray-600 mt-12">
           Já tem cadastro?{" "}
-          <Link href="/login" className="text-purple-600 font-bold hover:underline">
+          <button className="text-purple-600 font-bold hover:underline cursor-not-allowed opacity-60" disabled>
             Faça login aqui
-          </Link>
+          </button>
         </p>
       </div>
     </div>
   );
 }
-

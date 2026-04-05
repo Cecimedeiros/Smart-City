@@ -16,7 +16,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Simular login
+    
     setTimeout(() => {
       if (email && senha) {
         if (tipoLogin === "gestor") {
@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-purple-50 to-purple-100">
-      {/* Navbar */}
+      
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
         <Link href="/" className="text-2xl font-bold text-purple-600 hover:text-purple-700">
           Smart City
@@ -45,12 +45,12 @@ export default function LoginPage() {
         </Link>
       </nav>
 
-      {/* Login Form */}
+      
       <div className="max-w-md mx-auto py-12 px-4">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h2>
 
-          {/* Toggle Tipo de Usuário */}
+          
           <div className="flex gap-2 mb-6">
             <button
               onClick={() => setTipoLogin("cidadao")}
@@ -75,7 +75,7 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
+            
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email
@@ -89,7 +89,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Senha */}
+            
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Senha
@@ -103,7 +103,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Botão Login */}
+            
             <Button
               type="submit"
               variant="primary"

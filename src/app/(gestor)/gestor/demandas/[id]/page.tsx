@@ -149,7 +149,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Componente de Detalhes da Demanda */}
+          
           <DemandDetails
             demand={demand}
             onBack={handleBack}
@@ -159,7 +159,7 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Espaço em branco no fundo */}
+      
       <div className="h-12" />
     </div>
   );

@@ -37,13 +37,13 @@ export default function CadastroPage() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-      {/* Foto da cidade como fundo */}
+      
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/recife.jpg')" }}
       />
 
-      {/* Gradiente roxo→laranja por cima */}
+      
       <div
         className="absolute inset-0"
         style={{
@@ -51,7 +51,7 @@ export default function CadastroPage() {
         }}
       />
 
-      {/* Navbar */}
+      
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
         <Link href="/" className="flex items-center gap-2">
           <div className="text-2xl font-bold text-white">Smart City</div>
@@ -63,7 +63,7 @@ export default function CadastroPage() {
         </Link>
       </nav>
 
-      {/* Card branco centralizado */}
+      
       <div className="relative z-10 w-full max-w-sm mx-4 mt-20">
         <div className="bg-white rounded-2xl shadow-xl px-8 py-8">
 
@@ -73,7 +73,7 @@ export default function CadastroPage() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-            {/* Nome completo */}
+            
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-700">Nome completo</label>
               <input
@@ -86,7 +86,7 @@ export default function CadastroPage() {
               />
             </div>
 
-            {/* Email */}
+            
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-700">Email</label>
               <input
@@ -99,7 +99,7 @@ export default function CadastroPage() {
               />
             </div>
 
-            {/* Senha */}
+            
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-700">Senha</label>
               <input
@@ -113,7 +113,7 @@ export default function CadastroPage() {
               />
             </div>
 
-            {/* Confirmar senha */}
+            
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-gray-700">Confirmar senha</label>
               <input
@@ -126,7 +126,7 @@ export default function CadastroPage() {
               />
             </div>
 
-            {/* Tipo de usuário */}
+            
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-700">Tipo de usuário</label>
               <div className="flex gap-6">
@@ -155,7 +155,7 @@ export default function CadastroPage() {
               </div>
             </div>
 
-            {/* Código de acesso — apenas para Gestor */}
+            
             {tipoUsuario === "gestor" && (
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-700">Código de acesso</label>
@@ -170,7 +170,7 @@ export default function CadastroPage() {
               </div>
             )}
 
-            {/* Botão de cadastro */}
+           
             <Button
               type="submit"
               variant="primary"
