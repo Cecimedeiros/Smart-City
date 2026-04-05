@@ -108,12 +108,12 @@ Smart-City/
 
 ### Fluxo Cidadão
 ```
-Inicial (/) → Cadastro (/cadastro) → Login (/login) → Nova Demanda (/demandas/nova)
+Inicial (/) → Cadastro (/cadastro) → Login (/login) → page principal(/puublic)-> Nova Demanda (/demandas/nova)
 ```
 
 ### Fluxo Gestor
 ```
-Inicial (/) → Login (/login) → Dashboard (/gestor/dashboard) → Gerenciar Demandas
+Inicial (/) → Login (/login) →  page primcipal(/gestor) ->Dashboard (/gestor/dashboard) → Gerenciar Demandas
 ```
 
 ---
