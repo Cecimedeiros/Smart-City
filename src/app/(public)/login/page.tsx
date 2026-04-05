@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/UI/Button";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [tipoLogin, setTipoLogin] = useState<"cidadao" | "gestor">("cidadao");
@@ -19,11 +16,7 @@ export default function LoginPage() {
     
     setTimeout(() => {
       if (email && senha) {
-        if (tipoLogin === "gestor") {
-          router.push("/gestor/dashboard");
-        } else {
-          router.push("/demandas/nova");
-        }
+        alert("Login desabilitado: navegação entre páginas foi removida");
       } else {
         alert("Preencha todos os campos!");
       }
@@ -35,14 +28,12 @@ export default function LoginPage() {
     <div className="min-h-screen bg-linear-to-b from-purple-50 to-purple-100">
       
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
-        <Link href="/" className="text-2xl font-bold text-purple-600 hover:text-purple-700">
+        <button className="text-2xl font-bold text-purple-600 hover:text-purple-700 cursor-not-allowed opacity-60" disabled>
           Smart City
-        </Link>
-        <Link href="/">
-          <Button variant="outline" size="md">
-            ← Voltar
-          </Button>
-        </Link>
+        </button>
+        <Button variant="outline" size="md" disabled>
+          ← Voltar
+        </Button>
       </nav>
 
       
@@ -118,9 +109,9 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Não tem cadastro?{" "}
-              <Link href="/cadastro" className="text-purple-600 font-bold hover:underline">
+              <button className="text-purple-600 font-bold hover:underline cursor-not-allowed opacity-60" disabled>
                 Cadastre-se aqui
-              </Link>
+              </button>
             </p>
           </div>
         </div>

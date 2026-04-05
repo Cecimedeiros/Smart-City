@@ -1,12 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/UI/Button";
 
 export default function CadastroPage() {
-  const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -29,8 +26,7 @@ export default function CadastroPage() {
     setLoading(true);
     setTimeout(() => {
       console.log("Cadastro:", { nome, email, senha, tipoUsuario, codigoAcesso });
-      alert("Cadastro realizado com sucesso!");
-      router.push("/login");
+      alert("Cadastro desabilitado: navegação entre páginas foi removida");
       setLoading(false);
     }, 1000);
   };
@@ -53,14 +49,12 @@ export default function CadastroPage() {
 
       
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
-        <Link href="/" className="flex items-center gap-2">
+        <button className="flex items-center gap-2 cursor-not-allowed opacity-60" disabled>
           <div className="text-2xl font-bold text-white">Smart City</div>
-        </Link>
-        <Link href="/">
-          <Button variant="outline" size="md" className="text-white border-white">
-            ← Voltar
-          </Button>
-        </Link>
+        </button>
+        <Button variant="outline" size="md" className="text-white border-white" disabled>
+          ← Voltar
+        </Button>
       </nav>
 
       
@@ -184,9 +178,9 @@ export default function CadastroPage() {
 
           <p className="text-center text-sm text-gray-600 mt-4">
             Já tem conta?{" "}
-            <Link href="/login" className="text-purple-600 hover:text-purple-700 font-semibold transition-colors">
+            <button className="text-purple-600 hover:text-purple-700 font-semibold transition-colors cursor-not-allowed opacity-60" disabled>
               Fazer login
-            </Link>
+            </button>
           </p>
         </div>
       </div>
