@@ -35,8 +35,8 @@ export default function Page() {
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm border-b border-gray-200">
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
-          <a href="/gestor/gestor" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
-            Gestão
+          <a href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
+            Painel de gestão
           </a>
           <a href="/login" className="text-purple-400 font-normal hover:text-purple-500">
             Sair
@@ -46,7 +46,7 @@ export default function Page() {
 
       
       <div className="w-full h-64 bg-linear-to-r from-indigo-900 via-fuchsia-500 to-orange-500 flex items-start justify-center pt-10">
-        <h2 className="text-white text-4xl font-bold">Gestão</h2>
+        <h2 className="text-white text-4xl font-bold">Painel de gestão </h2>
       </div>
 
      
@@ -54,51 +54,50 @@ export default function Page() {
         <div className="-mt-24 bg-white rounded-2xl shadow-xl p-8 relative z-10">
           
           <div className="grid grid-cols-3 gap-6 mb-8">
-            
-            <div className="bg-purple-600 rounded-xl p-6 text-white">
-              <p className="text-sm font-semibold mb-2">Demandas registradas</p>
-              <p className="text-5xl font-bold">{stats.total}</p>
+            {/* Card 1 - Total de Demandas */}
+            <div className="bg-purple-600 rounded-xl p-6 text-white flex flex-col items-center justify-center min-h-[160px] gap-2">
+              <p className="text-base font-semibold text-white/70 uppercase tracking-widest">Demandas registradas</p>
+              <p className="text-7xl font-extrabold leading-none">{stats.total}</p>
             </div>
 
             
             <div className="bg-purple-600 rounded-xl p-6 text-white">
-              <p className="text-sm font-semibold mb-4">Demandas por categoria</p>
-              <div className="text-xs space-y-2">
-                <div className="flex justify-between">
-                  <span>Infraestrutura</span>
-                  <span className="font-bold">{stats.byCategory.infraestrutura}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Saneamento</span>
-                  <span className="font-bold">{stats.byCategory.saneamento}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Iluminação</span>
-                  <span className="font-bold">{stats.byCategory.iluminacao}</span>
-                </div>
+              <p className="text-lg font-bold mb-4 text-white/70">Demandas por categoria</p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                {[
+                  "Coleta de lixo",
+                  "Iluminação Pública",
+                  "Manutenção de vias",
+                  "Saneamento",
+                  "Fiscalização",
+                  "Segurança",
+                  "Sinalização de Trânsito",
+                  "Outros Empecilhos",
+                ].map((cat) => (
+                  <div key={cat} className="flex items-center justify-between gap-1">
+                    <span className="truncate">{cat}</span>
+                    <span className="font-bold shrink-0">{stats.byCategory[cat] ?? 0}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             
             <div className="bg-purple-600 rounded-xl p-6 text-white">
-              <p className="text-sm font-semibold mb-4">Demandas por região</p>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="text-center">
-                  <p className="text-xs">Norte</p>
-                  <p className="text-xl font-bold">{stats.byRegion.norte}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs">Sul</p>
-                  <p className="text-xl font-bold">{stats.byRegion.sul}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs">Leste</p>
-                  <p className="text-xl font-bold">{stats.byRegion.leste}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs">Oeste</p>
-                  <p className="text-xl font-bold">{stats.byRegion.oeste}</p>
-                </div>
+              <p className="text-lg font-bold mb-4 text-white/70">Demandas por região</p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                {[
+                  "RMR",
+                  "Zona da Mata",
+                  "Agreste",
+                  "Sertão",
+                  "Outra",
+                ].map((reg) => (
+                  <div key={reg} className="flex items-center justify-between gap-1">
+                    <span className="truncate">{reg}</span>
+                    <span className="font-bold shrink-0">{stats.byRegion[reg] ?? 0}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -111,9 +110,9 @@ export default function Page() {
                 label="Status"
                 options={[
                   { value: "", label: "Todos" },
-                  { value: "aberta", label: "Aberta" },
-                  { value: "em_analise", label: "Em Análise" },
-                  { value: "resolvida", label: "Resolvida" },
+                  { value: "Aberta", label: "Aberta" },
+                  { value: "Em_analise", label: "Em Análise" },
+                  { value: "Resolvida", label: "Resolvida" },
                 ]}
                 value={filters.status}
                 onChange={(e) => handleFilterChange("status", e.target.value)}
@@ -124,11 +123,14 @@ export default function Page() {
                 label="Categoria"
                 options={[
                   { value: "", label: "Todas" },
-                  { value: "infraestrutura", label: "Infraestrutura" },
-                  { value: "saneamento", label: "Saneamento" },
-                  { value: "iluminacao", label: "Iluminação" },
-                  { value: "poda", label: "Poda" },
-                  { value: "outra", label: "Outra" },
+                  { value: "Iluminação Pública", label: "Iluminação Pública" },
+                  { value: "Manutenção de vias", label: "Manutenção de vias" },
+                  { value: "Saneamento", label: "Saneamento" },
+                  { value: "Coleta de lixo", label: "Coleta de lixo" },
+                  { value: "Fiscalização", label: "Fiscalização" },
+                  { value: "Segurança", label: "Segurança" },
+                  { value: "Sinalização de Trânsito", label: "Sinalização de Trânsito" },
+                  { value: "Outros Empecilhos", label: "Outros Empecilhos" },
                 ]}
                 value={filters.category}
                 onChange={(e) => handleFilterChange("category", e.target.value)}
@@ -139,10 +141,11 @@ export default function Page() {
                 label="Região"
                 options={[
                   { value: "", label: "Todas" },
-                  { value: "norte", label: "Norte" },
-                  { value: "sul", label: "Sul" },
-                  { value: "leste", label: "Leste" },
-                  { value: "oeste", label: "Oeste" },
+                  { value: "Região Metropolitana do Recife", label: "Região Metropolitana do Recife" },
+                  { value: "Zona da Mata", label: "Zona da Mata" },
+                  { value: "Agreste", label: "Agreste" },
+                  { value: "Sertão", label: "Sertão" },
+                  { value: "Outra", label: "Outra" },
                 ]}
                 value={filters.region}
                 onChange={(e) => handleFilterChange("region", e.target.value)}
@@ -153,9 +156,9 @@ export default function Page() {
                 label="Prioridade"
                 options={[
                   { value: "", label: "Todas" },
-                  { value: "alta", label: "Alta" },
-                  { value: "media", label: "Média" },
-                  { value: "baixa", label: "Baixa" },
+                  { value: "Alta", label: "Alta" },
+                  { value: "Media", label: "Média" },
+                  { value: "Baixa", label: "Baixa" },
                 ]}
                 value={filters.priority}
                 onChange={(e) => handleFilterChange("priority", e.target.value)}
@@ -171,7 +174,7 @@ export default function Page() {
           
           <div>
             <h3 className="text-xl font-bold mb-4 text-black">
-              Demandas ({filteredDemands.length})
+              Demandas
             </h3>
             <div className="flex flex-col gap-4">
               {filteredDemands.length > 0 ? (

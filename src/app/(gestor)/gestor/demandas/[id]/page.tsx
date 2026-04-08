@@ -63,7 +63,7 @@ export default function Page() {
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm border-b border-gray-200">
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
-          <a href="/gestor/gestor" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
+          <a href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
             Gestão
           </a>
           <a href="/login" className="text-purple-400 font-normal hover:text-purple-500">

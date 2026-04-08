@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
-import { Button } from "./Button";
 
 interface DemandDetailsProps {
   demand: Demand;
@@ -61,9 +60,6 @@ export function DemandDetails({
               <span>Sem imagem</span>
             )}
           </div>
-          <Button variant="primary" size="sm">
-            Atualizar
-          </Button>
         </div>
 
         {/* Coluna Central - Informações */}
