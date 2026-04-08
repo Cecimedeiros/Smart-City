@@ -36,13 +36,12 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 flex justify-between items-center bg-white hover:shadow-md transition-shadow">
-      {/* Esquerda - Status e Título */}
+
       <div className="flex items-center gap-4 flex-1">
         <div className={`w-4 h-4 rounded-full ${statusConfig_.color}`} />
         <h3 className="font-bold text-lg text-gray-800">{demand.title}</h3>
       </div>
 
-      {/* Centro - Metadados */}
       <div className="flex-1 px-6">
         <div className="grid grid-cols-3 gap-6 text-xs text-gray-600">
           <div>
@@ -60,7 +59,6 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
         </div>
       </div>
 
-      {/* Direita - Botão */}
       <Button
         variant="primary"
         size="sm"

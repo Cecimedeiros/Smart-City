@@ -1,8 +1,3 @@
-/**
- * Componente DemandBadge
- * Bolinha colorida indicando prioridade da demanda.
- * Alta → vermelho | Média → amarelo | Baixa → verde
- */
 import { DemandPriority } from "@/types/demand";
 
 interface DemandBadgeProps {

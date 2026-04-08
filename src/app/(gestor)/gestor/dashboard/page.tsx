@@ -7,14 +7,19 @@ import { DemandFilters } from "@/types/demand";
 import { Button } from "@/components/UI/Button";
 import { Select } from "@/components/UI/Select";
 import { DemandCard } from "@/components/UI/DemandCard";
+import { useEffect } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const { filters, setFilters, resetFilters, getFilteredDemands, getDemandStats } =
+  const { filters, setFilters, resetFilters, getFilteredDemands, getDemandStats, fetchDemands, isLoading } =
     useDemandStore();
   const filteredDemands = getFilteredDemands();
   const stats = getDemandStats();
   const [selectedDemandId, setSelectedDemandId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchDemands();
+  }, [fetchDemands]);
 
   const handleFilterChange = (key: keyof DemandFilters, value: string) => {
     setFilters({ [key]: value === "" ? "" : (value as any) });
@@ -36,7 +41,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
           <a href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
-            Painel de gestão
+            Painel de Gestão
           </a>
           <a href="/login" className="text-purple-400 font-normal hover:text-purple-500">
             Sair
@@ -46,7 +51,7 @@ export default function Page() {
 
       
       <div className="w-full h-64 bg-linear-to-r from-indigo-900 via-fuchsia-500 to-orange-500 flex items-start justify-center pt-10">
-        <h2 className="text-white text-4xl font-bold">Painel de gestão </h2>
+        <h2 className="text-white text-4xl font-bold">Painel de Gestão </h2>
       </div>
 
      
@@ -173,25 +178,33 @@ export default function Page() {
 
           
           <div>
-            <h3 className="text-xl font-bold mb-4 text-black">
-              Demandas
-            </h3>
-            <div className="flex flex-col gap-4">
-              {filteredDemands.length > 0 ? (
-                filteredDemands.map((demand) => (
-                  <DemandCard
-                    key={demand.id}
-                    demand={demand}
-                    onViewDetails={handleViewDetails}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <p>Nenhuma demanda encontrada com os filtros aplicados.</p>
-                </div>
-              )}
-            </div>
-          </div>
+  <h3 className="text-xl font-bold mb-4 text-black">Demandas</h3>
+  
+  <div className="flex flex-col gap-4">
+    {isLoading? (
+      <div className="text-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+        <p className="text-gray-500 italic">Carregando dados da Smart City...</p>
+      </div>
+    ) : filteredDemands.length > 0 ? (
+      filteredDemands.map((demand) => (
+        <DemandCard
+          key={demand.id}
+          demand={demand}
+          onViewDetails={handleViewDetails}
+        />
+      ))
+    ) : (
+      <div className="text-center py-8 text-gray-500">
+        <p>Nenhuma demanda encontrada com os filtros aplicados.</p>
+      </div>
+    )}
+  </div>
+</div> 
+
+          
+
+              
         </div>
       </div>
 

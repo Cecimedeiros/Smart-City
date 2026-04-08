@@ -1,7 +1,3 @@
-/**
- * Componente Logo
- * Exibe o texto "Smart City" conforme o Figma.
- */
 interface LogoProps {
   variant?: "white" | "purple";
 }

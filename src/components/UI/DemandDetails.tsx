@@ -42,15 +42,12 @@ export function DemandDetails({
 
   return (
     <div className="border border-gray-300 rounded-lg p-6 mt-6 bg-white">
-      {/* Cabeçalho do Cartão */}
       <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200">
         <div className="w-6 h-6 rounded-full bg-red-600" />
         <h2 className="text-xl font-bold text-gray-800">{demand.title}</h2>
       </div>
 
-      {/* Corpo do Cartão - Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
-        {/* Coluna Esquerda - Foto */}
         <div className="flex flex-col items-center">
           <p className="text-sm font-semibold text-gray-700 mb-2">Foto:</p>
           <div className="bg-gray-200 rounded-md h-40 w-full max-w-xs mb-4 flex items-center justify-center text-gray-400">
@@ -62,7 +59,6 @@ export function DemandDetails({
           </div>
         </div>
 
-        {/* Coluna Central - Informações */}
         <div className="flex flex-col gap-4 text-sm text-gray-800">
           <div>
             <p className="text-xs text-gray-500 font-semibold">Categoria</p>
@@ -177,7 +173,6 @@ export function DemandDetails({
           </div>
         </div>
 
-        {/* Coluna Direita - Detalhes */}
         <div className="flex flex-col">
           <p className="text-sm font-bold text-gray-800 mb-2">Detalhes:</p>
           <div className="bg-gray-200 rounded-md p-4 h-24 text-sm text-gray-700 overflow-auto">
@@ -186,7 +181,6 @@ export function DemandDetails({
         </div>
       </div>
 
-      {/* Rodapé - Botão Voltar */}
       <div className="flex justify-end pt-6 border-t border-gray-200">
         <button
           onClick={onBack}

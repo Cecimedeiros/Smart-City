@@ -27,7 +27,6 @@ export function FormDemanda() {
   const addDemand = useDemandStore((state) => state.addDemand)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
-  // Estado para armazenar as imagens selecionadas (preview)
   const [images, setImages] = useState<string[]>([])
 
   const [formData, setFormData] = useState({
@@ -38,17 +37,16 @@ export function FormDemanda() {
     descricao: ''
   })
 
-  // Função para lidar com a seleção de arquivos
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files)
       const newUrls = newFiles.map(file => URL.createObjectURL(file))
-      setImages(prev => [...prev, ...newUrls].slice(0, 3)) // Limita a 3 imagens
+      setImages(prev => [...prev, ...newUrls].slice(0, 3)) 
     }
   }
 
   const removeImage = (indexToRemove: number, e: React.MouseEvent) => {
-  e.stopPropagation(); // Impede que o clique abra a janela de seleção de arquivos
+  e.stopPropagation(); 
   setImages(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
@@ -66,13 +64,13 @@ export function FormDemanda() {
       location: formData.endereco,
       category: formData.categoria as any,
       region: formData.regiao as any,
-      status: "Aberta", // Fixo pois é nova
-      priority: "Media", // Fixo pois removemos o campo
+      status: "Aberta", 
+      priority: "Media", 
       description: formData.descricao,
       createdAt: new Date().toLocaleDateString('pt-BR'),
       fotoUrl: "",
       endereco: formData.endereco,
-      solicitante: "Utilizador", // Pode ser preenchido com dados do utilizador
+      solicitante: "Utilizador", 
       dataRegistro: new Date().toLocaleString('pt-BR'),
       detalhes: formData.descricao,
     }
@@ -80,7 +78,6 @@ export function FormDemanda() {
     addDemand(novaDenuncia)
     alert("✅ Demanda salva com sucesso!")
 
-    // LIMPA TUDO: Texto e Imagens
     setFormData({ titulo: '', categoria: '', regiao: '', endereco: '', descricao: '' })
     setImages([])
   }
@@ -88,7 +85,6 @@ export function FormDemanda() {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-4xl shadow-xl w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
       
-      {/* COLUNA ESQUERDA */}
       <div className="flex flex-col gap-5">
         <input 
           type="text" required placeholder="Título *" 
@@ -130,16 +126,13 @@ export function FormDemanda() {
         />
       </div>
 
-      {/* COLUNA DIREITA */}
       <div className="flex flex-col gap-6">
         
-        {/* Input escondido que atende a todos os cliques de imagem */}
         <input 
             type="file" ref={fileInputRef} className="hidden" 
             multiple accept="image/*" onChange={handleFileChange} 
         />
 
-        {/* Área Principal de Imagem */}
        <div 
         onClick={() => fileInputRef.current?.click()}
         className="relative grow border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center overflow-hidden hover:border-purple-400 transition-colors cursor-pointer"
@@ -162,7 +155,6 @@ export function FormDemanda() {
         )}
         </div>
 
-        {/* Espaços Extras */}
         <div className="flex gap-4">
         {[1, 2].map((i) => (
             <div 

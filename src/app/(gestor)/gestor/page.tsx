@@ -36,7 +36,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
         <div className="flex items-center gap-4">
           <a href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
-            Painel de gest„o
+            Painel de gest√£o
           </a>
           <a href="/login" className="text-purple-400 font-normal hover:text-purple-500">
             Sair
@@ -45,7 +45,7 @@ export default function Page() {
       </nav>
 
       <div className="w-full h-64 bg-linear-to-r from-indigo-900 via-fuchsia-500 to-orange-500 flex items-start justify-center pt-10">
-        <h2 className="text-white text-4xl font-bold">Painel de gest„o</h2>
+        <h2 className="text-white text-4xl font-bold">Painel de gest√£o</h2>
       </div>
 
       <div className="max-w-6xl mx-auto px-4">
@@ -62,12 +62,12 @@ export default function Page() {
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                 {[
                   "Coleta de lixo",
-                  "IluminaÁ„o P˙blica",
-                  "ManutenÁ„o de vias",
+                  "Ilumina√ß√£o P√∫blica",
+                  "Manuten√ß√£o de vias",
                   "Saneamento",
-                  "FiscalizaÁ„o",
-                  "SeguranÁa",
-                  "SinalizaÁ„o de Tr‚nsito",
+                  "Fiscaliza√ß√£o",
+                  "Seguran√ßa",
+                  "Sinaliza√ß√£o de Tr√¢nsito",
                   "Outros Empecilhos",
                 ].map((cat) => (
                   <div key={cat} className="flex items-center justify-between gap-1">
@@ -79,13 +79,13 @@ export default function Page() {
             </div>
 
             <div className="bg-purple-600 rounded-xl p-6 text-white">
-              <p className="text-lg font-bold mb-4 text-white/70">Demandas por regi„o</p>
+              <p className="text-lg font-bold mb-4 text-white/70">Demandas por regi√£o</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                 {[
                   "RMR",
                   "Zona da Mata",
                   "Agreste",
-                  "Sert„o",
+                  "Sert√£o",
                   "Outra",
                 ].map((reg) => (
                   <div key={reg} className="flex items-center justify-between gap-1">
@@ -105,7 +105,7 @@ export default function Page() {
                 options={[
                   { value: "", label: "Todos" },
                   { value: "Aberta", label: "Aberta" },
-                  { value: "Em_analise", label: "Em An·lise" },
+                  { value: "Em_analise", label: "Em AnÔøΩlise" },
                   { value: "Resolvida", label: "Resolvida" },
                 ]}
                 value={filters.status}
@@ -116,13 +116,13 @@ export default function Page() {
                 label="Categoria"
                 options={[
                   { value: "", label: "Todas" },
-                  { value: "IluminaÁ„o P˙blica", label: "IluminaÁ„o P˙blica" },
-                  { value: "ManutenÁ„o de vias", label: "ManutenÁ„o de vias" },
+                  { value: "Ilumina√ß√£o P√∫blica", label: "Ilumina√ß√£o P√∫blica" },
+                  { value: "Manuten√ß√£o de vias", label: "Manuten√ß√£o de vias" },
                   { value: "Saneamento", label: "Saneamento" },
                   { value: "Coleta de lixo", label: "Coleta de lixo" },
-                  { value: "FiscalizaÁ„o", label: "FiscalizaÁ„o" },
-                  { value: "SeguranÁa", label: "SeguranÁa" },
-                  { value: "SinalizaÁ„o de Tr‚nsito", label: "SinalizaÁ„o de Tr‚nsito" },
+                  { value: "Fiscaliza√ß√£o", label: "Fiscaliza√ß√£o" },
+                  { value: "Seguran√ßa", label: "Seguran√ßa" },
+                  { value: "Sinaliza√ß√£o de Tr√¢nsito", label: "Sinaliza√ß√£o de Tr√¢nsito" },
                   { value: "Outros Empecilhos", label: "Outros Empecilhos" },
                 ]}
                 value={filters.category}
@@ -130,13 +130,13 @@ export default function Page() {
                 className="flex-1"
               />
               <Select
-                label="Regi„o"
+                label="Regi√£o"
                 options={[
                   { value: "", label: "Todas" },
-                  { value: "Regi„o Metropolitana do Recife", label: "Regi„o Metropolitana do Recife" },
+                  { value: "Regi√£o Metropolitana do Recife", label: "Regi√£o Metropolitana do Recife" },
                   { value: "Zona da Mata", label: "Zona da Mata" },
                   { value: "Agreste", label: "Agreste" },
-                  { value: "Sert„o", label: "Sert„o" },
+                  { value: "Sert√£o", label: "Sert√£o" },
                   { value: "Outra", label: "Outra" },
                 ]}
                 value={filters.region}
@@ -148,7 +148,7 @@ export default function Page() {
                 options={[
                   { value: "", label: "Todas" },
                   { value: "Alta", label: "Alta" },
-                  { value: "Media", label: "MÈdia" },
+                  { value: "Media", label: "M√©dia" },
                   { value: "Baixa", label: "Baixa" },
                 ]}
                 value={filters.priority}
