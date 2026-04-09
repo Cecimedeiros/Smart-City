@@ -16,13 +16,19 @@ export default function Page() {
   const filteredDemands = getFilteredDemands();
   const stats = getDemandStats();
   const [selectedDemandId, setSelectedDemandId] = useState<string | null>(null);
+  const [tempFilters, setTempFilters] = useState(filters);
 
   useEffect(() => {
     fetchDemands();
   }, [fetchDemands]);
 
+  // keep local tempFilters in sync when store filters change (e.g., reset)
+  useEffect(() => {
+    setTempFilters(filters);
+  }, [filters]);
+
   const handleFilterChange = (key: keyof DemandFilters, value: string) => {
-    setFilters({ [key]: value === "" ? "" : (value as any) });
+    setTempFilters((prev) => ({ ...prev, [key]: value === "" ? "" : (value as any) }));
   };
 
   const handleViewDetails = (demandId: string) => {
@@ -31,7 +37,12 @@ export default function Page() {
   };
 
   const handleApplyFilters = () => {
-    console.log("Applied filters:", filters);
+    setFilters(tempFilters);
+  };
+
+  const handleResetFilters = () => {
+    resetFilters();
+    setTempFilters({ status: "", category: "", region: "", priority: "" });
   };
 
   return (
@@ -119,7 +130,7 @@ export default function Page() {
                   { value: "Em_analise", label: "Em Análise" },
                   { value: "Resolvida", label: "Resolvida" },
                 ]}
-                value={filters.status}
+                value={tempFilters.status}
                 onChange={(e) => handleFilterChange("status", e.target.value)}
                 className="flex-1"
               />
@@ -137,7 +148,7 @@ export default function Page() {
                   { value: "Sinalização de Trânsito", label: "Sinalização de Trânsito" },
                   { value: "Outros Empecilhos", label: "Outros Empecilhos" },
                 ]}
-                value={filters.category}
+                value={tempFilters.category}
                 onChange={(e) => handleFilterChange("category", e.target.value)}
                 className="flex-1"
               />
@@ -152,7 +163,7 @@ export default function Page() {
                   { value: "Sertão", label: "Sertão" },
                   { value: "Outra", label: "Outra" },
                 ]}
-                value={filters.region}
+                value={tempFilters.region}
                 onChange={(e) => handleFilterChange("region", e.target.value)}
                 className="flex-1"
               />
@@ -165,14 +176,19 @@ export default function Page() {
                   { value: "Media", label: "Média" },
                   { value: "Baixa", label: "Baixa" },
                 ]}
-                value={filters.priority}
+                value={tempFilters.priority}
                 onChange={(e) => handleFilterChange("priority", e.target.value)}
                 className="flex-1"
               />
 
-              <Button variant="primary" size="md" onClick={handleApplyFilters}>
-                Aplicar Filtro
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="primary" size="md" onClick={handleApplyFilters}>
+                  Aplicar Filtro
+                </Button>
+                <Button variant="secondary" size="md" onClick={handleResetFilters}>
+                  Limpar filtros
+                </Button>
+              </div>
             </div>
           </div>
 
