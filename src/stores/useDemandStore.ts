@@ -96,7 +96,7 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
 
   getDemandStats: () => {
     const state = get();
-    const demands = state.demands;
+    const demands = state.getFilteredDemands();
     const total = demands.length;
 
     const byCategory: Record<string, number> = {};

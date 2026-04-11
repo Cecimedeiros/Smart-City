@@ -13,7 +13,10 @@ export default function Page() {
   const router = useRouter();
   const { filters, setFilters, resetFilters, getFilteredDemands, getDemandStats, fetchDemands, isLoading } =
     useDemandStore();
-  const filteredDemands = getFilteredDemands();
+  const PRIORITY_ORDER: Record<string, number> = { Alta: 0, Media: 1, Baixa: 2 };
+  const filteredDemands = getFilteredDemands().slice().sort(
+    (a, b) => (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3)
+  );
   const stats = getDemandStats();
   const [selectedDemandId, setSelectedDemandId] = useState<string | null>(null);
   const [tempFilters, setTempFilters] = useState(filters);
@@ -103,15 +106,15 @@ export default function Page() {
               <p className="text-lg font-bold mb-4 text-white/70">Demandas por região</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                 {[
-                  "RMR",
-                  "Zona da Mata",
-                  "Agreste",
-                  "Sertão",
-                  "Outra",
-                ].map((reg) => (
-                  <div key={reg} className="flex items-center justify-between gap-1">
-                    <span className="truncate">{reg}</span>
-                    <span className="font-bold shrink-0">{stats.byRegion[reg] ?? 0}</span>
+                  { label: "RMR", key: "Região Metropolitana do Recife" },
+                  { label: "Zona da Mata", key: "Zona da Mata" },
+                  { label: "Agreste", key: "Agreste" },
+                  { label: "Sertão", key: "Sertão" },
+                  { label: "Outra", key: "Outra" },
+                ].map(({ label, key }) => (
+                  <div key={key} className="flex items-center justify-between gap-1">
+                    <span className="truncate">{label}</span>
+                    <span className="font-bold shrink-0">{stats.byRegion[key] ?? 0}</span>
                   </div>
                 ))}
               </div>
