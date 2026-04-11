@@ -1,4 +1,4 @@
-import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
+import { Demand, DemandStatus, DemandPriority, ProblemaUrbano } from "@/types/demand";
 import { Button } from "./Button";
 
 interface DemandCardProps {
@@ -8,7 +8,7 @@ interface DemandCardProps {
 
 const statusConfig: Record<DemandStatus, { color: string; label: string }> = {
   Aberta: { color: "bg-red-600", label: "Aberta" },
-  Em_analise: { color: "bg-amber-500", label: "Em Análise" },
+  "Em análise": { color: "bg-amber-500", label: "Em Análise" },
   Resolvida: { color: "bg-green-600", label: "Resolvida" },
 };
 
@@ -39,7 +39,7 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
 
       <div className="flex items-center gap-4 flex-1">
         <div className={`w-4 h-4 rounded-full ${statusConfig_.color}`} />
-        <h3 className="font-bold text-lg text-gray-800">{demand.title}</h3>
+        <h3 className="font-bold text-lg text-gray-800">{demand.problema}</h3>
       </div>
 
       <div className="flex-1 px-6">

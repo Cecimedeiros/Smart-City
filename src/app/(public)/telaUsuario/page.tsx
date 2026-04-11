@@ -112,7 +112,6 @@ export default function TelaUsuarioPage() {
             </div>
           </section>
 
-          {/* LISTAGEM */}
           <section className="flex flex-col gap-6">
             <h3 className="font-bold text-gray-700 text-lg ml-1">
               Resultados Recentes
