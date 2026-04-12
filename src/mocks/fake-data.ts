@@ -5,7 +5,7 @@ import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/dem
 export const MOCK_DEMANDS: Demand[] = [
  {
     id: "1",
-    title: "Grande concentração de lixo",
+    problema: "Lixo acumulado",
     location: "Parque da Macaxeira",
     category: "Coleta de lixo",
     status: "Aberta",
@@ -21,10 +21,10 @@ export const MOCK_DEMANDS: Demand[] = [
   },
   {
     id: "2",
-    title: "Poste com a lâmpada queimada",
+    problema: "Poste com lâmpada apagada",
     location: "Bairro Vila",
     category: "Iluminação Pública",
-    status: "Em_analise",
+    status: "Em análise",
     priority: "Media",
     region: "Sertão",
     description: "Falta de iluminação em vários pontos",
@@ -37,7 +37,7 @@ export const MOCK_DEMANDS: Demand[] = [
   },
   {
     id: "3",
-    title: "Árvore caída",
+    problema: "Objeto obstruindo passagem",
     location: "Parque Municipal",
     category: "Outros Empecilhos",
     status: "Aberta",
@@ -53,10 +53,10 @@ export const MOCK_DEMANDS: Demand[] = [
   },
   {
     id: "4",
-    title: "Cratera",
+    problema: "Buraco no asfalto",
     location: "Rua das Flores",
     category: "Manutenção de vias",
-    status: "Em_analise",
+    status: "Em análise",
     priority: "Media",
     region: "Outra",
     description: "Buraco enorme do meio da rua",
@@ -69,7 +69,7 @@ export const MOCK_DEMANDS: Demand[] = [
   },
   {
     id: "5",
-    title: "Poça de água na calçada",
+    problema: "Inundação recorrente",
     location: "Avenida Principal",
     category: "Saneamento",
     status: "Aberta",
@@ -85,10 +85,10 @@ export const MOCK_DEMANDS: Demand[] = [
   },
   {
     id: "6",
-    title: "Semáforo com defeito",
+    problema: "Semáforo com defeito",
     location: "Avenida Brasil",
     category: "Sinalização de Trânsito",
-    status: "Em_analise",
+    status: "Em análise",
     priority: "Alta",
     region: "Região Metropolitana do Recife",
     description: "Semáforo não está funcionando",
