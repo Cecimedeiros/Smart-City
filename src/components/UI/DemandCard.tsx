@@ -1,4 +1,4 @@
-import { Demand, DemandStatus, DemandPriority, ProblemaUrbano } from "@/types/demand";
+import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
 import { Button } from "./Button";
 
 interface DemandCardProps {
@@ -32,14 +32,16 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
-  const statusConfig_ = statusConfig[demand.status];
+  const normalizedStatus = demand.status === "Em_analise" ? "Em análise" : demand.status;
+  const statusConfig_ = statusConfig[normalizedStatus as DemandStatus] ?? statusConfig.Aberta;
+  const problemName = demand.problema ?? (demand as any).title ?? "Problema não informado";
 
   return (
     <div className="border border-gray-200 rounded-lg p-4 flex justify-between items-center bg-white hover:shadow-md transition-shadow">
 
       <div className="flex items-center gap-4 flex-1">
         <div className={`w-4 h-4 rounded-full ${statusConfig_.color}`} />
-        <h3 className="font-bold text-lg text-gray-800">{demand.problema}</h3>
+        <h3 className="font-bold text-lg text-gray-800">{problemName}</h3>
       </div>
 
       <div className="flex-1 px-6">

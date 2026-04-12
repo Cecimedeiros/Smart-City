@@ -2,6 +2,20 @@ import { create } from "zustand";
 import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/demand";
 import { MOCK_DEMANDS } from '@/mocks/fake-data';
 
+const normalizeStatus = (status: string): DemandStatus => {
+  if (status === "Em_analise") return "Em análise";
+  if (status === "Aberta" || status === "Em análise" || status === "Resolvida") return status;
+  return "Aberta";
+};
+
+const normalizeDemands = (items: any[]): Demand[] => {
+  return items.map((item) => ({
+    ...item,
+    status: normalizeStatus(item.status),
+    problema: item.problema ?? item.title ?? "Problema não informado",
+  }));
+};
+
 interface DemandStore {
   demands: Demand[];
   filters: DemandFilters;
@@ -33,7 +47,7 @@ const defaultFilters: DemandFilters = {
 };
 
 export const useDemandStore = create<DemandStore>((set, get) => ({
-  demands: MOCK_DEMANDS,
+  demands: normalizeDemands(MOCK_DEMANDS as any[]),
   filters: defaultFilters,
   selectedDemand: null,
   isLoading: false,
@@ -86,7 +100,11 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
   getFilteredDemands: () => {
     const state = get();
     return state.demands.filter((demand) => {
-      if (state.filters.status && demand.status.trim() !== state.filters.status.trim()) return false;
+      const demandStatus = normalizeStatus(String(demand.status).trim());
+      const filterStatus = state.filters.status
+        ? normalizeStatus(String(state.filters.status).trim())
+        : "";
+      if (filterStatus && demandStatus !== filterStatus) return false;
       if (state.filters.category && demand.category.trim() !== state.filters.category.trim()) return false;
       if (state.filters.region && demand.region.trim() !== state.filters.region.trim()) return false;
       if (state.filters.priority && demand.priority.trim() !== state.filters.priority.trim()) return false;
@@ -116,7 +134,7 @@ export const useDemandStore = create<DemandStore>((set, get) => ({
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const dados = MOCK_DEMANDS; 
+      const dados = normalizeDemands(MOCK_DEMANDS as any[]); 
 
       set({ demands: dados, isLoading: false }); 
     } catch (err) {

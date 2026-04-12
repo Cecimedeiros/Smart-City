@@ -130,7 +130,7 @@ export default function Page() {
                 options={[
                   { value: "", label: "Todos" },
                   { value: "Aberta", label: "Aberta" },
-                  { value: "Em_analise", label: "Em Análise" },
+                  { value: "Em análise", label: "Em Análise" },
                   { value: "Resolvida", label: "Resolvida" },
                 ]}
                 value={tempFilters.status}

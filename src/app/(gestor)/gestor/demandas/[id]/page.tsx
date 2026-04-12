@@ -58,8 +58,8 @@ export default function Page() {
         <h2 className="text-white text-4xl font-bold">Demandas</h2>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="-mt-24 bg-white rounded-3xl shadow-xl p-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="-mt-24 bg-white rounded-3xl shadow-xl p-10 relative z-10">
           <DemandDetails
             demand={demand}
             onBack={handleBack}

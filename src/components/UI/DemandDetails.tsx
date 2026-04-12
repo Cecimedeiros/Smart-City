@@ -10,12 +10,12 @@ interface DemandDetailsProps {
   onPriorityChange?: (priority: DemandPriority) => void;
 }
 
-const statusOptions: DemandStatus[] = ["Aberta", "Em_analise", "Resolvida"];
+const statusOptions: DemandStatus[] = ["Aberta", "Em análise", "Resolvida"];
 const priorityOptions: DemandPriority[] = ["Alta", "Media", "Baixa"];
 
 const statusColors: Record<DemandStatus, string> = {
   Aberta: "bg-red-600",
-  Em_analise: "bg-amber-500",
+  "Em análise": "bg-amber-500",
   Resolvida: "bg-green-600",
 };
 
@@ -41,10 +41,10 @@ export function DemandDetails({
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg p-6 mt-6 bg-white">
+    <div className="border border-gray-300 rounded-lg p-8 mt-6 bg-white">
       <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200">
         <div className="w-6 h-6 rounded-full bg-red-600" />
-        <h2 className="text-xl font-bold text-gray-800">{demand.title}</h2>
+        <h2 className="text-xl font-bold text-gray-800">{demand.problema}</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
@@ -52,7 +52,7 @@ export function DemandDetails({
           <p className="text-sm font-semibold text-gray-700 mb-2">Foto:</p>
           <div className="bg-gray-200 rounded-md h-40 w-full max-w-xs mb-4 flex items-center justify-center text-gray-400">
             {demand.fotoUrl ? (
-              <img src={demand.fotoUrl} alt={demand.title} className="w-full h-full object-cover rounded-md" />
+              <img src={demand.fotoUrl} alt={demand.problema} className="w-full h-full object-cover rounded-md" />
             ) : (
               <span>Sem imagem</span>
             )}
@@ -132,7 +132,7 @@ export function DemandDetails({
                 >
                   {statusOptions.map((s) => (
                     <option key={s} value={s}>
-                      {s === "Em_analise" ? "Em Análise" : s}
+                      {s === "Em análise" ? "Em Análise" : s}
                     </option>
                   ))}
                 </select>
@@ -153,7 +153,7 @@ export function DemandDetails({
                 </button>
               </div>
             ) : (
-              <p className="text-sm font-bold">{demand.status === "Em_analise" ? "Em Análise" : demand.status}</p>
+              <p className="text-sm font-bold">{demand.status === "Em análise" ? "Em Análise" : demand.status}</p>
             )}
           </div>
 
@@ -175,7 +175,7 @@ export function DemandDetails({
 
         <div className="flex flex-col">
           <p className="text-sm font-bold text-gray-800 mb-2">Detalhes:</p>
-          <div className="bg-gray-200 rounded-md p-4 h-24 text-sm text-gray-700 overflow-auto">
+          <div className="bg-gray-200 rounded-md p-4 min-h-56 text-sm text-gray-700 overflow-auto">
             {demand.detalhes}
           </div>
         </div>
