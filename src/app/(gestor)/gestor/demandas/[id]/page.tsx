@@ -10,6 +10,7 @@ import { DemandFilters as DemandFiltersType } from '@/types/demand';
 
 // Página de detalhes da demanda para GESTOR (com capacidade de edição)
 export default function DemandDetailsManagerPage() {
+
   const params = useParams();
   const router = useRouter();
   const demandId = params.id as string;

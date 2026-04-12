@@ -104,7 +104,7 @@ export default function DemandDetailsCitizenPage() {
           <div className="mb-8">
             <DemandFilters
               filters={filters}
-              onFilterChange={(newFilters) => handleFilterChange(newFilters)}
+              onFilterChange={(key, value) => setFilters(prev => ({...prev, [key]: value}))}
               onApplyFilters={handleApplyFilters}
               onResetFilters={handleResetFilters}
             />
