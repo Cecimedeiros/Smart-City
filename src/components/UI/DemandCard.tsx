@@ -32,7 +32,7 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
-  const normalizedStatus = demand.status === "Em_analise" ? "Em análise" : demand.status;
+  const normalizedStatus = demand.status === "Em análise" ? "Em análise" : demand.status;
   const statusConfig_ = statusConfig[normalizedStatus as DemandStatus] ?? statusConfig.Aberta;
   const problemName = demand.problema ?? (demand as any).title ?? "Problema não informado";
 
