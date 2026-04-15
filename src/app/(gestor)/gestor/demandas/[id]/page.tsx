@@ -4,9 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useDemandStore } from '@/stores/useDemandStore';
 import { Button } from '@/components/UI/Button';
 import { DemandDetails } from '@/components/UI/DemandDetails';
-import { DemandFilters } from '@/components/UI/DemandFilters';
 import { useState } from 'react';
-import { DemandFilters as DemandFiltersType } from '@/types/demand';
 
 // Página de detalhes da demanda para GESTOR (com capacidade de edição)
 export default function DemandDetailsManagerPage() {
@@ -20,32 +18,9 @@ export default function DemandDetailsManagerPage() {
     state.demands.find((d) => d.id === demandId)
   );
 
-  // Estado dos filtros para aplicar na busca
-  const [filters, setFilters] = useState<DemandFiltersType>({
-    status: '',
-    category: '',
-    region: '',
-    priority: '',
-  });
-
   // Volta para o dashboard do gestor
   const handleBack = () => {
     router.push('/gestor/dashboard');
-  };
-
-  // Aplica os filtros (aqui você pode adicionar lógica de busca)
-  const handleApplyFilters = () => {
-    // TODO: Implementar lógica de filtro
-  };
-
-  // Limpa os filtros
-  const handleResetFilters = () => {
-    setFilters({
-      status: '',
-      category: '',
-      region: '',
-      priority: '',
-    });
   };
 
   // Callback quando o gestor clica em "Atualizar"
@@ -102,33 +77,6 @@ export default function DemandDetailsManagerPage() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="-mt-24 bg-white rounded-3xl shadow-xl p-10 relative z-10">
           
-          {/* BOTÃO: Criar Nova Solicitação - centralizado no topo */}
-          <div className="flex justify-center mb-8">
-            <Button 
-              onClick={() => router.push('/demandas/nova')}
-              variant="primary"
-              size="lg"
-              className="bg-purple-600 hover:bg-purple-700"
-            >
-              Criar Nova Solicitação
-            </Button>
-          </div>
-
-          {/* FILTROS: Status, Categoria, Região, Prioridade */}
-          <div className="mb-8">
-            <DemandFilters
-              filters={filters}
-              onFilterChange={(key, value) => {
-                setFilters(prev => ({
-                  ...prev,
-                  [key]: value
-                }));
-              }}
-              onApplyFilters={handleApplyFilters}
-              onResetFilters={handleResetFilters}
-            />
-          </div>
-
           {/* DETALHES DA DEMANDA: Componente com layout 3 colunas e capacidade de edição */}
           <DemandDetails
             demand={demand}

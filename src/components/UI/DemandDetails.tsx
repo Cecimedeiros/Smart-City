@@ -212,16 +212,7 @@ export function DemandDetails({
       </div>
 
       {/* Rodapé com botões de ação */}
-      <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-        {isManager ? (
-          <Button
-            variant="primary"
-            size="md"
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Atualizar
-          </Button>
-        ) : null}
+      <div className="flex justify-end items-center pt-6 border-t border-gray-200">
         <button
           onClick={onBack}
           className="text-purple-600 text-sm font-semibold hover:text-purple-700 transition-colors"
