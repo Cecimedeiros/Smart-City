@@ -4,9 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useDemandStore } from '@/stores/useDemandStore';
 import { Button } from '@/components/UI/Button';
 import { DemandDetails } from '@/components/UI/DemandDetails';
-import { DemandFilters } from '@/components/UI/DemandFilters';
 import { useState } from 'react';
-import { DemandFilters as DemandFiltersType } from '@/types/demand';
 
 // Página de detalhes da demanda para CIDADÃO (visualização apenas)
 export default function DemandDetailsCitizenPage() {
@@ -19,37 +17,9 @@ export default function DemandDetailsCitizenPage() {
     state.demands.find((d) => d.id === demandId)
   );
 
-  // Estado dos filtros para aplicar na busca
-  const [filters, setFilters] = useState<DemandFiltersType>({
-    status: '',
-    category: '',
-    region: '',
-    priority: '',
-  });
-
   // Volta para a lista de demandas
   const handleBack = () => {
     router.push('/telaUsuario');
-  };
-
-  // Atualiza os filtros quando o usuário muda
-  const handleFilterChange = (newFilters: DemandFiltersType) => {
-    setFilters(newFilters);
-  };
-
-  // Aplica os filtros (aqui você pode adicionar lógica de busca)
-  const handleApplyFilters = () => {
-    // TODO: Implementar lógica de filtro
-  };
-
-  // Limpa os filtros
-  const handleResetFilters = () => {
-    setFilters({
-      status: '',
-      category: '',
-      region: '',
-      priority: '',
-    });
   };
 
   // Se a demanda não existir, mostra erro
@@ -98,16 +68,6 @@ export default function DemandDetailsCitizenPage() {
             >
               Criar Nova Solicitação
             </Button>
-          </div>
-
-          {/* FILTROS: Status, Categoria, Região, Prioridade */}
-          <div className="mb-8">
-            <DemandFilters
-              filters={filters}
-              onFilterChange={(key, value) => setFilters(prev => ({...prev, [key]: value}))}
-              onApplyFilters={handleApplyFilters}
-              onResetFilters={handleResetFilters}
-            />
           </div>
 
           {/* DETALHES DA DEMANDA: Componente com layout 3 colunas */}
