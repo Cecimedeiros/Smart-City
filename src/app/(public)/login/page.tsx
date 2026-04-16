@@ -1,122 +1,152 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/UI/Button";
+import { ChakraProvider } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  Text,
+  VStack,
+  Heading,
+  Checkbox,
+} from "@chakra-ui/react";
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [tipoLogin, setTipoLogin] = useState<"cidadao" | "gestor">("cidadao");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    
-    setTimeout(() => {
-      if (email && senha) {
-        alert("Login desabilitado: navegação entre páginas foi removida");
-      } else {
-        alert("Preencha todos os campos!");
-      }
-      setLoading(false);
-    }, 1000);
-  };
-
+export default function Page() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-purple-50 to-purple-100">
-      
-      <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
-        <button className="text-2xl font-bold text-purple-600 hover:text-purple-700 cursor-not-allowed opacity-60" disabled>
-          Smart City
-        </button>
-        <Button variant="outline" size="md" disabled>
-          ← Voltar
-        </Button>
-      </nav>
-
-      
-      <div className="max-w-md mx-auto py-12 px-4">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h2>
-
-          
-          <div className="flex gap-2 mb-6">
-            <button
-              onClick={() => setTipoLogin("cidadao")}
-              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
-                tipoLogin === "cidadao"
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              }`}
-            >
-              Cidadão
-            </button>
-            <button
-              onClick={() => setTipoLogin("gestor")}
-              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition ${
-                tipoLogin === "gestor"
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              }`}
-            >
-              Gestor
-            </button>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                placeholder="seu@email.com"
-              />
-            </div>
-
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Senha
-              </label>
-              <input
-                type="password"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-                placeholder="••••••••"
-              />
-            </div>
-
-            
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              className="w-full mt-6"
-              disabled={loading}
-            >
-              {loading ? "Entrando..." : "Entrar"}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Não tem cadastro?{" "}
-              <button className="text-purple-600 font-bold hover:underline cursor-not-allowed opacity-60" disabled>
-                Cadastre-se aqui
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ChakraProvider>
+      <LoginPage />
+    </ChakraProvider>
   );
 }
 
+function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  return (
+    <Box minH="100vh" position="relative" display="flex" alignItems="center" justifyContent="center">
+
+      {/* 🌆 BACKGROUND COM IMAGEM */}
+      <Box
+        position="absolute"
+        inset="0"
+        bgImage="url('/images/recife.jpg')"
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
+      />
+
+      {/* 🎨 GRADIENTE */}
+      <Box
+        position="absolute"
+        inset="0"
+        bg="linear-gradient(135deg, #3D2683cc 0%, #8528FFaa 50%, #FF6636cc 100%)"
+      />
+
+      {/* 📦 CARD */}
+      <Box
+        position="relative"
+        bg="white"
+        p={8}
+        rounded="lg"
+        shadow="xl"
+        w="400px"
+      >
+        <VStack spacing={4}>
+
+          {/* TÍTULO */}
+          <Heading size="lg" color="purple.600">
+            Smart City
+          </Heading>
+
+          {/* BOTÕES */}
+          <Button
+            w="full"
+            bg="purple.600"
+            color="white"
+            _hover={{ bg: "purple.700" }}
+          >
+            Entrar com Certificado Digital
+          </Button>
+
+          <Button
+            w="full"
+            bg="purple.500"
+            color="white"
+            _hover={{ bg: "purple.600" }}
+          >
+            Entrar com gov.br
+          </Button>
+
+          {/* TEXTO */}
+          <Text fontSize="sm" textAlign="center">
+            Faça login em sua conta. <br />
+            Ou{" "}
+            <Text as="span" color="purple.600" fontWeight="bold" cursor="pointer">
+              Cadastre-se
+            </Text>
+          </Text>
+
+          {/* INPUT EMAIL */}
+          <Box w="full">
+            <Text fontSize="sm" mb={1}>
+              Email
+            </Text>
+            <Input
+              bg="purple.50"
+              borderColor="purple.300"
+              _hover={{ borderColor: "purple.400" }}
+              _focus={{
+                borderColor: "purple.600",
+                boxShadow: "0 0 0 1px purple.600",
+              }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Box>
+
+          {/* INPUT SENHA */}
+          <Box w="full">
+            <Text fontSize="sm" mb={1}>
+              Senha
+            </Text>
+            <Input
+              type="password"
+              bg="purple.50"
+              borderColor="purple.300"
+              _hover={{ borderColor: "purple.400" }}
+              _focus={{
+                borderColor: "purple.600",
+                boxShadow: "0 0 0 1px purple.600",
+              }}
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+          </Box>
+
+          {/* CHECKBOX */}
+          <Box display="flex" justifyContent="space-between" w="full" fontSize="sm">
+            <Checkbox colorScheme="purple">
+              Mantenha-me conectado
+            </Checkbox>
+
+            <Text color="gray.500" cursor="pointer">
+              Esqueceu a senha?
+            </Text>
+          </Box>
+
+          {/* BOTÃO FINAL */}
+          <Button
+            w="full"
+            bg="purple.600"
+            color="white"
+            _hover={{ bg: "purple.700" }}
+          >
+            ENTRAR
+          </Button>
+        </VStack>
+      </Box>
+    </Box>
+  );
+}

@@ -4,6 +4,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: "primary" | "secondary" | "outline";
   size?: "sm" | "md" | "lg";
+  asChild?: boolean;  
 }
 
 const variantStyles = {
@@ -23,6 +24,7 @@ export function Button({
   variant = "primary",
   size = "md",
   className = "",
+  asChild, 
   ...props
 }: ButtonProps) {
   const baseStyles =
