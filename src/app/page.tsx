@@ -58,7 +58,7 @@ export default function HomePage() {
                     _hover={{ transform: "scale(1.05)", filter: "brightness(1.1)" }}
                     cursor="pointer"
                   >
-                    <Link href="/cadastro">Faça sua denúncia</Link>
+                    <Link href="/login">Faça sua denúncia</Link>
                   </Button>
                 </VStack>
 
@@ -71,21 +71,22 @@ export default function HomePage() {
               </Flex>
 
               {/* Botão Sou Gestor - O Roxo vibrante no canto */}
-              <Flex justify="flex-end">
-                <Button
-                  asChild
-                  height="80px"
-                  px="50px"
-                  fontSize="24px"
-                  fontWeight="bold"
-                  borderRadius="20px"
-                  background="#7F3DFF" // Roxo da imagem
-                  _hover={{ background: "#6A26F0" }}
-                  boxShadow="0 10px 25px rgba(127, 61, 255, 0.3)"
-                >
-                  <Link href="/gestor">Sou gestor</Link>
-                </Button>
-              </Flex>
+            <Flex justify="flex-end">
+              <Button
+                asChild
+                height="80px"
+                px="50px"
+                fontSize="24px"
+                fontWeight="bold"
+                borderRadius="20px"
+                background="#7F3DFF"
+                _hover={{ background: "#6A26F0" }}
+                boxShadow="0 10px 25px rgba(127, 61, 255, 0.3)"
+              >
+                {/* Remova o "/page", deixe apenas o caminho da pasta */}
+                <Link href="/logingestor">Sou gestor</Link>
+              </Button>
+            </Flex>
 
             </Flex>
           </Container>

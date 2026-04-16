@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 
 import { DemandCard } from "@/components/UI/DemandCard"
 import { useDemandStore } from "@/stores/useDemandStore"
+import Link from "next/link";
 
 // constants
 import { CATEGORIAS, REGIOES, STATUS, PRIORIDADES } from '@/constants/demanda'
@@ -66,12 +67,17 @@ export default function TelaUsuarioPage() {
 
         <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-10">
 
-          {/* BOTÃO PRINCIPAL */}
-          <div className="flex justify-center mb-10">
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition">
-              Criar Nova Solicitação
-            </button>
-          </div>
+      {/* BOTÃO PRINCIPAL */}
+      <div className="flex justify-center mb-10">
+        <Link href="/demandas/nova">
+          <button 
+            type="button"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+          >
+            Criar Nova Solicitação
+          </button>
+        </Link>
+      </div>
 
           {/* FILTROS */}
           <div className="mb-10">

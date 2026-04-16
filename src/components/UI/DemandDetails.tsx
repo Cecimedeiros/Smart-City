@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
 import { Button } from "./Button";
+import Link from "next/link";
 
 interface DemandDetailsProps {
   demand: Demand;
@@ -212,13 +213,14 @@ export function DemandDetails({
       </div>
 
       {/* Rodapé com botões de ação */}
+
       <div className="flex justify-end items-center pt-6 border-t border-gray-200">
-        <button
-          onClick={onBack}
+        <Link 
+          href="/telaUsuario" 
           className="text-purple-600 text-sm font-semibold hover:text-purple-700 transition-colors"
         >
           ← Voltar
-        </button>
+        </Link>
       </div>
     </div>
   );

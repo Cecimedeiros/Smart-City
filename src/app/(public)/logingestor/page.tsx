@@ -147,7 +147,7 @@ function LoginPage() {
           color="white"
           _hover={{ bg: "purple.700" }}
         >
-          <Link href="/telaUsuario">
+          <Link href="/gestor">
             ENTRAR
           </Link>
         </Button>

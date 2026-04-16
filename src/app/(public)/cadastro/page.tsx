@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/UI/Button";
+import Link from "next/link";
 
 export default function CadastroPage() {
   const [nome, setNome] = useState("");
@@ -165,13 +166,15 @@ export default function CadastroPage() {
               />
             )}
 
-            <Button
-              type="submit"
-              className="w-full mt-2"
-              disabled={loading}
-            >
-              {loading ? "Criando..." : "Criar Conta"}
-            </Button>
+            <Link href="/telaUsuario">
+              <Button 
+                type="button" 
+                className="w-full mt-2" 
+                disabled={loading}
+              >
+                {loading ? "Criando..." : "Criar Conta"}
+              </Button>
+            </Link>
 
           </form>
         </div>

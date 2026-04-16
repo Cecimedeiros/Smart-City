@@ -1,5 +1,6 @@
 import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
 import { Button } from "./Button";
+import Link from "next/link";
 
 interface DemandCardProps {
   demand: Demand;
@@ -61,13 +62,11 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
         </div>
       </div>
 
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={() => onViewDetails(demand.id)}
-      >
+    <Button variant="primary" size="sm" asChild>
+      <Link href={`/demandas/${demand.id}`}>
         Ver Detalhes
-      </Button>
+      </Link>
+    </Button>
     </div>
   );
 }

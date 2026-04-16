@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useDemandStore } from '@/stores/useDemandStore'
 import { Demand } from '@/types/demand'
+import Link from "next/link";
 
 const CATEGORIAS = [
   "Iluminação Pública", "Manutenção de vias", "Saneamento", 
@@ -178,9 +179,14 @@ export function FormDemanda() {
           ))}
         </div>
 
-        <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-wider">
+      <Link href="/telaUsuario" className="w-full">
+        <button 
+          type="button" 
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-wider"
+        >
           Salvar Denúncia
         </button>
+      </Link>
       </div>
     </form>
   )
