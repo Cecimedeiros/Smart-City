@@ -1,13 +1,18 @@
 "use client";
 
 import { Button } from "@/components/UI/Button";
+import Link from "next/link";
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-linear-to-b from-purple-50 to-purple-100">
       {/* Navbar */}
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
+        <Link href="/page">
+          <h1 className="text-2xl font-bold text-purple-600 cursor-pointer hover:opacity-80 transition-opacity">
+            Smart City
+          </h1>
+        </Link>
         <div className="flex items-center gap-4">
           <button
             className="text-purple-600 font-bold hover:text-purple-700 transition cursor-not-allowed opacity-60"

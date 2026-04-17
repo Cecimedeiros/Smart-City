@@ -5,6 +5,7 @@ import { useDemandStore } from '@/stores/useDemandStore';
 import { Button } from '@/components/UI/Button';
 import { DemandDetails } from '@/components/UI/DemandDetails';
 import { useState } from 'react';
+import Link from "next/link";
 
 // Página de detalhes da demanda para CIDADÃO (visualização apenas)
 export default function DemandDetailsCitizenPage() {
@@ -37,17 +38,24 @@ export default function DemandDetailsCitizenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* NAVBAR: Header com logo e info do usuário */}
-      <nav className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-gray-700">Usuário</span>
-          <a href="#" className="text-purple-600 hover:text-purple-700">
-            Sair
-          </a>
-        </div>
-      </nav>
+        <div className="min-h-screen bg-neutral-100"> 
+          
+          <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-100 px-6 py-4 flex justify-between items-center">
+            <Link href="/">
+              <h1 className="text-2xl font-bold text-purple-600 cursor-pointer hover:opacity-80 transition-opacity">
+                Smart City
+              </h1>
+            </Link>
+            <div className="flex gap-4 items-center">
+              <span className="text-sm font-medium text-purple-700">Usuário</span>
+            <Link 
+              href="/" 
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              Sair
+            </Link>
+            </div>
+          </header>
 
       {/* BANNER: Gradiente com título da seção */}
       <div className="w-full h-64 bg-gradient-to-r from-indigo-700 via-purple-600 to-orange-500 flex items-center justify-center">

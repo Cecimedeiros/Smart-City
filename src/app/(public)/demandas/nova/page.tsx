@@ -2,16 +2,26 @@
 'use client'
 
 import { FormDemanda } from "../../../../components/demands/FormDemanda"; 
+import Link from "next/link";
 
 export default function NovaDemandaPage() {
   return (
     <div className="min-h-screen bg-neutral-100"> 
       
       <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-100 px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
+        <Link href="/">
+          <h1 className="text-2xl font-bold text-purple-600 cursor-pointer hover:opacity-80 transition-opacity">
+            Smart City
+          </h1>
+        </Link>
         <div className="flex gap-4 items-center">
           <span className="text-sm font-medium text-purple-700">Usuário</span>
-          <button className="text-sm text-gray-600 hover:text-gray-900">Sair</button>
+        <Link 
+          href="/" 
+          className="text-sm text-gray-600 hover:text-gray-900"
+        >
+          Sair
+        </Link>
         </div>
       </header>
 
