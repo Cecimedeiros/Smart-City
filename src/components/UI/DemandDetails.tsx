@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
-import { Button } from "./Button";
-import Link from "next/link";
 
 interface DemandDetailsProps {
   demand: Demand;
   onBack: () => void;
-  isManager?: boolean;
   onStatusChange?: (status: DemandStatus) => void;
   onPriorityChange?: (priority: DemandPriority) => void;
 }
@@ -25,7 +22,6 @@ const statusColors: Record<DemandStatus, string> = {
 export function DemandDetails({
   demand,
   onBack,
-  isManager = false,
   onStatusChange,
   onPriorityChange,
 }: DemandDetailsProps) {
@@ -44,55 +40,40 @@ export function DemandDetails({
     setIsEditingPriority(false);
   };
 
-  const statusColor = statusColors[demand.status as DemandStatus] || statusColors.Aberta;
-
   return (
-    <div className="border border-gray-300 rounded-2xl p-8 mt-6 bg-white">
-      {/* Cabeçalho com indicador de status */}
+    <div className="border border-gray-300 rounded-lg p-8 mt-6 bg-white">
       <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200">
-        <div className={`w-6 h-6 rounded-full ${statusColor}`} />
+        <div className="w-6 h-6 rounded-full bg-red-600" />
         <h2 className="text-xl font-bold text-gray-800">{demand.problema}</h2>
       </div>
 
-      {/* Grid principal: Foto, Metadados, Detalhes */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
-        {/* Coluna 1: Foto */}
         <div className="flex flex-col items-center">
-          <p className="text-sm font-semibold text-gray-700 mb-3">Foto:</p>
-          <div className="bg-gray-200 rounded-lg h-40 w-full max-w-xs flex items-center justify-center text-gray-400 overflow-hidden">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Foto:</p>
+          <div className="bg-gray-200 rounded-md h-40 w-full max-w-xs mb-4 flex items-center justify-center text-gray-400">
             {demand.fotoUrl ? (
-              <img 
-                src={demand.fotoUrl} 
-                alt={demand.problema} 
-                className="w-full h-full object-cover" 
-              />
+              <img src={demand.fotoUrl} alt={demand.problema} className="w-full h-full object-cover rounded-md" />
             ) : (
-              <span className="text-sm">Sem imagem</span>
+              <span>Sem imagem</span>
             )}
           </div>
         </div>
 
-        {/* Coluna 2: Metadados (2 colunas de campos) */}
         <div className="flex flex-col gap-4 text-sm text-gray-800">
-          {/* Linha 1: Categoria */}
           <div>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Categoria</p>
-            <p className="text-sm font-medium text-gray-700 mt-1">{demand.category}</p>
+            <p className="text-xs text-gray-500 font-semibold">Categoria</p>
+            <p className="text-sm">{demand.category}</p>
           </div>
 
-          {/* Linha 2: Prioridade (editável para gestor) */}
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Prioridade</span>
-              {isManager && !isEditingPriority && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-semibold">Prioridade</span>
+              {!isEditingPriority && (
                 <button
                   onClick={() => setIsEditingPriority(true)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
-                  title="Editar prioridade"
+                  className="p-1 hover:bg-gray-100 rounded"
                 >
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
+                  ✏️
                 </button>
               )}
             </div>
@@ -101,7 +82,7 @@ export function DemandDetails({
                 <select
                   value={tempPriority}
                   onChange={(e) => setTempPriority(e.target.value as DemandPriority)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="px-2 py-1 border border-gray-300 rounded text-sm"
                 >
                   {priorityOptions.map((p) => (
                     <option key={p} value={p}>
@@ -111,7 +92,7 @@ export function DemandDetails({
                 </select>
                 <button
                   onClick={handlePrioritySave}
-                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700"
                 >
                   ✓
                 </button>
@@ -120,31 +101,25 @@ export function DemandDetails({
                     setTempPriority(demand.priority);
                     setIsEditingPriority(false);
                   }}
-                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400 transition-colors"
+                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400"
                 >
                   ✕
                 </button>
               </div>
             ) : (
-              <p className="text-sm font-semibold text-gray-700 mt-1">
-                {demand.priority === "Media" ? "Média" : demand.priority}
-              </p>
+              <p className="text-sm font-bold">{demand.priority === "Media" ? "Média" : demand.priority}</p>
             )}
           </div>
 
-          {/* Linha 3: Status (editável para gestor) */}
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Status</span>
-              {isManager && !isEditingStatus && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 font-semibold">Status</span>
+              {!isEditingStatus && (
                 <button
                   onClick={() => setIsEditingStatus(true)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
-                  title="Editar status"
+                  className="p-1 hover:bg-gray-100 rounded"
                 >
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
+                  ✏️
                 </button>
               )}
             </div>
@@ -153,7 +128,7 @@ export function DemandDetails({
                 <select
                   value={tempStatus}
                   onChange={(e) => setTempStatus(e.target.value as DemandStatus)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="px-2 py-1 border border-gray-300 rounded text-sm"
                 >
                   {statusOptions.map((s) => (
                     <option key={s} value={s}>
@@ -163,7 +138,7 @@ export function DemandDetails({
                 </select>
                 <button
                   onClick={handleStatusSave}
-                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700"
                 >
                   ✓
                 </button>
@@ -172,55 +147,47 @@ export function DemandDetails({
                     setTempStatus(demand.status);
                     setIsEditingStatus(false);
                   }}
-                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400 transition-colors"
+                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400"
                 >
                   ✕
                 </button>
               </div>
             ) : (
-              <p className="text-sm font-semibold text-gray-700 mt-1">
-                {demand.status === "Em análise" ? "Em Análise" : demand.status}
-              </p>
+              <p className="text-sm font-bold">{demand.status === "Em análise" ? "Em Análise" : demand.status}</p>
             )}
           </div>
 
-          {/* Linha 4: Endereço */}
           <div>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Endereço</p>
-            <p className="text-sm font-medium text-gray-700 mt-1">{demand.endereco}</p>
+            <p className="text-xs text-gray-500 font-semibold">Endereço</p>
+            <p className="text-sm">{demand.endereco}</p>
           </div>
 
-          {/* Linha 5: Solicitante */}
           <div>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Solicitante</p>
-            <p className="text-sm font-medium text-gray-700 mt-1">{demand.solicitante}</p>
+            <p className="text-xs text-gray-500 font-semibold">Solicitante</p>
+            <p className="text-sm">{demand.solicitante}</p>
           </div>
 
-          {/* Linha 6: Data de Registro */}
           <div>
-            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Data e Horário de Registro</p>
-            <p className="text-sm font-medium text-gray-700 mt-1">{demand.dataRegistro}</p>
+            <p className="text-xs text-gray-500 font-semibold">Data e horário de registro</p>
+            <p className="text-sm">{demand.dataRegistro}</p>
           </div>
         </div>
 
-        {/* Coluna 3: Detalhes */}
         <div className="flex flex-col">
-          <p className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">Detalhes:</p>
-          <div className="bg-gray-100 rounded-lg p-4 min-h-56 text-sm text-gray-700 overflow-auto border border-gray-200">
+          <p className="text-sm font-bold text-gray-800 mb-2">Detalhes:</p>
+          <div className="bg-gray-200 rounded-md p-4 min-h-56 text-sm text-gray-700 overflow-auto">
             {demand.detalhes}
           </div>
         </div>
       </div>
 
-      {/* Rodapé com botões de ação */}
-
-      <div className="flex justify-end items-center pt-6 border-t border-gray-200">
-        <Link 
-          href="/telaUsuario" 
-          className="text-purple-600 text-sm font-semibold hover:text-purple-700 transition-colors"
+      <div className="flex justify-end pt-6 border-t border-gray-200">
+        <button
+          onClick={onBack}
+          className="text-purple-600 text-sm font-semibold hover:underline"
         >
           ← Voltar
-        </Link>
+        </button>
       </div>
     </div>
   );

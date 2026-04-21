@@ -1,6 +1,5 @@
 import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
 import { Button } from "./Button";
-import Link from "next/link";
 
 interface DemandCardProps {
   demand: Demand;
@@ -33,7 +32,7 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
-  const normalizedStatus = demand.status === "Em análise" ? "Em análise" : demand.status;
+  const normalizedStatus = demand.status === "Em_analise" ? "Em análise" : demand.status;
   const statusConfig_ = statusConfig[normalizedStatus as DemandStatus] ?? statusConfig.Aberta;
   const problemName = demand.problema ?? (demand as any).title ?? "Problema não informado";
 
@@ -62,11 +61,13 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
         </div>
       </div>
 
-    <Button variant="primary" size="sm" asChild>
-      <Link href={`/demandas/${demand.id}`}>
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={() => onViewDetails(demand.id)}
+      >
         Ver Detalhes
-      </Link>
-    </Button>
+      </Button>
     </div>
   );
 }

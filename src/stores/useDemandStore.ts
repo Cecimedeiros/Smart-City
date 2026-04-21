@@ -3,7 +3,7 @@ import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/dem
 import { MOCK_DEMANDS } from '@/mocks/fake-data';
 
 const normalizeStatus = (status: string): DemandStatus => {
-  if (status === "Em análise") return "Em análise";
+  if (status === "Em_analise") return "Em análise";
   if (status === "Aberta" || status === "Em análise" || status === "Resolvida") return status;
   return "Aberta";
 };

@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useDemandStore } from '@/stores/useDemandStore';
 import { Button } from '@/components/UI/Button';
 import { DemandDetails } from '@/components/UI/DemandDetails';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import Link from "next/link";
 
 // Página de detalhes da demanda para CIDADÃO (visualização apenas)
@@ -12,6 +12,15 @@ export default function DemandDetailsCitizenPage() {
   const params = useParams();
   const router = useRouter();
   const demandId = params.id as string;
+
+  // Se o acesso vier do fluxo do gestor, garante o detalhe do gestor.
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const referrer = document.referrer || '';
+    if (referrer.includes('/gestor/')) {
+      router.replace(`/gestor/demandas/${demandId}`);
+    }
+  }, [demandId, router]);
 
   // Pega a demanda do store pelo ID da URL
   const demand = useDemandStore((state) =>

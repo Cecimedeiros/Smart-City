@@ -8,7 +8,6 @@ import { Button } from "@/components/UI/Button";
 import { Select } from "@/components/UI/Select";
 import { DemandCard } from "@/components/UI/DemandCard";
 import { useEffect } from "react";
-import Link from "next/link";
 
 export default function Page() {
   const router = useRouter();
@@ -58,9 +57,9 @@ export default function Page() {
           <a href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
             Painel de Gestão
           </a>
-        <Link href="/page" className="text-purple-400 font-normal hover:text-purple-500">
-          Sair
-        </Link>
+          <a href="/login" className="text-purple-400 font-normal hover:text-purple-500">
+            Sair
+          </a>
         </div>
       </nav>
 
