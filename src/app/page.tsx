@@ -41,7 +41,6 @@ export default function HomePage() {
                   </Heading>
 
                   <Button
-                    asChild
                     height="110px"
                     px="60px"
                     fontSize="45px" 
@@ -65,7 +64,6 @@ export default function HomePage() {
 
             <Flex justify="flex-end">
               <Button
-                asChild
                 height="80px"
                 px="50px"
                 fontSize="24px"

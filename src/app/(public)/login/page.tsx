@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChakraProvider, defaultSystem, Box, Button, Input, Text, VStack, Heading } from "@chakra-ui/react";
+import { ChakraProvider, Box, Button, Input, Text, VStack, Heading } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; 
 import { useDemandStore } from "@/stores/useDemandStore"; 
@@ -23,7 +23,7 @@ export default function LoginPage() {
   };
 
   return (
-    <ChakraProvider value={defaultSystem}>
+    <ChakraProvider>
       <Box minH="100vh" position="relative" display="flex" alignItems="center" justifyContent="center" overflow="hidden">
         <Box position="absolute" inset="0" bgImage="url('/images/recife.jpg')" bgSize="cover" bgPos="center" bgRepeat="no-repeat" zIndex="0" />
         <Box position="absolute" inset="0" bg="linear-gradient(135deg, #3D2683cc 0%, #8528FFaa 50%, #FF6636cc 100%)" zIndex="1" />
@@ -32,7 +32,7 @@ export default function LoginPage() {
           <Link href="/" passHref>
             <Text fontSize="2xl" fontWeight="bold" color="white" opacity="0.7" cursor="pointer" _hover={{ opacity: 1 }}>Smart City</Text>
           </Link>
-          <Button variant="outline" color="white" borderColor="white" asChild>
+          <Button variant="outline" color="white" borderColor="white">
             <Link href="/">← Voltar</Link>
           </Button>
         </Box>
