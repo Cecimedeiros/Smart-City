@@ -45,13 +45,11 @@ export default function CadastroPage() {
   return (
     <div className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
       
-      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/recife.jpg')" }}
       />
 
-      {/* Overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -60,7 +58,6 @@ export default function CadastroPage() {
         }}
       />
 
-      {/* Navbar */}
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
         <div className="text-2xl font-bold text-white opacity-60">
           Smart City
@@ -76,7 +73,6 @@ export default function CadastroPage() {
         </Button>
       </nav>
 
-      {/* Card */}
       <div className="relative z-10 w-full max-w-sm mx-4 mt-20">
         <div className="bg-white rounded-2xl shadow-xl px-8 py-8">
 

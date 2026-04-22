@@ -32,7 +32,8 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
-  const normalizedStatus = demand.status === "Em_analise" ? "Em análise" : demand.status;
+  
+  const normalizedStatus = (demand.status as string) === "Em_analise" ? "Em análise" : demand.status;
   const statusConfig_ = statusConfig[normalizedStatus as DemandStatus] ?? statusConfig.Aberta;
   const problemName = demand.problema ?? (demand as any).title ?? "Problema não informado";
 
@@ -61,10 +62,10 @@ export function DemandCard({ demand, onViewDetails }: DemandCardProps) {
         </div>
       </div>
 
-      <Button
-        variant="primary"
-        size="sm"
+      
+      <Button 
         onClick={() => onViewDetails(demand.id)}
+        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all cursor-pointer hover:shadow-md hover:-translate-y-0.5 active:scale-95"
       >
         Ver Detalhes
       </Button>

@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { useDemandStore } from '@/stores/useDemandStore'
 import { Demand } from '@/types/demand'
-import Link from "next/link";
+import { useRouter } from "next/navigation"
 
 const CATEGORIAS = [
   "Iluminação Pública", "Manutenção de vias", "Saneamento", 
@@ -25,6 +25,7 @@ const PROBLEMAS_POR_CATEGORIA: Record<string, string[]> = {
 };
 
 export function FormDemanda() {
+  const router = useRouter()
   const addDemand = useDemandStore((state) => state.addDemand)
   const fileInputRef = useRef<HTMLInputElement>(null)
   
@@ -82,37 +83,34 @@ export function FormDemanda() {
       createdAt: new Date().toLocaleDateString('pt-BR'),
       fotoUrl: images[0] || "", 
       endereco: formData.endereco,
-      solicitante: "Utilizador", 
+      solicitante: "Usuário", 
       dataRegistro: new Date().toLocaleString('pt-BR'),
       detalhes: formData.descricao,
     }
 
     addDemand(novaDenuncia)
     alert("✅ Demanda salva com sucesso!")
-    
-    setFormData({ problema: '', categoria: '', regiao: '', endereco: '', descricao: '' })
-    setImages([null, null, null])
+    router.push("/telaUsuario")
   }
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-8 rounded-4xl shadow-xl w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8">
       
       <div className="flex flex-col gap-5">
-
         <select 
           required 
-          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500"
+          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500 cursor-pointer"
           value={formData.categoria}
-          onChange={(e) => setFormData({...formData, categoria: e.target.value, problema: ''})} // Reseta o problema ao mudar categoria
+          onChange={(e) => setFormData({...formData, categoria: e.target.value, problema: ''})}
         >
-          <option value="" disabled> Selecione a Categoria do Problema Urbano Encontrado *</option>
+          <option value="" disabled> Selecione a Categoria *</option>
           {CATEGORIAS.map(cat => <option key={cat} value={cat}>{cat}</option>)}
         </select>
 
         <select 
           required 
           disabled={!formData.categoria} 
-          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500 disabled:bg-gray-50 disabled:cursor-not-allowed"
+          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500 disabled:bg-gray-50 disabled:cursor-not-allowed cursor-pointer"
           value={formData.problema}
           onChange={(e) => setFormData({...formData, problema: e.target.value})}
         >
@@ -124,7 +122,7 @@ export function FormDemanda() {
 
         <select 
           required 
-          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500"
+          className="w-full py-3 border border-gray-300 rounded-full text-center outline-none bg-white text-gray-600 focus:border-purple-500 cursor-pointer"
           value={formData.regiao}
           onChange={(e) => setFormData({...formData, regiao: e.target.value})}
         >
@@ -150,11 +148,14 @@ export function FormDemanda() {
       <div className="flex flex-col gap-6">
         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
 
-        <div onClick={() => openExplorer(0)} className="relative grow border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center overflow-hidden hover:border-purple-400 transition-colors cursor-pointer min-h-[200px] bg-gray-50">
+        <div 
+          onClick={() => openExplorer(0)} 
+          className="relative grow border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center overflow-hidden hover:border-purple-400 hover:bg-purple-50 transition-all cursor-pointer min-h-[200px] bg-gray-50"
+        >
           {images[0] ? (
             <>
               <img src={images[0]} alt="Preview" className="w-full h-full object-cover" />
-              <button type="button" onClick={(e) => removeImage(0, e)} className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors">✕</button>
+              <button type="button" onClick={(e) => removeImage(0, e)} className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors cursor-pointer">✕</button>
             </>
           ) : (
             <div className="text-center">
@@ -166,11 +167,15 @@ export function FormDemanda() {
 
         <div className="flex gap-4">
           {[1, 2].map((i) => (
-            <div key={i} onClick={() => openExplorer(i)} className="relative w-1/2 h-32 border border-gray-300 rounded-2xl flex items-center justify-center overflow-hidden hover:bg-gray-100 cursor-pointer bg-white">
+            <div 
+              key={i} 
+              onClick={() => openExplorer(i)} 
+              className="relative w-1/2 h-32 border border-gray-300 rounded-2xl flex items-center justify-center overflow-hidden hover:bg-gray-100 hover:border-purple-300 cursor-pointer bg-white transition-all"
+            >
               {images[i] ? (
                 <>
                   <img src={images[i]} alt="Preview small" className="w-full h-full object-cover" />
-                  <button type="button" onClick={(e) => removeImage(i, e)} className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition-colors">✕</button>
+                  <button type="button" onClick={(e) => removeImage(i, e)} className="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-md hover:bg-red-600 transition-colors cursor-pointer">✕</button>
                 </>
               ) : (
                 <span className="text-4xl text-gray-300">+</span>
@@ -179,14 +184,18 @@ export function FormDemanda() {
           ))}
         </div>
 
-      <Link href="/telaUsuario" className="w-full">
         <button 
-          type="button" 
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-wider"
+          type="submit" 
+          className="
+            w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider
+            transition-all duration-200 cursor-pointer
+            hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1
+            active:scale-95 active:translate-y-0
+            shadow-lg
+          "
         >
           Salvar Denúncia
         </button>
-      </Link>
       </div>
     </form>
   )

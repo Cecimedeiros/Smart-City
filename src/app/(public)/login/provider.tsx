@@ -1,7 +1,11 @@
-"use client";
+'use client'
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 
-export function LoginProvider({ children }: { children: React.ReactNode }) {
-  return <ChakraProvider>{children}</ChakraProvider>;
+export function Provider({ children }: { children: React.ReactNode }) {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      {children}
+    </ChakraProvider>
+  )
 }

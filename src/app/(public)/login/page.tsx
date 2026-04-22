@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
-import {
+import { 
+  ChakraProvider, 
+  defaultSystem,
   Box,
   Button,
   Input,
@@ -15,7 +16,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <ChakraProvider>
+    <ChakraProvider value={defaultSystem}>
       <LoginPage />
     </ChakraProvider>
   );
@@ -26,131 +27,183 @@ function LoginPage() {
   const [senha, setSenha] = useState("");
 
   return (
-    <Box minH="100vh" position="relative" display="flex" alignItems="center" justifyContent="center">
+    <Box 
+      minH="100vh" 
+      position="relative" 
+      display="flex" 
+      alignItems="center" 
+      justifyContent="center"
+      overflow="hidden"
+    >
 
-      {/* 🌆 BACKGROUND COM IMAGEM */}
       <Box
         position="absolute"
         inset="0"
         bgImage="url('/images/recife.jpg')"
         bgSize="cover"
-        bgPosition="center"
+        bgPos="center"
         bgRepeat="no-repeat"
+        zIndex="0"
       />
 
-      {/* 🎨 GRADIENTE */}
       <Box
         position="absolute"
         inset="0"
         bg="linear-gradient(135deg, #3D2683cc 0%, #8528FFaa 50%, #FF6636cc 100%)"
+        zIndex="1"
       />
 
-      {/* 📦 CARD */}
+      <Box 
+        as="nav"
+        position="absolute" 
+        top="0" 
+        left="0" 
+        right="0" 
+        display="flex" 
+        justifyContent="space-between" 
+        alignItems="center" 
+        px={{ base: 8, md: 16 }} 
+        py={{ base: 6, md: 10 }} 
+        zIndex="30"
+      >
+        <Link href="/" passHref>
+          <Text 
+            fontSize="2xl" 
+            fontWeight="bold" 
+            color="white" 
+            opacity="0.7" 
+            cursor="pointer"
+            _hover={{ opacity: 1 }} 
+            transition="all 0.3s"
+          >
+            Smart City
+          </Text>
+        </Link>
+
+        <Button
+          variant="outline"
+          color="white"
+          borderColor="white"
+          px={6}
+          _hover={{ bg: "white", color: "purple.600", transform: "translateY(-2px)" }}
+          transition="all 0.2s"
+        >
+          <Link href="/">
+            ← Voltar
+          </Link>
+        </Button>
+      </Box>
+
       <Box
         position="relative"
         bg="white"
         p={8}
-        rounded="lg"
-        shadow="xl"
-        w="400px"
+        rounded="2xl"
+        shadow="2xl"
+        w="full"
+        maxW="400px"
+        zIndex="10"
+        mx={4} 
       >
-        <VStack spacing={4}>
+        <VStack gap={6}>
 
-          {/* TÍTULO */}
-          <Heading size="lg" color="purple.600">
+          <Heading size="lg" color="purple.700" textAlign="center">
             Smart City
           </Heading>
 
-          {/* BOTÕES */}
-          <Button
-            w="full"
-            bg="purple.600"
-            color="white"
-            _hover={{ bg: "purple.700" }}
-          >
-            Entrar com Certificado Digital
-          </Button>
+          <VStack w="full" gap={3}>
+            <Button
+              w="full"
+              bg="purple.600"
+              color="white"
+              _hover={{ bg: "purple.700" }}
+            >
+              Entrar com Certificado Digital
+            </Button>
 
-          <Button
-            w="full"
-            bg="purple.500"
-            color="white"
-            _hover={{ bg: "purple.600" }}
-          >
-            Entrar com gov.br
-          </Button>
+            <Button
+              w="full"
+              bg="purple.500"
+              color="white"
+              _hover={{ bg: "purple.600" }}
+            >
+              Entrar com gov.br
+            </Button>
+          </VStack>
 
-          {/* TEXTO */}
-          <Text fontSize="sm" textAlign="center">
+          <Text fontSize="sm" textAlign="center" color="gray.600">
             Faça login em sua conta. <br />
             Ou{" "}
-          <Link href="/cadastro">
-            <Text as="span" color="purple.600" fontWeight="bold" cursor="pointer">
-              Cadastre-se
-            </Text>
-          </Link>
+            <Link href="/cadastro">
+              <Text as="span" color="purple.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                Cadastre-se
+              </Text>
+            </Link>
           </Text>
 
-          {/* INPUT EMAIL */}
-          <Box w="full">
-            <Text fontSize="sm" mb={1}>
-              Email
-            </Text>
-            <Input
-              bg="purple.50"
-              borderColor="purple.300"
-              _hover={{ borderColor: "purple.400" }}
-              _focus={{
-                borderColor: "purple.600",
-                boxShadow: "0 0 0 1px purple.600",
-              }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Box>
+          <VStack w="full" gap={4}>
+            <Box w="full">
+              <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">
+                Email
+              </Text>
+              <Input
+                placeholder="seu@email.com"
+                bg="purple.50"
+                borderColor="purple.200"
+                _focus={{
+                  borderColor: "purple.600",
+                  outline: "none",
+                  bg: "white"
+                }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Box>
 
-          {/* INPUT SENHA */}
-          <Box w="full">
-            <Text fontSize="sm" mb={1}>
-              Senha
-            </Text>
-            <Input
-              type="password"
-              bg="purple.50"
-              borderColor="purple.300"
-              _hover={{ borderColor: "purple.400" }}
-              _focus={{
-                borderColor: "purple.600",
-                boxShadow: "0 0 0 1px purple.600",
-              }}
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-          </Box>
+            <Box w="full">
+              <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">
+                Senha
+              </Text>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                bg="purple.50"
+                borderColor="purple.200"
+                _focus={{
+                  borderColor: "purple.600",
+                  outline: "none",
+                  bg: "white"
+                }}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+              />
+            </Box>
+          </VStack>
 
-          {/* CHECKBOX */}
-          <Box display="flex" justifyContent="space-between" w="full" fontSize="sm">
-            <Checkbox colorScheme="purple">
-              Mantenha-me conectado
-            </Checkbox>
+          <Box display="flex" justifyContent="space-between" alignItems="center" w="full">
+            <Checkbox.Root colorPalette="purple" defaultChecked>
+              <Checkbox.HiddenInput />
+              <Checkbox.Control />
+              <Checkbox.Label fontSize="xs" color="gray.600">Mantenha-me conectado</Checkbox.Label>
+            </Checkbox.Root>
 
-            <Text color="gray.500" cursor="pointer">
+            <Text color="purple.600" cursor="pointer" fontSize="xs" fontWeight="semibold" _hover={{ textDecoration: "underline" }}>
               Esqueceu a senha?
             </Text>
           </Box>
 
-          {/* BOTÃO FINAL */}
-        <Button
-          asChild
-          w="full"
-          bg="purple.600"
-          color="white"
-          _hover={{ bg: "purple.700" }}
-        >
-          <Link href="/telaUsuario">
-            ENTRAR
-          </Link>
-        </Button>
+          <Button
+            w="full"
+            size="lg"
+            bg="purple.600"
+            color="white"
+            fontWeight="bold"
+            _hover={{ bg: "purple.700", shadow: "md" }}
+          >
+            <Link href="/telaUsuario" style={{ width: '100%', textAlign: 'center' }}>
+              ENTRAR
+            </Link>
+          </Button>
         </VStack>
       </Box>
     </Box>

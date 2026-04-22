@@ -3,10 +3,10 @@ import { Select } from "./Select";
 import { Button } from "./Button";
 
 interface DemandFiltersProps {
-  filters: DemandFiltersType;                                    // Estado atual dos filtros
-  onFilterChange: (key: keyof DemandFiltersType, value: string) => void; // Quando muda um filtro
-  onApplyFilters: () => void;                                   // Quando clica em "Aplicar"
-  onResetFilters: () => void;                                   // Quando clica em "Limpar"
+  filters: DemandFiltersType;                                    
+  onFilterChange: (key: keyof DemandFiltersType, value: string) => void; 
+  onApplyFilters: () => void;                                
+  onResetFilters: () => void;                                  
 }
 
 export function DemandFilters({
@@ -17,15 +17,13 @@ export function DemandFilters({
 }: DemandFiltersProps) {
   return (
     <section className="mb-8">
-      {/* Título da seção */}
+    
       <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">
         Filtros
       </h3>
       
-      {/* Container com todos os filtros em linha */}
       <div className="flex gap-3 items-end bg-gray-50 p-4 rounded-xl border border-gray-200">
         
-        {/* Filtro 1: Status */}
         <div className="flex-1 min-w-[120px]">
           <Select
             label="Status"
@@ -40,7 +38,6 @@ export function DemandFilters({
           />
         </div>
 
-        {/* Filtro 2: Categoria */}
         <div className="flex-1 min-w-[120px]">
           <Select
             label="Categoria"
@@ -60,7 +57,6 @@ export function DemandFilters({
           />
         </div>
 
-        {/* Filtro 3: Região */}
         <div className="flex-1 min-w-[120px]">
           <Select
             label="Região"
@@ -77,7 +73,6 @@ export function DemandFilters({
           />
         </div>
 
-        {/* Filtro 4: Prioridade */}
         <div className="flex-1 min-w-[120px]">
           <Select
             label="Prioridade"
@@ -92,7 +87,6 @@ export function DemandFilters({
           />
         </div>
 
-        {/* Botão "Aplicar Filtro" - roxo */}
         <Button 
           variant="primary" 
           size="md"
@@ -102,7 +96,6 @@ export function DemandFilters({
           Aplicar Filtro
         </Button>
 
-        {/* Botão "Limpar" - cinza */}
         <Button 
           variant="secondary" 
           size="md"

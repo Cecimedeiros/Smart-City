@@ -6,6 +6,7 @@ import { Demand, DemandStatus, DemandPriority } from "@/types/demand";
 interface DemandDetailsProps {
   demand: Demand;
   onBack: () => void;
+  isManager: boolean;
   onStatusChange?: (status: DemandStatus) => void;
   onPriorityChange?: (priority: DemandPriority) => void;
 }

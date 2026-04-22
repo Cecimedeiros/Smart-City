@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Page() {
   return (
     <div className="min-h-screen bg-linear-to-b from-purple-50 to-purple-100">
-      {/* Navbar */}
+   
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
         <Link href="/page">
           <h1 className="text-2xl font-bold text-purple-600 cursor-pointer hover:opacity-80 transition-opacity">

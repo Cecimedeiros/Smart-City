@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { Demand, DemandFilters, DemandStatus, DemandPriority } from "@/types/demand";
 import { MOCK_DEMANDS } from '@/mocks/fake-data';
 
 const normalizeStatus = (status: string): DemandStatus => {
-  if (status === "Em_analise") return "Em análise";
-  if (status === "Aberta" || status === "Em análise" || status === "Resolvida") return status;
+  const s = String(status).trim();
+  if (s === "Em análise" || s === "Aberta" || s === "Resolvida") return s;
   return "Aberta";
 };
 
@@ -22,13 +23,16 @@ interface DemandStore {
   selectedDemand: Demand | null;
   isLoading: boolean; 
   error: string | null;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
   addDemand: (newDemand: Demand) => void;
+  // FUNÇÃO QUE ESTAVA FALTANDO:
+  updateDemand: (id: string, updates: Partial<Demand>) => void;
   getDemandById: (id: string) => Demand | undefined;
   setSelectedDemand: (demand: Demand | null) => void;
   updateDemandStatus: (id: string, newStatus: DemandStatus) => void;
   updateDemandPriority: (id: string, newPriority: DemandPriority) => void;
   fetchDemands: () => Promise<void>;
-  
   setFilters: (filters: Partial<DemandFilters>) => void;
   resetFilters: () => void;
   getFilteredDemands: () => Demand[];
@@ -46,99 +50,99 @@ const defaultFilters: DemandFilters = {
   priority: "",
 };
 
-export const useDemandStore = create<DemandStore>((set, get) => ({
-  demands: normalizeDemands(MOCK_DEMANDS as any[]),
-  filters: defaultFilters,
-  selectedDemand: null,
-  isLoading: false,
-  error: null,
+export const useDemandStore = create<DemandStore>()(
+  persist(
+    (set, get) => ({
+      demands: [], 
+      filters: defaultFilters,
+      selectedDemand: null,
+      isLoading: false,
+      error: null,
+      _hasHydrated: false,
 
-  addDemand: (newDemand: Demand) =>
-    set((state) => ({
-      demands: [newDemand, ...state.demands],
-    })),
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
 
-  getDemandById: (id: string) => {
-    const state = get();
-    return state.demands.find((demand) => demand.id === id);
-  },
+      addDemand: (newDemand: Demand) =>
+        set((state) => ({
+          demands: [newDemand, ...state.demands],
+        })),
 
-  setSelectedDemand: (demand: Demand | null) =>
-    set({
-      selectedDemand: demand,
+      // IMPLEMENTAÇÃO DA ATUALIZAÇÃO GENÉRICA
+      updateDemand: (id, updates) =>
+        set((state) => ({
+          demands: state.demands.map((d) => 
+            d.id === id ? { ...d, ...updates } : d
+          ),
+          // Se a demanda selecionada for a que estamos editando, atualiza ela também
+          selectedDemand: state.selectedDemand?.id === id 
+            ? { ...state.selectedDemand, ...updates } 
+            : state.selectedDemand,
+        })),
+
+      getDemandById: (id: string) => get().demands.find((d) => d.id === id),
+
+      setSelectedDemand: (demand: Demand | null) => set({ selectedDemand: demand }),
+
+      updateDemandStatus: (id: string, newStatus: DemandStatus) =>
+        get().updateDemand(id, { status: newStatus }),
+
+      updateDemandPriority: (id: string, newPriority: DemandPriority) =>
+        get().updateDemand(id, { priority: newPriority }),
+
+      setFilters: (newFilters: Partial<DemandFilters>) =>
+        set((state) => ({ filters: { ...state.filters, ...newFilters } })),
+
+      resetFilters: () => set({ filters: defaultFilters }),
+
+      getFilteredDemands: () => {
+        const { demands, filters } = get();
+        return demands.filter((d) => {
+          if (filters.status && normalizeStatus(d.status) !== normalizeStatus(filters.status)) return false;
+          if (filters.category && d.category !== filters.category) return false;
+          if (filters.region && d.region !== filters.region) return false;
+          if (filters.priority && d.priority !== filters.priority) return false;
+          return true;
+        });
+      },
+
+      getDemandStats: () => {
+        const demands = get().getFilteredDemands();
+        const byCategory: Record<string, number> = {};
+        const byRegion: Record<string, number> = {};
+        demands.forEach((d) => {
+          byCategory[d.category] = (byCategory[d.category] || 0) + 1;
+          byRegion[d.region] = (byRegion[d.region] || 0) + 1;
+        });
+        return { total: demands.length, byCategory, byRegion };
+      },
+
+      fetchDemands: async () => {
+        set({ isLoading: true });
+        try {
+          await new Promise((r) => setTimeout(r, 500));
+          const mocks = normalizeDemands(MOCK_DEMANDS);
+          
+          set((state) => {
+            const currentIds = new Set(state.demands.map(d => d.id));
+            const uniqueMocks = mocks.filter(m => !currentIds.has(m.id));
+            return { 
+              demands: [...state.demands, ...uniqueMocks], 
+              isLoading: false 
+            };
+          });
+        } catch (err) {
+          set({ error: "Erro ao carregar", isLoading: false });
+        }
+      },
     }),
-
-  updateDemandStatus: (id: string, newStatus: DemandStatus) =>
-    set((state) => ({
-      demands: state.demands.map((demand) =>
-        demand.id === id ? { ...demand, status: newStatus } : demand
-      ),
-      selectedDemand:
-        state.selectedDemand?.id === id
-          ? { ...state.selectedDemand, status: newStatus }
-          : state.selectedDemand,
-    })),
-
-  updateDemandPriority: (id: string, newPriority: DemandPriority) =>
-    set((state) => ({
-      demands: state.demands.map((demand) =>
-        demand.id === id ? { ...demand, priority: newPriority } : demand
-      ),
-      selectedDemand:
-        state.selectedDemand?.id === id
-          ? { ...state.selectedDemand, priority: newPriority }
-          : state.selectedDemand,
-    })),
-
-  setFilters: (newFilters: Partial<DemandFilters>) =>
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters },
-    })),
-
-  resetFilters: () => set({ filters: defaultFilters }),
-
-  getFilteredDemands: () => {
-    const state = get();
-    return state.demands.filter((demand) => {
-      const demandStatus = normalizeStatus(String(demand.status).trim());
-      const filterStatus = state.filters.status
-        ? normalizeStatus(String(state.filters.status).trim())
-        : "";
-      if (filterStatus && demandStatus !== filterStatus) return false;
-      if (state.filters.category && demand.category.trim() !== state.filters.category.trim()) return false;
-      if (state.filters.region && demand.region.trim() !== state.filters.region.trim()) return false;
-      if (state.filters.priority && demand.priority.trim() !== state.filters.priority.trim()) return false;
-      return true;
-    });
-  },
-
-  getDemandStats: () => {
-    const state = get();
-    const demands = state.getFilteredDemands();
-    const total = demands.length;
-
-    const byCategory: Record<string, number> = {};
-    const byRegion: Record<string, number> = {};
-
-    demands.forEach((demand) => {
-      byCategory[demand.category] = (byCategory[demand.category] || 0) + 1;
-      byRegion[demand.region] = (byRegion[demand.region] || 0) + 1;
-    });
-
-    return { total, byCategory, byRegion };
-  },
-
-  fetchDemands: async () => {
-    set({ isLoading: true, error: null }); 
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const dados = normalizeDemands(MOCK_DEMANDS as any[]); 
-
-      set({ demands: dados, isLoading: false }); 
-    } catch (err) {
-      set({ error: "Erro ao carregar demandas", isLoading: false });
+    {
+      name: "smart-city-storage-v1",
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+      // Salvamos as demandas para persistir as alterações de status/prioridade
+      partialize: (state) => ({ demands: state.demands }),
     }
-  }
-}));
+  )
+);
