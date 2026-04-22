@@ -47,7 +47,7 @@ export default function Page() {
     );
   }
 
-  const PRIORITY_ORDER: Record<string, number> = { Alta: 0, Media: 1, Baixa: 2 };
+  const PRIORITY_ORDER: Record<string, number> = { Alta: 0, "Média": 1, Baixa: 2 };
   const filteredDemands = getFilteredDemands().slice().sort(
     (a, b) => (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3)
   );
@@ -126,23 +126,90 @@ export default function Page() {
           </div>
 
           <div className="mb-8 text-black">
-            <h3 className="text-xl font-bold mb-4">Filtros</h3>
-            <div className="flex flex-wrap gap-4 items-end">
-              <Select
-                label="Status"
-                options={[
-                  { value: "", label: "Todos" },
-                  { value: "Aberta", label: "Aberta" },
-                  { value: "Em análise", label: "Em Análise" },
-                  { value: "Resolvida", label: "Resolvida" },
-                ]}
-                value={tempFilters.status}
-                onChange={(e) => handleFilterChange("status", e.target.value)}
-                className="flex-1 min-w-[150px]"
-              />
+            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">
+              Filtros
+            </h3>
+            <div className="flex flex-wrap gap-3 items-end bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <div className="flex-1 min-w-[120px]">
+                <Select
+                  label="Status"
+                  options={[
+                    { value: "", label: "Todos" },
+                    { value: "Aberta", label: "Aberta" },
+                    { value: "Em análise", label: "Em Análise" },
+                    { value: "Resolvida", label: "Resolvida" },
+                  ]}
+                  value={tempFilters.status}
+                  onChange={(e) => handleFilterChange("status", e.target.value)}
+                />
+              </div>
+
+              <div className="flex-1 min-w-[120px]">
+                <Select
+                  label="Categoria"
+                  options={[
+                    { value: "", label: "Todas" },
+                    { value: "Iluminação Pública", label: "Iluminação Pública" },
+                    { value: "Manutenção de vias", label: "Manutenção de vias" },
+                    { value: "Saneamento", label: "Saneamento" },
+                    { value: "Coleta de lixo", label: "Coleta de lixo" },
+                    { value: "Fiscalização", label: "Fiscalização" },
+                    { value: "Segurança", label: "Segurança" },
+                    { value: "Sinalização de Trânsito", label: "Sinalização de Trânsito" },
+                    { value: "Outros Empecilhos", label: "Outros Empecilhos" },
+                  ]}
+                  value={tempFilters.category}
+                  onChange={(e) => handleFilterChange("category", e.target.value)}
+                />
+              </div>
+
+              <div className="flex-1 min-w-[120px]">
+                <Select
+                  label="Região"
+                  options={[
+                    { value: "", label: "Todas" },
+                    { value: "Região Metropolitana do Recife", label: "RMR" },
+                    { value: "Zona da Mata", label: "Zona da Mata" },
+                    { value: "Agreste", label: "Agreste" },
+                    { value: "Sertão", label: "Sertão" },
+                    { value: "Outra", label: "Outra" },
+                  ]}
+                  value={tempFilters.region}
+                  onChange={(e) => handleFilterChange("region", e.target.value)}
+                />
+              </div>
+
+              <div className="flex-1 min-w-[120px]">
+                <Select
+                  label="Prioridade"
+                  options={[
+                    { value: "", label: "Todas" },
+                    { value: "Alta", label: "Alta" },
+                    { value: "Média", label: "Média" },
+                    { value: "Baixa", label: "Baixa" },
+                  ]}
+                  value={tempFilters.priority}
+                  onChange={(e) => handleFilterChange("priority", e.target.value)}
+                />
+              </div>
+
               <div className="flex gap-2">
-                <Button variant="primary" size="md" onClick={handleApplyFilters}>Aplicar Filtro</Button>
-                <Button variant="secondary" size="md" onClick={handleResetFilters}>Limpar</Button>
+                <Button 
+                  variant="primary" 
+                  size="md" 
+                  onClick={handleApplyFilters}
+                  className="bg-purple-600 hover:bg-purple-700 whitespace-nowrap"
+                >
+                  Aplicar Filtro
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  size="md" 
+                  onClick={handleResetFilters}
+                  className="whitespace-nowrap"
+                >
+                  Limpar
+                </Button>
               </div>
             </div>
           </div>

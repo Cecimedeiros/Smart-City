@@ -91,7 +91,6 @@ export default function DemandDetailsManagerPage() {
               onClick={handleBack}
               className="text-purple-600 font-bold flex items-center gap-2 hover:text-purple-800 transition-all cursor-pointer group"
             >
-              <span className="group-hover:-translate-x-1 transition-transform">←</span> Voltar ao Dashboard
             </button>
             <span className="text-gray-400 text-sm font-mono">ID: #{demandId}</span>
           </div>
