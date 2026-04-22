@@ -23,6 +23,7 @@ const statusColors: Record<DemandStatus, string> = {
 export function DemandDetails({
   demand,
   onBack,
+  isManager,
   onStatusChange,
   onPriorityChange,
 }: DemandDetailsProps) {
@@ -69,7 +70,7 @@ export function DemandDetails({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-500 font-semibold">Prioridade</span>
-              {!isEditingPriority && (
+              {isManager && !isEditingPriority && (
                 <button
                   onClick={() => setIsEditingPriority(true)}
                   className="p-1 hover:bg-gray-100 rounded"
@@ -78,7 +79,7 @@ export function DemandDetails({
                 </button>
               )}
             </div>
-            {isEditingPriority ? (
+            {isManager && isEditingPriority ? (
               <div className="flex gap-2 items-center mt-2">
                 <select
                   value={tempPriority}
@@ -115,7 +116,7 @@ export function DemandDetails({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-gray-500 font-semibold">Status</span>
-              {!isEditingStatus && (
+              {isManager && !isEditingStatus && (
                 <button
                   onClick={() => setIsEditingStatus(true)}
                   className="p-1 hover:bg-gray-100 rounded"
@@ -124,7 +125,7 @@ export function DemandDetails({
                 </button>
               )}
             </div>
-            {isEditingStatus ? (
+            {isManager && isEditingStatus ? (
               <div className="flex gap-2 items-center mt-2">
                 <select
                   value={tempStatus}
