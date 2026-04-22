@@ -63,14 +63,16 @@ export default function CadastroPage() {
           Smart City
         </div>
 
-        <Button
-          variant="outline"
-          size="md"
-          className="text-white border-white"
-          disabled
-        >
-          ← Voltar
-        </Button>
+        {/* ✅ BOTÃO VOLTAR FUNCIONAL */}
+        <Link href="/">
+          <Button
+            variant="outline"
+            size="md"
+            className="text-white border-white"
+          >
+            ← Voltar
+          </Button>
+        </Link>
       </nav>
 
       <div className="relative z-10 w-full max-w-sm mx-4 mt-20">

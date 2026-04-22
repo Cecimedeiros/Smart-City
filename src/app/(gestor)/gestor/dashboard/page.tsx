@@ -79,7 +79,7 @@ export default function Page() {
           <Link href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
             Painel de Gestão
           </Link>
-          <Link href="/login" className="text-purple-400 font-normal hover:text-purple-500">
+          <Link href="/" className="text-purple-400 font-normal hover:text-purple-500">
             Sair
           </Link>
         </div>
