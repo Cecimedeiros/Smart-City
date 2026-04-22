@@ -15,12 +15,7 @@ export default function DemandDetailsCitizenPage() {
 
   useEffect(() => {
     setIsMounted(true);
-    if (typeof document === 'undefined') return;
-    const referrer = document.referrer || '';
-    if (referrer.includes('/gestor/')) {
-      router.replace(`/gestor/demandas/${demandId}`);
-    }
-  }, [demandId, router]);
+  }, []);
 
   const demand = useDemandStore((state) =>
     state.demands.find((d) => d.id === demandId)

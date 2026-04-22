@@ -25,10 +25,16 @@ export default function Page() {
     _hasHydrated 
   } = useDemandStore();
 
+  const [tempFilters, setTempFilters] = useState(filters);
+
   useEffect(() => {
     setMounted(true);
     fetchDemands();
   }, [fetchDemands]);
+
+  useEffect(() => {
+    setTempFilters(filters);
+  }, [filters]);
 
   if (!mounted || !_hasHydrated) {
     return (
@@ -47,7 +53,6 @@ export default function Page() {
   );
   
   const stats = getDemandStats();
-  const [tempFilters, setTempFilters] = useState(filters);
 
   const handleFilterChange = (key: keyof DemandFilters, value: string) => {
     setTempFilters((prev) => ({ ...prev, [key]: value === "" ? "" : (value as any) }));
@@ -55,6 +60,10 @@ export default function Page() {
 
   const handleApplyFilters = () => {
     setFilters(tempFilters);
+  };
+
+  const handleViewDetails = (demandId: string) => {
+    router.push(`/gestor/demandas/${demandId}`);
   };
 
   const handleResetFilters = () => {
@@ -145,13 +154,11 @@ export default function Page() {
                 <div className="text-center py-10 italic text-gray-400">Atualizando lista...</div>
               ) : filteredDemands.length > 0 ? (
                 filteredDemands.map((demand) => (
-                  <Link 
+                  <DemandCard
                     key={demand.id}
-                    href={`/gestor/demandas/demandasGestor/${demand.id}`} 
-                    style={{ textDecoration: 'none', display: 'block' }}
-                  >
-                    <DemandCard demand={demand} onViewDetails={() => {}} />
-                  </Link>
+                    demand={demand}
+                    onViewDetails={handleViewDetails}
+                  />
                 ))
               ) : (
                 <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-xl">

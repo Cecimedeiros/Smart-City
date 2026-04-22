@@ -48,6 +48,10 @@ export default function Page() {
     console.log("Filtros aplicados:", filters);
   };
 
+  const handleViewDetails = (demandId: string) => {
+    router.push(`/gestor/demandas/${demandId}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
   
@@ -154,16 +158,11 @@ export default function Page() {
             <div className="flex flex-col gap-4">
               {filteredDemands.length > 0 ? (
                 filteredDemands.map((demand) => (
-                  <Link 
-                    key={demand.id} 
-                    href={`/gestor/demandas/demandasGestor/${demand.id}`}
-                    className="block no-underline"
-                  >
-                    <DemandCard
-                      demand={demand}
-                      onViewDetails={() => {}} // Função vazia pois o Link resolve o clique
-                    />
-                  </Link>
+                  <DemandCard
+                    key={demand.id}
+                    demand={demand}
+                    onViewDetails={handleViewDetails}
+                  />
                 ))
               ) : (
                 <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-xl">
