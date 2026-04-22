@@ -14,12 +14,6 @@ interface DemandDetailsProps {
 const statusOptions: DemandStatus[] = ["Aberta", "Em análise", "Resolvida"];
 const priorityOptions: DemandPriority[] = ["Alta", "Media", "Baixa"];
 
-const statusColors: Record<DemandStatus, string> = {
-  Aberta: "bg-red-600",
-  "Em análise": "bg-amber-500",
-  Resolvida: "bg-green-600",
-};
-
 export function DemandDetails({
   demand,
   onBack,
@@ -43,141 +37,105 @@ export function DemandDetails({
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg p-8 mt-6 bg-white">
+    <div className="border border-gray-300 rounded-lg p-8 mt-6 bg-white shadow-sm">
       <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200">
         <div className="w-6 h-6 rounded-full bg-red-600" />
         <h2 className="text-xl font-bold text-gray-800">{demand.problema}</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
+       
         <div className="flex flex-col items-center">
-          <p className="text-sm font-semibold text-gray-700 mb-2">Foto:</p>
-          <div className="bg-gray-200 rounded-md h-40 w-full max-w-xs mb-4 flex items-center justify-center text-gray-400">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Foto anexada:</p>
+          <div className="bg-gray-100 border border-gray-200 rounded-md h-48 w-full flex items-center justify-center text-gray-400 overflow-hidden">
             {demand.fotoUrl ? (
-              <img src={demand.fotoUrl} alt={demand.problema} className="w-full h-full object-cover rounded-md" />
+              <img src={demand.fotoUrl} alt={demand.problema} className="w-full h-full object-cover" />
             ) : (
-              <span>Sem imagem</span>
+              <div className="text-center">
+                <span className="text-2xl block">📷</span>
+                <span className="text-xs">Sem imagem</span>
+              </div>
             )}
           </div>
         </div>
 
         <div className="flex flex-col gap-4 text-sm text-gray-800">
           <div>
-            <p className="text-xs text-gray-500 font-semibold">Categoria</p>
-            <p className="text-sm">{demand.category}</p>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Categoria</p>
+            <p className="text-sm font-medium">{demand.category}</p>
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 font-semibold">Prioridade</span>
+              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Prioridade</span>
               {isManager && !isEditingPriority && (
-                <button
-                  onClick={() => setIsEditingPriority(true)}
-                  className="p-1 hover:bg-gray-100 rounded"
-                >
-                  ✏️
-                </button>
+                <button onClick={() => setIsEditingPriority(true)} className="text-xs hover:opacity-70">✏️</button>
               )}
             </div>
             {isManager && isEditingPriority ? (
-              <div className="flex gap-2 items-center mt-2">
+              <div className="flex gap-2 items-center mt-1">
                 <select
                   value={tempPriority}
                   onChange={(e) => setTempPriority(e.target.value as DemandPriority)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm"
+                  className="px-2 py-1 border border-gray-300 rounded text-sm outline-none focus:border-purple-500"
                 >
                   {priorityOptions.map((p) => (
-                    <option key={p} value={p}>
-                      {p === "Media" ? "Média" : p}
-                    </option>
+                    <option key={p} value={p}>{p === "Media" ? "Média" : p}</option>
                   ))}
                 </select>
-                <button
-                  onClick={handlePrioritySave}
-                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700"
-                >
-                  ✓
-                </button>
-                <button
-                  onClick={() => {
-                    setTempPriority(demand.priority);
-                    setIsEditingPriority(false);
-                  }}
-                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400"
-                >
-                  ✕
-                </button>
+                <button onClick={handlePrioritySave} className="bg-green-500 text-white p-1 px-2 rounded text-xs">✓</button>
+                <button onClick={() => setIsEditingPriority(false)} className="bg-gray-300 text-gray-700 p-1 px-2 rounded text-xs">✕</button>
               </div>
             ) : (
-              <p className="text-sm font-bold">{demand.priority === "Media" ? "Média" : demand.priority}</p>
+              <p className="text-sm font-bold text-gray-900">{demand.priority === "Media" ? "Média" : demand.priority}</p>
             )}
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 font-semibold">Status</span>
+              <span className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Status Atual</span>
               {isManager && !isEditingStatus && (
-                <button
-                  onClick={() => setIsEditingStatus(true)}
-                  className="p-1 hover:bg-gray-100 rounded"
-                >
-                  ✏️
-                </button>
+                <button onClick={() => setIsEditingStatus(true)} className="text-xs hover:opacity-70">✏️</button>
               )}
             </div>
             {isManager && isEditingStatus ? (
-              <div className="flex gap-2 items-center mt-2">
+              <div className="flex gap-2 items-center mt-1">
                 <select
                   value={tempStatus}
                   onChange={(e) => setTempStatus(e.target.value as DemandStatus)}
-                  className="px-2 py-1 border border-gray-300 rounded text-sm"
+                  className="px-2 py-1 border border-gray-300 rounded text-sm outline-none focus:border-purple-500"
                 >
                   {statusOptions.map((s) => (
-                    <option key={s} value={s}>
-                      {s === "Em análise" ? "Em Análise" : s}
-                    </option>
+                    <option key={s} value={s}>{s}</option>
                   ))}
                 </select>
-                <button
-                  onClick={handleStatusSave}
-                  className="px-2 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700"
-                >
-                  ✓
-                </button>
-                <button
-                  onClick={() => {
-                    setTempStatus(demand.status);
-                    setIsEditingStatus(false);
-                  }}
-                  className="px-2 py-1 bg-gray-300 text-gray-800 text-xs rounded hover:bg-gray-400"
-                >
-                  ✕
-                </button>
+                <button onClick={handleStatusSave} className="bg-green-500 text-white p-1 px-2 rounded text-xs">✓</button>
+                <button onClick={() => setIsEditingStatus(false)} className="bg-gray-300 text-gray-700 p-1 px-2 rounded text-xs">✕</button>
               </div>
             ) : (
-              <p className="text-sm font-bold">{demand.status === "Em análise" ? "Em Análise" : demand.status}</p>
+              <p className="text-sm font-bold text-gray-900">{demand.status}</p>
             )}
           </div>
 
           <div>
-            <p className="text-xs text-gray-500 font-semibold">Endereço</p>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Solicitante</p>
+            <p className="text-sm font-medium text-gray-800">{demand.solicitante || "Não identificado"}</p>
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Endereço da Ocorrência</p>
             <p className="text-sm">{demand.endereco}</p>
           </div>
 
           <div>
-            <p className="text-xs text-gray-500 font-semibold">Solicitante</p>
-            <p className="text-sm">{demand.solicitante}</p>
-          </div>
-
-          <div>
-            <p className="text-xs text-gray-500 font-semibold">Data e horário de registro</p>
-            <p className="text-sm">{demand.dataRegistro}</p>
+            <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Data do Registro</p>
+            <p className="text-sm text-gray-600">{demand.dataRegistro}</p>
           </div>
         </div>
 
         <div className="flex flex-col">
-          <p className="text-sm font-bold text-gray-800 mb-2">Detalhes:</p>
-          <div className="bg-gray-200 rounded-md p-4 min-h-56 text-sm text-gray-700 overflow-auto">
+          <p className="text-sm font-bold text-gray-800 mb-2 uppercase tracking-wider">Descrição Detalhada:</p>
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-4 min-h-[200px] text-sm text-gray-700 shadow-inner">
             {demand.detalhes}
           </div>
         </div>
@@ -186,9 +144,9 @@ export function DemandDetails({
       <div className="flex justify-end pt-6 border-t border-gray-200">
         <button
           onClick={onBack}
-          className="text-purple-600 text-sm font-semibold hover:underline"
+          className="bg-gray-100 text-gray-600 px-6 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition-all"
         >
-          ← Voltar
+          ← Voltar para Lista
         </button>
       </div>
     </div>

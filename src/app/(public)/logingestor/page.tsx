@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChakraProvider, defaultSystem, Box, Button, Input, Text, VStack, Heading, Checkbox } from "@chakra-ui/react";
+import { ChakraProvider, defaultSystem, Box, Button, Input, Text, VStack, Heading } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; 
 
 export default function Page() {
   return (
@@ -15,6 +16,15 @@ export default function Page() {
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    console.log("Login de Gestor:", email);
+    
+    router.push("/gestor/dashboard");
+  };
 
   return (
     <Box minH="100vh" position="relative" display="flex" alignItems="center" justifyContent="center" overflow="hidden">
@@ -31,26 +41,59 @@ function LoginPage() {
       </Box>
 
       <Box position="relative" bg="white" p={8} rounded="2xl" shadow="2xl" w="full" maxW="400px" zIndex="10" mx={4}>
-        <VStack gap={6}>
+    
+        <VStack gap={6} as="form" onSubmit={handleSubmit}>
           <Heading size="lg" color="purple.700" textAlign="center">Smart City</Heading>
+          
           <VStack w="full" gap={3}>
-            <Button w="full" bg="purple.600" color="white" _hover={{ bg: "purple.700" }}>Entrar com Certificado Digital</Button>
-            <Button w="full" bg="purple.500" color="white" _hover={{ bg: "purple.600" }}>Entrar com gov.br</Button>
+
+            <Button type="button" w="full" bg="purple.600" color="white" _hover={{ bg: "purple.700" }}>Entrar com Certificado Digital</Button>
+            <Button type="button" w="full" bg="purple.500" color="white" _hover={{ bg: "purple.600" }}>Entrar com gov.br</Button>
           </VStack>
-          <Text fontSize="sm" textAlign="center" color="gray.600">Faça login em sua conta.   
- Ou <Link href="/cadastro"><Text as="span" color="purple.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>Cadastre-se</Text></Link></Text>
+
+          <Text fontSize="sm" textAlign="center" color="gray.600">
+            Faça login em sua conta de gestor. Ou <Link href="/cadastro"><Text as="span" color="purple.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>Cadastre-se</Text></Link>
+          </Text>
+
           <VStack w="full" gap={4}>
             <Box w="full">
               <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Email</Text>
-              <Input placeholder="seu@email.com" bg="purple.50" borderColor="purple.200" _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input 
+                required 
+                type="email" 
+                placeholder="seu@email.com" 
+                bg="purple.50" 
+                borderColor="purple.200" 
+                _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+              />
             </Box>
             <Box w="full">
               <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Senha</Text>
-              <Input type="password" placeholder="••••••••" bg="purple.50" borderColor="purple.200" _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} value={senha} onChange={(e) => setSenha(e.target.value)} />
+              <Input 
+                required 
+                type="password" 
+                placeholder="••••••••" 
+                bg="purple.50" 
+                borderColor="purple.200" 
+                _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} 
+                value={senha} 
+                onChange={(e) => setSenha(e.target.value)} 
+              />
             </Box>
           </VStack>
-          <Button w="full" size="lg" bg="purple.600" color="white" fontWeight="bold" _hover={{ bg: "purple.700", shadow: "md" }} asChild>
-            <Link href="/gestor/dashboard">ENTRAR</Link>
+
+          <Button 
+            type="submit" 
+            w="full" 
+            size="lg" 
+            bg="purple.600" 
+            color="white" 
+            fontWeight="bold" 
+            _hover={{ bg: "purple.700", shadow: "md" }}
+          >
+            ENTRAR
           </Button>
         </VStack>
       </Box>

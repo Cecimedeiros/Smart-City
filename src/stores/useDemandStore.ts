@@ -19,14 +19,17 @@ const normalizeDemands = (items: any[]): Demand[] => {
 
 interface DemandStore {
   demands: Demand[];
+  userEmail: string | null; 
   filters: DemandFilters;
   selectedDemand: Demand | null;
   isLoading: boolean; 
   error: string | null;
   _hasHydrated: boolean;
   setHasHydrated: (state: boolean) => void;
+  login: (email: string) => void; 
+  logout: () => void; 
   addDemand: (newDemand: Demand) => void;
-  // FUNÇÃO QUE ESTAVA FALTANDO:
+  deleteDemand: (id: string) => void; 
   updateDemand: (id: string, updates: Partial<Demand>) => void;
   getDemandById: (id: string) => Demand | undefined;
   setSelectedDemand: (demand: Demand | null) => void;
@@ -54,6 +57,7 @@ export const useDemandStore = create<DemandStore>()(
   persist(
     (set, get) => ({
       demands: [], 
+      userEmail: null, 
       filters: defaultFilters,
       selectedDemand: null,
       isLoading: false,
@@ -62,18 +66,25 @@ export const useDemandStore = create<DemandStore>()(
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
 
+      // Implementação das funções de Auth
+      login: (email) => set({ userEmail: email }),
+      logout: () => set({ userEmail: null }),
+
       addDemand: (newDemand: Demand) =>
         set((state) => ({
           demands: [newDemand, ...state.demands],
         })),
 
-      // IMPLEMENTAÇÃO DA ATUALIZAÇÃO GENÉRICA
+      deleteDemand: (id: string) =>
+        set((state) => ({
+          demands: state.demands.filter((d) => d.id !== id),
+        })),
+
       updateDemand: (id, updates) =>
         set((state) => ({
           demands: state.demands.map((d) => 
             d.id === id ? { ...d, ...updates } : d
           ),
-          // Se a demanda selecionada for a que estamos editando, atualiza ela também
           selectedDemand: state.selectedDemand?.id === id 
             ? { ...state.selectedDemand, ...updates } 
             : state.selectedDemand,
@@ -119,7 +130,7 @@ export const useDemandStore = create<DemandStore>()(
       fetchDemands: async () => {
         set({ isLoading: true });
         try {
-          await new Promise((r) => setTimeout(r, 500));
+          await new Promise((r) => setTimeout(r, 300));
           const mocks = normalizeDemands(MOCK_DEMANDS);
           
           set((state) => {
@@ -137,12 +148,15 @@ export const useDemandStore = create<DemandStore>()(
     }),
     {
       name: "smart-city-storage-v1",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
-      // Salvamos as demandas para persistir as alterações de status/prioridade
-      partialize: (state) => ({ demands: state.demands }),
+      
+      partialize: (state) => ({ 
+        demands: state.demands,
+        userEmail: state.userEmail 
+      }),
     }
   )
 );

@@ -63,7 +63,6 @@ export default function CadastroPage() {
           Smart City
         </div>
 
-        {/* ✅ BOTÃO VOLTAR FUNCIONAL */}
         <Link href="/">
           <Button
             variant="outline"

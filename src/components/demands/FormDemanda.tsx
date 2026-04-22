@@ -27,6 +27,8 @@ const PROBLEMAS_POR_CATEGORIA: Record<string, string[]> = {
 export function FormDemanda() {
   const router = useRouter()
   const addDemand = useDemandStore((state) => state.addDemand)
+  const userEmail = useDemandStore((state) => state.userEmail) 
+  
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [images, setImages] = useState<(string | null)[]>([null, null, null])
@@ -83,7 +85,8 @@ export function FormDemanda() {
       createdAt: new Date().toLocaleDateString('pt-BR'),
       fotoUrl: images[0] || "", 
       endereco: formData.endereco,
-      solicitante: "Usuário", 
+      
+      solicitante: userEmail || "Usuário Anônimo", 
       dataRegistro: new Date().toLocaleString('pt-BR'),
       detalhes: formData.descricao,
     }
@@ -186,13 +189,7 @@ export function FormDemanda() {
 
         <button 
           type="submit" 
-          className="
-            w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider
-            transition-all duration-200 cursor-pointer
-            hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1
-            active:scale-95 active:translate-y-0
-            shadow-lg
-          "
+          className="w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 shadow-lg"
         >
           Salvar Denúncia
         </button>
