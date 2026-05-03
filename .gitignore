@@ -1,0 +1,21 @@
+# ───── Frontend (Next.js) ─────
+Smart-City/node_modules/
+Smart-City/.next/
+Smart-City/.env
+Smart-City/.env.local
+Smart-City/.env*.local
+Smart-City/out/
+
+# ───── Backend (FastAPI) ─────
+Back-SmartCity/__pycache__/
+Back-SmartCity/**/__pycache__/
+Back-SmartCity/*.pyc
+Back-SmartCity/.venv/
+Back-SmartCity/venv/
+Back-SmartCity/.env
+Back-SmartCity/*.egg-info/
+
+# ───── Sistema ─────
+.DS_Store
+Thumbs.db
+*.log
