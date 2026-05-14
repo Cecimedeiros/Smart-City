@@ -1,0 +1,1 @@
+# Schema do Token JWT

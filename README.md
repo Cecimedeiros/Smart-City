@@ -105,7 +105,7 @@ O painel administrativo acompanha, no mínimo:
 | Camada | Tecnologias Utilizadas |
 | :--- | :--- |
 | **Front-end** | `TypeScript`, `Next.js`, `Chakra UI`, `Tailwind CSS`, `Zustand` |
-| **Back-end & Integração** | `Node.js`, `Express`, `Prisma ORM` |
+| **Back-end & Integração** | `Node.js`, `Express`, `Prisma ORM` / `Python`, `FastAPI` |
 | **Autenticação & Dados** | `JWT`, `Cookies`, `Redis`, `Cron Jobs`, `API Fake` |
 
 ---
@@ -170,12 +170,35 @@ src/
 
   mocks/
     fake-data.ts
-
 ```
 
 </details>
 
-👩‍💻 Equipe de Desenvolvimento
+---
+
+## 🚀 Como Rodar
+
+### Frontend
+```bash
+cd Smart-City
+npm install
+npm run dev
+```
+> Disponível em http://localhost:3000
+
+### Backend (FastAPI)
+```bash
+cd Back-SmartCity
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+> Disponível em http://localhost:8000
+
+---
+
+## 👩‍💻 Equipe de Desenvolvimento
 
 - Beatriz Paredes
 - Catarina Loureiro
