@@ -109,6 +109,16 @@ O painel administrativo acompanha, no mínimo:
 
 ---
 
+## 🔗 Links Úteis
+
+| Ferramenta Utilizada | Material | Links |
+| :--- | :--- | :---
+| **Figma** | Protótipo | https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1 |
+| **BRmodelo** | Modelagem conceitual | https://app.brmodeloweb.com/publicview/6a08cc4149bbefa91a521ff7 |
+
+
+---
+
 ## 🏗️ Arquitetura Front-end
 
 A proposta prioriza uma estrutura simples, escalável e de fácil manutenção, com separação clara de responsabilidades.
