@@ -1,5 +1,5 @@
 <h1 align="center">
-  🏙️ Plataforma de Gestão de Demandas Urbanas (Smart City)
+  🏙️ Sistema de Gerenciamento de Demandas do Estado (SGDCity)
 </h1>
 
 <p align="center">
@@ -10,17 +10,17 @@
 </p>
 
 <p align="center">
-  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores públicos.
+  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores privados, responsáveis por executar a resolução de problemas públicos.
 </p>
 
 ---
 
 ## 🌍 Visão Geral
 
-A plataforma busca melhorar a comunicação entre o cidadão e a gestão pública, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
+A plataforma busca melhorar a comunicação entre o cidadão e a gestão privada, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
 
 ### 🎯 O Problema Central
-A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão pública e reduz a eficiência no atendimento à população.
+A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão e reduz a eficiência no atendimento à população.
 
 ### 🏛️ Alinhamento com Políticas Públicas
 A proposta dialoga com as diretrizes de transformação digital no setor público, em especial a **Lei nº 14.129/2021 (Lei do Governo Digital)**, estabelecendo princípios como:
@@ -35,7 +35,7 @@ Relaciona-se também com a **Estratégia Nacional de Governo Digital**, incentiv
 ## ✅ Objetivos Específicos
 - **Centralizar** o registro de demandas urbanas.
 - **Permitir** o acompanhamento claro das solicitações.
-- **Oferecer** visibilidade operacional para gestores públicos.
+- **Oferecer** visibilidade operacional para os gestores.
 - **Aumentar** a transparência no atendimento à população.
 - **Organizar** o fluxo de demandas com base na prioridade, data e status.
 
@@ -64,9 +64,9 @@ Responsável por:
 - [ ] Cadastro e autenticação de usuários;
 - [ ] Criação e listagem de demandas urbanas;
 - [ ] Visualização detalhada de cada demanda;
-- [ ] Sistema de filtros avançados (data, categoria, local, canal, prioridade e status);
+- [ ] Sistema de filtros avançados (prioridade, categoria, região  e status);
 - [ ] Atualização manual de status (exclusivo para gestores);
-- [ ] Visualizações em formato de Lista e **Kanban**;
+- [ ] Visualizações em formato de Lista;
 - [ ] Painel administrativo para gestores (Métricas e KPIs);
 - [ ] Integração com API *fake* para simulação de dados.
 
@@ -75,9 +75,8 @@ Responsável por:
 ## 📊 Indicadores Operacionais (Gestão)
 O painel administrativo acompanha, no mínimo:
 1. **Volume:** Quantidade total de demandas registradas;
-2. **Eficiência:** Tempo médio de atendimento;
-3. **Distribuição:** Demandas por categoria;
-4. **Geografia:** Demandas por região.
+2. **Distribuição:** Demandas por categoria;
+3. **Geografia:** Demandas por região.
 
 ---
 
@@ -105,7 +104,7 @@ O painel administrativo acompanha, no mínimo:
 | Camada | Tecnologias Utilizadas |
 | :--- | :--- |
 | **Front-end** | `TypeScript`, `Next.js`, `Chakra UI`, `Tailwind CSS`, `Zustand` |
-| **Back-end & Integração** | `Node.js`, `Express`, `Prisma ORM` / `Python`, `FastAPI` |
+| **Back-end & Integração** | `Node.js`, `Express`, `Prisma ORM` |
 | **Autenticação & Dados** | `JWT`, `Cookies`, `Redis`, `Cron Jobs`, `API Fake` |
 
 ---
@@ -201,8 +200,7 @@ uvicorn app.main:app --reload
 ## 👩‍💻 Equipe de Desenvolvimento
 
 - Beatriz Paredes
-- Catarina Loureiro
 - Cecília Medeiros
 - Isabella Batista
-- Jose Leandro De Morais Alves Luz
+- Jose Leandro De Morais
 - Gabriel Souza
