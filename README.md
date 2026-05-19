@@ -1,5 +1,5 @@
 <h1 align="center">
-  🏙️ Sistema de Gerenciamento de Demandas do Estado (SGDCity)
+  🏙️ Sistema de Gerenciamento de Demandas do Estado
 </h1>
 
 <p align="center">
