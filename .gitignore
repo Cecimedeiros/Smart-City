@@ -1,0 +1,46 @@
+# ───── Frontend (Next.js) ─────
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+/coverage
+/.next/
+/out/
+/build
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# ───── Backend (FastAPI) ─────
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# ───── Env ─────
+.env
+.env.local
+.env*.local
+.env*
+
+# ───── Sistema ─────
+.DS_Store
+Thumbs.db
+*.pem
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+backend/.env
+
+backend/.env
+
+backend/.env
