@@ -113,8 +113,8 @@ O painel administrativo acompanha, no mínimo:
 
 | Ferramenta Utilizada | Material | Links |
 | :--- | :--- | :---
-| **Figma** | Protótipo | https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1 |
-| **BRmodelo** | Modelagem conceitual | https://app.brmodeloweb.com/publicview/6a08cc4149bbefa91a521ff7 |
+| **Figma** | Protótipo | [Acesse aqui](https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1) |
+| **BRmodelo** | Modelagem conceitual | [Acesse aqui](https://github.com/Cecimedeiros/Smart-City/blob/main/public/images/ModelagemConceitual.png) |
 
 
 ---
