@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, Integer, String
@@ -21,3 +22,6 @@ class User(Base):
         default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+=======
+# Model User
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

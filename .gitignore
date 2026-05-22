@@ -38,9 +38,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+<<<<<<< HEAD
 
 backend/.env
 
 backend/.env
 
 backend/.env
+=======
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

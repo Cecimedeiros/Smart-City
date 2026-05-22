@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -62,3 +63,6 @@ async def update_user(db: AsyncSession, user: User, user_in: UserUpdate) -> User
     await db.commit()
     await db.refresh(user)
     return user
+=======
+# Logica de negocio de usuarios
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

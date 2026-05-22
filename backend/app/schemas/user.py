@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
@@ -30,3 +31,6 @@ class UserRead(BaseModel):
     role: UserRole
 
     model_config = ConfigDict(from_attributes=True)
+=======
+# Schemas Pydantic para User
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

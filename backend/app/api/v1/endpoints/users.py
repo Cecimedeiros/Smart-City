@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,3 +23,6 @@ async def update_me(
     current_user: User = Depends(get_current_user),
 ) -> User:
     return await update_user(db, current_user, user_in)
+=======
+# GET e PUT /users/me
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

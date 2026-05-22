@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -36,3 +37,6 @@ def decode_access_token(token: str) -> dict[str, Any] | None:
         return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:
         return None
+=======
+# JWT e hash de senha
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

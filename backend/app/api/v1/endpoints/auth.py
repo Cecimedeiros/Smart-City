@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -75,3 +76,6 @@ async def me(current_user: User = Depends(get_current_user)) -> User:
 async def gestor_check(current_user: User = Depends(require_role("GESTOR"))) -> User:
     # Endpoint pequeno apenas para demonstrar a proteção por perfil.
     return current_user
+=======
+# POST /auth/register e /auth/login
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

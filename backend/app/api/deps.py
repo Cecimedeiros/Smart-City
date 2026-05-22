@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from fastapi import Cookie, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -43,3 +44,6 @@ def require_role(required_role: str):
         return current_user
 
     return role_checker
+=======
+# Dependencias: get_db, get_current_user
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335

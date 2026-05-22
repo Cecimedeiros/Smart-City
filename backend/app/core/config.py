@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,3 +18,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+=======
+# Configuracoes da aplicacao (env vars)
+>>>>>>> 49d05a055bb489dd60fe7a2ed679341194b0b335
