@@ -1,1 +1,0 @@
-# Schemas Pydantic para Demand
