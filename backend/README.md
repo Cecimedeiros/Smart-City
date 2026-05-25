@@ -1,6 +1,6 @@
 # Smart City — Backend
 
-API REST construída com **Express** e **PostgreSQL**, com autenticação JWT e Prisma ORM.
+API REST construída com **Express**, **PostgreSQL**, **Redis** e arquitetura de **microsserviços**.
 
 ---
 
@@ -21,84 +21,112 @@ API REST construída com **Express** e **PostgreSQL**, com autenticação JWT e 
 
 ## Arquitetura
 
-O projeto segue uma arquitetura em camadas, separando responsabilidades em:
+O projeto segue uma arquitetura de **microsserviços**, onde cada serviço é independente, possui suas próprias dependências e responsabilidades bem definidas.
 
 ```
 backend/
-├── src/
-│   ├── server.ts             # Ponto de entrada do servidor Express
-│   ├── config/
-│   │   ├── database.ts       # Configuração da conexão com PostgreSQL
-│   │   ├── redis.ts          # Configuração do cliente Redis
-│   │   └── cron.ts           # Agendamento de jobs com node-cron
-│   ├── controllers/
-│   │   ├── authController.ts    # Lógica HTTP de autenticação
-│   │   ├── demandController.ts  # Lógica HTTP de demandas
-│   │   └── metricsController.ts # Lógica HTTP de métricas
-│   ├── middlewares/
-│   │   ├── authMiddleware.ts    # Validação do JWT nas rotas protegidas
-│   │   └── errorMiddleware.ts   # Tratamento centralizado de erros
-│   ├── repositories/
-│   │   ├── userRepository.ts       # Acesso ao banco para usuários
-│   │   ├── denunciaRepository.ts   # Acesso ao banco para denúncias
-│   │   └── historicoRepository.ts  # Acesso ao banco para histórico
-│   ├── routes/
-│   │   ├── authRoutes.ts    # Rotas de autenticação
-│   │   ├── demandRoutes.ts  # Rotas de demandas
-│   │   └── metricsRoutes.ts # Rotas de métricas
-│   ├── services/
-│   │   ├── authService.ts     # Lógica de negócio de autenticação
-│   │   ├── demandService.ts   # Lógica de negócio de demandas
-│   │   └── metricsService.ts  # Agregação e cache de métricas
-│   └── prisma/
-│       ├── schema.prisma      # Schema do banco (Prisma ORM)
-│       └── migrations/        # Histórico de migrations do Prisma
-├── docker-compose.yml        # PostgreSQL via Docker
-├── package.json
-└── .env.example
+├── auth-service/               # Serviço de autenticação (porta 3001)
+│   ├── src/
+│   │   ├── server.ts
+│   │   ├── controllers/
+│   │   │   └── authController.ts
+│   │   ├── services/
+│   │   │   └── authService.ts
+│   │   ├── routes/
+│   │   │   └── authRoutes.ts
+│   │   └── middlewares/
+│   │       ├── authMiddleware.ts
+│   │       └── errorMiddleware.ts
+│   └── package.json
+│
+├── demand-service/             # Serviço de demandas (porta 3002)
+│   ├── src/
+│   │   ├── server.ts
+│   │   ├── controllers/
+│   │   │   └── demandController.ts
+│   │   ├── services/
+│   │   │   └── demandService.ts
+│   │   ├── repositories/
+│   │   │   ├── denunciaRepository.ts
+│   │   │   └── historicoRepository.ts
+│   │   ├── routes/
+│   │   │   └── demandRoutes.ts
+│   │   ├── middlewares/
+│   │   │   ├── authMiddleware.ts
+│   │   │   └── errorMiddleware.ts
+│   │   └── prisma/
+│   │       ├── schema.prisma
+│   │       └── migrations/
+│   └── package.json
+│
+├── metrics-service/            # Serviço de métricas (porta 3003)
+│   ├── src/
+│   │   ├── server.ts
+│   │   ├── controllers/
+│   │   │   └── metricsController.ts
+│   │   ├── services/
+│   │   │   └── metricsService.ts
+│   │   ├── routes/
+│   │   │   └── metricsRoutes.ts
+│   │   ├── middlewares/
+│   │   │   └── errorMiddleware.ts
+│   │   └── config/
+│   │       ├── redis.ts
+│   │       └── cron.ts
+│   └── package.json
+│
+└── docker-compose.yml          # PostgreSQL + Redis + 3 serviços
 ```
 
-### Fluxo de uma requisição
+---
+
+## Responsabilidades de cada serviço
+
+### auth-service (porta 3001)
+Responsável por cadastro, autenticação e geração de tokens JWT. Nenhum outro serviço realiza login ou registro — tudo passa por aqui.
+
+### demand-service (porta 3002)
+Responsável pelo CRUD completo de demandas. Valida o JWT recebido consultando a chave secreta compartilhada. Acessa o PostgreSQL via Prisma ORM.
+
+### metrics-service (porta 3003)
+Responsável por agregar e servir KPIs e estatísticas. Usa Redis para cache das métricas e node-cron para atualização periódica dos dados.
+
+---
+
+## Fluxo de uma requisição
 
 ```
 Cliente HTTP
     │
     ▼
-Route (routes/)
-    │  valida o JWT via authMiddleware
+Serviço correspondente (auth / demand / metrics)
+    │  valida o JWT via authMiddleware (demand e metrics)
     ▼
-Controller (controllers/)
+Controller
     │  valida o corpo da requisição
     ▼
-Service (services/)
+Service
     │  aplica regras de negócio
     ▼
-Repository (repositories/)
+Repository (apenas demand-service)
     │  executa queries via Prisma
     ▼
-PostgreSQL
+PostgreSQL / Redis
 ```
-
-### Camadas
-
-- **Routes** — definem os endpoints e aplicam os middlewares necessários.
-- **Controllers** — recebem a requisição HTTP, validam a entrada e delegam ao service.
-- **Services** — contêm toda a lógica de negócio (ex: verificar senha, autorizar ação).
-- **Repositories** — isolam o acesso ao banco de dados via Prisma ORM.
-- **Middlewares** — validação de JWT e tratamento centralizado de erros.
-- **Config** — configuração global: conexão com PostgreSQL, Redis e cron jobs.
 
 ---
 
 ## Endpoints
 
-### Auth
-| Método | Rota | Descrição |
-|---|---|---|
-| POST | `/auth/register` | Cadastra novo usuário |
-| POST | `/auth/login` | Autentica e retorna JWT |
+### auth-service — porta 3001
 
-### Demandas
+| Método | Rota | Descrição | Auth |
+|---|---|---|---|
+| POST | `/auth/register` | Cadastra novo usuário | ❌ |
+| POST | `/auth/login` | Autentica e retorna JWT | ❌ |
+
+### demand-service — porta 3002
+
 | Método | Rota | Descrição | Auth |
 |---|---|---|---|
 | GET | `/demands` | Lista todas as demandas | ✅ |
@@ -107,7 +135,8 @@ PostgreSQL
 | PUT | `/demands/:id` | Atualiza uma demanda | ✅ |
 | DELETE | `/demands/:id` | Remove uma demanda | ✅ |
 
-### Métricas
+### metrics-service — porta 3003
+
 | Método | Rota | Descrição | Auth |
 |---|---|---|---|
 | GET | `/metrics` | Retorna KPIs e estatísticas | ✅ |
@@ -118,25 +147,33 @@ PostgreSQL
 
 ### Pré-requisitos
 - Node.js 20+
-- Docker (para o PostgreSQL)
+- Docker e Docker Compose
 
 ### Passos
 
 ```bash
-# 1. Subir o banco de dados
+# 1. Subir PostgreSQL, Redis e os três serviços
 docker-compose up -d
 
-# 2. Instalar dependências
+# Ou, para rodar cada serviço manualmente em desenvolvimento:
+
+# auth-service
+cd auth-service
 npm install
-
-# 3. Configurar variáveis de ambiente
 cp .env.example .env.local
-# edite .env.local com sua DATABASE_URL e SECRET_KEY
+npm run dev
 
-# 4. Rodar as migrations
+# demand-service
+cd demand-service
+npm install
+cp .env.example .env.local
 npx prisma migrate dev
+npm run dev
 
-# 5. Iniciar o servidor
+# metrics-service
+cd metrics-service
+npm install
+cp .env.example .env.local
 npm run dev
 ```
 
@@ -144,8 +181,26 @@ npm run dev
 
 ## Variáveis de ambiente
 
+Cada serviço tem seu próprio arquivo `.env.local`.
+
+### auth-service
 | Variável | Descrição | Exemplo |
 |---|---|---|
-| `DATABASE_URL` | Connection string do PostgreSQL | `postgresql://user:pass@localhost:5432/smartcity` |
+| `PORT` | Porta do serviço | `3001` |
 | `SECRET_KEY` | Chave secreta para assinar o JWT | `uma-chave-longa-e-aleatoria` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Tempo de expiração do token | `1440` |
+
+### demand-service
+| Variável | Descrição | Exemplo |
+|---|---|---|
+| `PORT` | Porta do serviço | `3002` |
+| `DATABASE_URL` | Connection string do PostgreSQL | `postgresql://user:pass@localhost:5432/smartcity` |
+| `SECRET_KEY` | Mesma chave do auth-service para validar JWT | `uma-chave-longa-e-aleatoria` |
+
+### metrics-service
+| Variável | Descrição | Exemplo |
+|---|---|---|
+| `PORT` | Porta do serviço | `3003` |
+| `DATABASE_URL` | Connection string do PostgreSQL | `postgresql://user:pass@localhost:5432/smartcity` |
 | `REDIS_URL` | Connection string do Redis | `redis://localhost:6379` |
+| `SECRET_KEY` | Mesma chave do auth-service para validar JWT | `uma-chave-longa-e-aleatoria` |
