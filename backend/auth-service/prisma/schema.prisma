@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url= env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -11,7 +11,7 @@ model Usuario {
   id      Int      @id @default(autoincrement())
   nome    String   @db.VarChar(100)
   email   String   @db.VarChar(35) @unique
-  senha   String   @db.VarChar(20)
+  senha   String   @db.VarChar(60)
   cidadao Cidadao?
   gestor  Gestor?
 
@@ -48,7 +48,6 @@ model Denuncia {
   bairro        String
   cidade        String
   rua           String
-
   cidadao_id    Int
   cidadao       Cidadao         @relation(fields: [cidadao_id], references: [usuario_id])
   imagens       Imagem[]
@@ -58,7 +57,6 @@ model Denuncia {
   @@index([status])
   @@index([prioridade])
   @@index([regiao])
-
   @@map("denuncias")
 }
 
@@ -68,7 +66,6 @@ model Historico {
   data_alteracao DateTime
   status         StatusDenuncia
   prioridade     NivelPrioridade
-
   denuncia_id    Int
   denuncia       Denuncia        @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
   gestor_id      Int
@@ -82,7 +79,6 @@ model Imagem {
   legenda      String   @db.VarChar(35)
   caminho_file String   @db.VarChar(100)
   data_upload  DateTime @default(now())
-
   denuncia_id  Int
   denuncia     Denuncia @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
 

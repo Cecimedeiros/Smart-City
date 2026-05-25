@@ -15,7 +15,7 @@ CREATE TABLE "usuarios" (
     "id" SERIAL NOT NULL,
     "nome" VARCHAR(100) NOT NULL,
     "email" VARCHAR(35) NOT NULL,
-    "senha" VARCHAR(20) NOT NULL,
+    "senha" VARCHAR(60) NOT NULL,
 
     CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
 );
