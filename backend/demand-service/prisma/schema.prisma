@@ -1,0 +1,110 @@
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Cidadao {
+  usuario_id Int        @id
+  denuncias  Denuncia[]
+
+  @@map("cidadaos")
+}
+
+
+model Gestor {
+  usuario_id Int         @id 
+  historicos Historico[]
+
+  @@map("gestores")
+}
+
+
+model Denuncia {
+  id_denuncia   Int             @id @default(autoincrement())
+  titulo        String
+  categoria     Categorias
+  regiao        Regioes
+  descricao     String
+  status        StatusDenuncia  @default(ABERTA)
+  prioridade    NivelPrioridade @default(MEDIA)
+  data_registro DateTime        @default(now())
+  numero        String
+  cep           String
+  bairro        String
+  cidade        String
+  rua           String
+  cidadao_id    Int
+  cidadao       Cidadao         @relation(fields: [cidadao_id], references: [usuario_id])
+  imagens       Imagem[]
+  historicos    Historico[]
+
+ 
+  @@index([categoria])
+  @@index([status])
+  @@index([prioridade])
+  @@index([regiao])
+  @@map("denuncias")
+}
+
+
+model Historico {
+  id_historico   Int             @id @default(autoincrement())
+  data_abertura  DateTime        @default(now())
+  data_alteracao DateTime
+  status         StatusDenuncia
+  prioridade     NivelPrioridade
+  denuncia_id    Int
+  denuncia       Denuncia        @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
+  gestor_id      Int
+  gestor         Gestor          @relation(fields: [gestor_id], references: [usuario_id])
+
+  @@map("historicos")
+}
+
+
+model Imagem {
+  id_imagem    Int      @id @default(autoincrement())
+  legenda      String   @db.VarChar(35)
+  caminho_file String   @db.VarChar(100)
+  data_upload  DateTime @default(now())
+  denuncia_id  Int
+  denuncia     Denuncia @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
+
+  @@map("imagens")
+}
+
+
+enum Categorias {
+  ILUMINACAO_PUBLICA
+  MANUTENCAO_DE_VIAS
+  SANEAMENTO
+  COLETA_DE_LIXO
+  FISCALIZACAO
+  SEGURANCA
+  SINALIZACAO_DE_TRANSITO
+  OUTROS_EMPECILHOS
+}
+
+enum Regioes {
+  REGIAO_METROPOLITANA_DO_RECIFE
+  ZONA_DA_MATA
+  AGRESTE
+  SERTAO
+  OUTRA
+}
+
+enum StatusDenuncia {
+  ABERTA
+  EM_ANALISE
+  RESOLVIDA
+}
+
+enum NivelPrioridade {
+  ALTA
+  MEDIA
+  BAIXA
+}
