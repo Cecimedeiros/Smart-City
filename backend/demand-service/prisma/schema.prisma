@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL_DEMAND")
 }
 
 generator client {
@@ -8,7 +8,8 @@ generator client {
 }
 
 model Cidadao {
-  usuario_id Int        @id
+  id_cidadao Int @id @default(autoincrement())
+  usuario_id Int @unique 
   denuncias  Denuncia[]
 
   @@map("cidadaos")
@@ -16,7 +17,8 @@ model Cidadao {
 
 
 model Gestor {
-  usuario_id Int         @id 
+  id_gestor  Int         @id @default(autoincrement())
+  usuario_id Int         @unique 
   historicos Historico[]
 
   @@map("gestores")
@@ -25,7 +27,7 @@ model Gestor {
 
 model Denuncia {
   id_denuncia   Int             @id @default(autoincrement())
-  titulo        String
+  titulo        String          @db.VarChar(50)
   categoria     Categorias
   regiao        Regioes
   descricao     String
@@ -38,11 +40,10 @@ model Denuncia {
   cidade        String
   rua           String
   cidadao_id    Int
-  cidadao       Cidadao         @relation(fields: [cidadao_id], references: [usuario_id])
+  cidadao       Cidadao         @relation(fields: [cidadao_id], references: [id_cidadao])
   imagens       Imagem[]
   historicos    Historico[]
 
- 
   @@index([categoria])
   @@index([status])
   @@index([prioridade])
@@ -52,15 +53,15 @@ model Denuncia {
 
 
 model Historico {
-  id_historico   Int             @id @default(autoincrement())
-  data_abertura  DateTime        @default(now())
-  data_alteracao DateTime
+  id_historico   Int            @id @default(autoincrement())
+  data_abertura  DateTime       @default(now())
+  data_alteracao DateTime       @updatedAt
   status         StatusDenuncia
   prioridade     NivelPrioridade
   denuncia_id    Int
-  denuncia       Denuncia        @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
+  denuncia       Denuncia       @relation(fields: [denuncia_id], references: [id_denuncia], onDelete: Cascade)
   gestor_id      Int
-  gestor         Gestor          @relation(fields: [gestor_id], references: [usuario_id])
+  gestor         Gestor         @relation(fields: [gestor_id], references: [id_gestor])
 
   @@map("historicos")
 }

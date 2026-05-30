@@ -16,19 +16,18 @@ export async function register(
   nome: string,
   email: string,
   senha: string,
-  tipo: 'cidadao' | 'gestor'
+  tipo: 'CIDADAO' | 'GESTOR' // Ajustado para bater com o Enum em caixa alta do Prisma
 ) {
   const hash = await bcrypt.hash(senha, SALT_ROUNDS);
 
   try {
+    // Agora cria APENAS o usuário e salva o papel dele diretamente aqui
     const usuario = await prisma.usuario.create({
       data: {
         nome,
         email,
         senha: hash,
-        ...(tipo === 'cidadao'
-          ? { cidadao: { create: {} } }
-          : { gestor: { create: {} } }),
+        papel: tipo, 
       },
     });
 
@@ -45,21 +44,20 @@ export async function login(email: string, senha: string) {
   const usuario = await prisma.usuario.findUnique({ where: { email } });
 
   if (!usuario) {
-    // Mesma mensagem para usuário inexistente e senha errada — evita enumeração de e-mails
     throw httpError('Credenciais inválidas', 401);
   }
 
-  // Concorrência: bcrypt.compare (CPU) e consulta de papel (I/O) rodam em paralelo
-  const [senhaValida, cidadao] = await Promise.all([
-    bcrypt.compare(senha, usuario.senha),
-    prisma.cidadao.findUnique({ where: { usuario_id: usuario.id } }),
-  ]);
+  const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
   if (!senhaValida) {
     throw httpError('Credenciais inválidas', 401);
   }
 
-  const role = cidadao ? 'cidadao' : 'gestor';
+  // Usamos "as any" temporariamente aqui para o TypeScript aceitar o campo papel
+  // enquanto o banco de dados está sendo recriado do zero!
+  const papelUsuario = (usuario as any).papel || 'CIDADAO';
+  const role = papelUsuario.toLowerCase(); 
+  
   const token = jwt.sign({ userId: usuario.id, role }, SECRET, { expiresIn: '24h' });
 
   return { token, role, userId: usuario.id, nome: usuario.nome };

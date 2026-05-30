@@ -1,0 +1,62 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_DEMAND")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Denuncia {
+  id_denuncia   Int             @id @default(autoincrement())
+  titulo        String
+  categoria     Categorias
+  regiao        Regioes
+  descricao     String
+  status        StatusDenuncia  @default(ABERTA)
+  prioridade    NivelPrioridade @default(MEDIA)
+  data_registro DateTime        @default(now())
+  numero        String
+  cep           String
+  bairro        String
+  cidade        String
+  rua           String
+  cidadao_id    Int
+
+  @@index([categoria])
+  @@index([status])
+  @@index([prioridade])
+  @@index([regiao])
+  @@map("denuncias")
+}
+
+enum Categorias {
+  ILUMINACAO_PUBLICA
+  MANUTENCAO_DE_VIAS
+  SANEAMENTO
+  COLETA_DE_LIXO
+  FISCALIZACAO
+  SEGURANCA
+  SINALIZACAO_DE_TRANSITO
+  OUTROS_EMPECILHOS
+}
+
+enum Regioes {
+  REGIAO_METROPOLITANA_DO_RECIFE
+  ZONA_DA_MATA
+  AGRESTE
+  SERTAO
+  OUTRA
+}
+
+enum StatusDenuncia {
+  ABERTA
+  EM_ANALISE
+  RESOLVIDA
+}
+
+enum NivelPrioridade {
+  ALTA
+  MEDIA
+  BAIXA
+}

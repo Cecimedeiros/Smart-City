@@ -11,33 +11,25 @@ CREATE TYPE "StatusDenuncia" AS ENUM ('ABERTA', 'EM_ANALISE', 'RESOLVIDA');
 CREATE TYPE "NivelPrioridade" AS ENUM ('ALTA', 'MEDIA', 'BAIXA');
 
 -- CreateTable
-CREATE TABLE "usuarios" (
-    "id" SERIAL NOT NULL,
-    "nome" VARCHAR(100) NOT NULL,
-    "email" VARCHAR(35) NOT NULL,
-    "senha" VARCHAR(60) NOT NULL,
-
-    CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "cidadaos" (
+    "id_cidadao" SERIAL NOT NULL,
     "usuario_id" INTEGER NOT NULL,
 
-    CONSTRAINT "cidadaos_pkey" PRIMARY KEY ("usuario_id")
+    CONSTRAINT "cidadaos_pkey" PRIMARY KEY ("id_cidadao")
 );
 
 -- CreateTable
 CREATE TABLE "gestores" (
+    "id_gestor" SERIAL NOT NULL,
     "usuario_id" INTEGER NOT NULL,
 
-    CONSTRAINT "gestores_pkey" PRIMARY KEY ("usuario_id")
+    CONSTRAINT "gestores_pkey" PRIMARY KEY ("id_gestor")
 );
 
 -- CreateTable
 CREATE TABLE "denuncias" (
     "id_denuncia" SERIAL NOT NULL,
-    "titulo" TEXT NOT NULL,
+    "titulo" VARCHAR(50) NOT NULL,
     "categoria" "Categorias" NOT NULL,
     "regiao" "Regioes" NOT NULL,
     "descricao" TEXT NOT NULL,
@@ -79,22 +71,31 @@ CREATE TABLE "imagens" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "usuarios_email_key" ON "usuarios"("email");
+CREATE UNIQUE INDEX "cidadaos_usuario_id_key" ON "cidadaos"("usuario_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "gestores_usuario_id_key" ON "gestores"("usuario_id");
+
+-- CreateIndex
+CREATE INDEX "denuncias_categoria_idx" ON "denuncias"("categoria");
+
+-- CreateIndex
+CREATE INDEX "denuncias_status_idx" ON "denuncias"("status");
+
+-- CreateIndex
+CREATE INDEX "denuncias_prioridade_idx" ON "denuncias"("prioridade");
+
+-- CreateIndex
+CREATE INDEX "denuncias_regiao_idx" ON "denuncias"("regiao");
 
 -- AddForeignKey
-ALTER TABLE "cidadaos" ADD CONSTRAINT "cidadaos_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "gestores" ADD CONSTRAINT "gestores_usuario_id_fkey" FOREIGN KEY ("usuario_id") REFERENCES "usuarios"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "denuncias" ADD CONSTRAINT "denuncias_cidadao_id_fkey" FOREIGN KEY ("cidadao_id") REFERENCES "cidadaos"("usuario_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "denuncias" ADD CONSTRAINT "denuncias_cidadao_id_fkey" FOREIGN KEY ("cidadao_id") REFERENCES "cidadaos"("id_cidadao") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "historicos" ADD CONSTRAINT "historicos_denuncia_id_fkey" FOREIGN KEY ("denuncia_id") REFERENCES "denuncias"("id_denuncia") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "historicos" ADD CONSTRAINT "historicos_gestor_id_fkey" FOREIGN KEY ("gestor_id") REFERENCES "gestores"("usuario_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "historicos" ADD CONSTRAINT "historicos_gestor_id_fkey" FOREIGN KEY ("gestor_id") REFERENCES "gestores"("id_gestor") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "imagens" ADD CONSTRAINT "imagens_denuncia_id_fkey" FOREIGN KEY ("denuncia_id") REFERENCES "denuncias"("id_denuncia") ON DELETE CASCADE ON UPDATE CASCADE;
