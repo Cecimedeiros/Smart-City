@@ -3,17 +3,17 @@ import * as authService from '../services/authService';
 
 export async function register(req: Request, res: Response, next: NextFunction) {
   try {
-    const { nome, email, senha, tipo } = req.body;
+    const { nome, email, senha, papel } = req.body;
 
-    if (!nome || !email || !senha || !tipo) {
-      return res.status(400).json({ error: 'Campos obrigatórios: nome, email, senha, tipo' });
+    if (!nome || !email || !senha || !papel) {
+      return res.status(400).json({ error: 'Campos obrigatórios: nome, email, senha, papel' });
     }
 
-    if (tipo !== 'cidadao' && tipo !== 'gestor') {
-      return res.status(400).json({ error: 'tipo deve ser "cidadao" ou "gestor"' });
+    if (papel !== 'cidadao' && papel !== 'gestor') {
+      return res.status(400).json({ error: 'papel deve ser "cidadao" ou "gestor"' });
     }
 
-    const result = await authService.register(nome, email, senha, tipo);
+    const result = await authService.register(nome, email, senha, papel);
     return res.status(201).json(result);
   } catch (err) {
     next(err);
