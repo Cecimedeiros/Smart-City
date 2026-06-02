@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 const SECRET = process.env.JWT_SECRET || 'change-me';
 
 export interface AuthRequest extends Request {
-  user?: { userId: number; role: 'cidadao' | 'gestor' };
+  user?: { userId: number; papel: 'cidadao' | 'gestor' };
 }
 
 export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
@@ -17,7 +17,7 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, SECRET) as { userId: number; role: 'cidadao' | 'gestor' };
+    const decoded = jwt.verify(token, SECRET) as { userId: number; papel: 'cidadao' | 'gestor' };
     req.user = decoded;
     next();
   } catch {

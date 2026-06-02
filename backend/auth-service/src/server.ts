@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'dotenv/config';
 import express from 'express';
 import authRoutes from './routes/authRoutes';
@@ -19,6 +20,9 @@ app.use(express.json());
 app.use(healthRoutes);
 app.use('/auth', authRoutes);
 app.use(errorMiddleware);
+=======
+import app from './app';
+>>>>>>> 5daa218ea61fc5f1f309a8a7d9cc18de38d87e2f
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`auth-service rodando na porta ${PORT}`));

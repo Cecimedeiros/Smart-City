@@ -1,4 +1,5 @@
 import { Router } from 'express';
+<<<<<<< HEAD
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { roleMiddleware } from '../middlewares/roleMiddleware';
 import {
@@ -69,3 +70,15 @@ router.patch(
 );
 
 export default router;
+=======
+import { authMiddleware, apenascidadao } from '../middlewares/authMiddleware';
+import { createDemand } from '../controllers/demandController';
+
+const router = Router();
+
+// POST /demandas — issue #26
+// Apenas cidadãos autenticados criam demandas
+router.post('/', authMiddleware, apenascidadao, createDemand);
+
+export default router;
+>>>>>>> 5daa218ea61fc5f1f309a8a7d9cc18de38d87e2f

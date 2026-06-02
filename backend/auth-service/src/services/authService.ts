@@ -16,22 +16,22 @@ export async function register(
   nome: string,
   email: string,
   senha: string,
-  tipo: 'CIDADAO' | 'GESTOR' // Ajustado para bater com o Enum em caixa alta do Prisma
+  papel: 'cidadao' | 'gestor'
 ) {
   const hash = await bcrypt.hash(senha, SALT_ROUNDS);
+  const papelEnum = papel.toUpperCase() as 'CIDADAO' | 'GESTOR';
 
   try {
-    // Agora cria APENAS o usuário e salva o papel dele diretamente aqui
     const usuario = await prisma.usuario.create({
       data: {
         nome,
         email,
         senha: hash,
-        papel: tipo, 
+        papel: papelEnum,
       },
     });
 
-    return { id: usuario.id, nome: usuario.nome, email: usuario.email, tipo };
+    return { id: usuario.id, nome: usuario.nome, email: usuario.email, papel };
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
       throw httpError('E-mail já cadastrado', 409);
@@ -53,12 +53,8 @@ export async function login(email: string, senha: string) {
     throw httpError('Credenciais inválidas', 401);
   }
 
-  // Usamos "as any" temporariamente aqui para o TypeScript aceitar o campo papel
-  // enquanto o banco de dados está sendo recriado do zero!
-  const papelUsuario = (usuario as any).papel || 'CIDADAO';
-  const role = papelUsuario.toLowerCase(); 
-  
-  const token = jwt.sign({ userId: usuario.id, role }, SECRET, { expiresIn: '24h' });
+  const papel = usuario.papel.toLowerCase() as 'cidadao' | 'gestor';
+  const token = jwt.sign({ userId: usuario.id, papel }, SECRET, { expiresIn: '24h' });
 
-  return { token, role, userId: usuario.id, nome: usuario.nome };
+  return { token, papel, userId: usuario.id, nome: usuario.nome };
 }
