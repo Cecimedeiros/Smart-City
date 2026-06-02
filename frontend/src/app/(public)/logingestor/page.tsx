@@ -3,18 +3,31 @@
 import { useState } from "react";
 import { ChakraProvider, Box, Button, Input, Text, VStack, Heading } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
+import { useDemandStore } from "@/stores/useDemandStore";
+import { ApiError } from "@/lib/api";
 
-// Alterado para export default direto na função principal
-export default function LoginPage() {
+export default function LoginGestorPage() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const login = useDemandStore((state) => state.login);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login de Gestor:", email);
-    router.push("/gestor/dashboard");
+    setErro("");
+    setLoading(true);
+
+    try {
+      await login(email, senha, "gestor");
+      router.push("/gestor/dashboard");
+    } catch (err) {
+      setErro(err instanceof ApiError ? err.message : "Erro ao fazer login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,53 +48,58 @@ export default function LoginPage() {
         <Box position="relative" bg="white" p={8} rounded="2xl" shadow="2xl" w="full" maxW="400px" zIndex="10" mx={4}>
           <VStack gap={6} as="form" onSubmit={handleSubmit}>
             <Heading size="lg" color="purple.700" textAlign="center">Smart City</Heading>
-            
-            <VStack w="full" gap={3}>
-              <Button type="button" w="full" bg="purple.600" color="white" _hover={{ bg: "purple.700" }}>Entrar com Certificado Digital</Button>
-              <Button type="button" w="full" bg="purple.500" color="white" _hover={{ bg: "purple.600" }}>Entrar com gov.br</Button>
-            </VStack>
 
             <Text fontSize="sm" textAlign="center" color="gray.600">
-              Faça login em sua conta de gestor. Ou <Link href="/cadastro"><Text as="span" color="purple.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>Cadastre-se</Text></Link>
+              Faça login em sua conta de gestor. Ou{" "}
+              <Link href="/cadastro">
+                <Text as="span" color="purple.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>Cadastre-se</Text>
+              </Link>
             </Text>
+
+            {erro && (
+              <Text fontSize="sm" color="red.500" textAlign="center" w="full">
+                {erro}
+              </Text>
+            )}
 
             <VStack w="full" gap={4}>
               <Box w="full">
                 <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Email</Text>
-                <Input 
-                  required 
-                  type="email" 
-                  placeholder="seu@email.com" 
-                  bg="purple.50" 
-                  borderColor="purple.200" 
-                  _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
+                <Input
+                  required
+                  type="email"
+                  placeholder="seu@email.com"
+                  bg="purple.50"
+                  borderColor="purple.200"
+                  _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Box>
               <Box w="full">
                 <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Senha</Text>
-                <Input 
-                  required 
-                  type="password" 
-                  placeholder="••••••••" 
-                  bg="purple.50" 
-                  borderColor="purple.200" 
-                  _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }} 
-                  value={senha} 
-                  onChange={(e) => setSenha(e.target.value)} 
+                <Input
+                  required
+                  type="password"
+                  placeholder="••••••••"
+                  bg="purple.50"
+                  borderColor="purple.200"
+                  _focus={{ borderColor: "purple.600", outline: "none", bg: "white" }}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
                 />
               </Box>
             </VStack>
 
-            <Button 
-              type="submit" 
-              w="full" 
-              size="lg" 
-              bg="purple.600" 
-              color="white" 
-              fontWeight="bold" 
+            <Button
+              type="submit"
+              w="full"
+              size="lg"
+              bg="purple.600"
+              color="white"
+              fontWeight="bold"
               _hover={{ bg: "purple.700", shadow: "md" }}
+              isLoading={loading}
             >
               ENTRAR
             </Button>

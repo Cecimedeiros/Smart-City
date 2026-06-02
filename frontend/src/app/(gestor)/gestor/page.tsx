@@ -21,13 +21,21 @@ export default function Page() {
     getFilteredDemands, 
     getDemandStats, 
     fetchDemands,
+    error,
+    token,
+    role,
+    logout,
     _hasHydrated 
   } = useDemandStore();
 
   useEffect(() => {
     setMounted(true);
+    if (!token || role !== 'gestor') {
+      router.push('/logingestor');
+      return;
+    }
     fetchDemands();
-  }, [fetchDemands]);
+  }, [fetchDemands, token, role, router]);
 
   if (!mounted || !_hasHydrated) {
     return (

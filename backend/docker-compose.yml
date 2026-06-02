@@ -7,13 +7,16 @@ services:
     env_file:
       - .env.local
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: "db_auth" 
+      POSTGRES_DB: db_auth
     ports:
-      - "5432:5432" 
+      - "5432:5432"
     volumes:
-      - auth_postgres_data:/var/lib/postgresql/data 
+      - auth_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_auth"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   demand-db:
     image: postgres:15-alpine
@@ -22,13 +25,16 @@ services:
     env_file:
       - .env.local
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: "db_demand" 
+      POSTGRES_DB: db_demand
     ports:
-      - "5433:5432" 
+      - "5433:5432"
     volumes:
       - demand_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_demand"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -36,6 +42,11 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   auth-service:
     build: ./auth-service
@@ -45,14 +56,12 @@ services:
       - .env.local
     environment:
       PORT: 3001
+      DATABASE_URL_AUTH: postgresql://postgres:postgres@auth-db:5432/db_auth
     ports:
       - "3001:3001"
-    volumes:
-      - ./auth-service:/app
-      - /app/node_modules
-    command: tail -f /dev/null
     depends_on:
-      - auth-db 
+      auth-db:
+        condition: service_healthy
 
   demand-service:
     build: ./demand-service
@@ -62,14 +71,15 @@ services:
       - .env.local
     environment:
       PORT: 3002
+      DATABASE_URL_DEMAND: postgresql://postgres:postgres@demand-db:5432/db_demand
+      REDIS_URL: redis://redis:6379
     ports:
       - "3002:3002"
-    volumes:
-      - ./demand-service:/app
-      - /app/node_modules
-    command: tail -f /dev/null
     depends_on:
-      - demand-db 
+      demand-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   metrics-service:
     build: ./metrics-service
@@ -79,16 +89,34 @@ services:
       - .env.local
     environment:
       PORT: 3003
+      DATABASE_URL_DEMAND: postgresql://postgres:postgres@demand-db:5432/db_demand
+      REDIS_URL: redis://redis:6379
     ports:
       - "3003:3003"
-    volumes:
-      - ./metrics-service:/app
-      - /app/node_modules
-    command: tail -f /dev/null
     depends_on:
-      - demand-db 
-      - redis
+      demand-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: smartcity_gateway
+    restart: always
+    env_file:
+      - .env.local
+    environment:
+      PORT: 8080
+      AUTH_SERVICE_URL: http://auth-service:3001
+      DEMAND_SERVICE_URL: http://demand-service:3002
+      METRICS_SERVICE_URL: http://metrics-service:3003
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - demand-service
+      - metrics-service
 
 volumes:
-  auth_postgres_data: 
+  auth_postgres_data:
   demand_postgres_data:

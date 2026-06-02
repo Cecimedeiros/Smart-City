@@ -146,36 +146,67 @@ PostgreSQL / Redis
 ## Como rodar localmente
 
 ### Pré-requisitos
-- Node.js 20+
 - Docker e Docker Compose
+- Node.js 20+ (apenas para o frontend)
 
-### Passos
+### Backend (Docker)
+
+Na pasta `backend/`, copie o `.env.example` para `.env.local`.
 
 ```bash
-# 1. Subir PostgreSQL, Redis e os três serviços
-docker-compose up -d
+cd backend
 
-# Ou, para rodar cada serviço manualmente em desenvolvimento:
+docker compose --env-file .env.local up -d --build
 
+docker compose --env-file .env.local exec auth-service npx prisma migrate deploy
+docker compose --env-file .env.local exec demand-service npx prisma migrate deploy
+```
+
+> Use sempre `migrate deploy`. **Não** rode `prisma migrate dev` em produção.
+
+Serviços:
+- API Gateway → http://localhost:8080
+- Auth → http://localhost:3001
+- Demand → http://localhost:3002
+- Metrics → http://localhost:3003
+
+### Arquitetura assíncrona
+
+- **Filas (Redis):** `demand-service` publica eventos em `smartcity:event-queue` ao alterar status
+- **Eventos (pub/sub):** canal `smartcity:denuncia-status` notifica o `metrics-service`
+- **Processamento paralelo:** KPIs agregados com `Promise.all` no `metrics-service`
+- **Cron:** atualização de cache a cada 5 minutos
+- **Cache Redis:** KPIs em `smartcity:metrics:kpis` (TTL 5 min)
+- **Paginação:** `GET /demands?page=1&limit=20`
+- **Health:** `GET /health` em cada serviço + gateway agregado
+
+### Frontend
+
+```bash
+cd frontend
+cp .env.local.example .env.local
+npm install
+npm run dev
+```
+
+Acesse http://localhost:3000
+
+### Desenvolvimento sem Docker (opcional)
+
+```bash
 # auth-service
 cd auth-service
 npm install
-cp .env.example .env.local
 npm run dev
 
-# demand-service
+# demand-service (outro terminal)
 cd demand-service
 npm install
-cp .env.example .env.local
-npx prisma migrate dev
-npm run dev
-
-# metrics-service
-cd metrics-service
-npm install
-cp .env.example .env.local
+npx prisma migrate deploy
 npm run dev
 ```
+
+Use os arquivos `.env` dentro de cada serviço com URLs apontando para `localhost`.
 
 ---
 

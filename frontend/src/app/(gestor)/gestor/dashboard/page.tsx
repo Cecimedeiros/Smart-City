@@ -20,8 +20,14 @@ export default function Page() {
     resetFilters, 
     getFilteredDemands, 
     getDemandStats, 
-    fetchDemands, 
+    fetchDemands,
+    fetchMetrics,
     isLoading,
+    error,
+    apiMetrics,
+    token,
+    role,
+    logout,
     _hasHydrated 
   } = useDemandStore();
 
@@ -29,8 +35,13 @@ export default function Page() {
 
   useEffect(() => {
     setMounted(true);
+    if (!token || role !== 'gestor') {
+      router.push('/logingestor');
+      return;
+    }
     fetchDemands();
-  }, [fetchDemands]);
+    fetchMetrics();
+  }, [fetchDemands, fetchMetrics, token, role, router]);
 
   useEffect(() => {
     setTempFilters(filters);
@@ -52,7 +63,7 @@ export default function Page() {
     (a, b) => (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3)
   );
   
-  const stats = getDemandStats();
+  const stats = apiMetrics ?? getDemandStats();
 
   const handleFilterChange = (key: keyof DemandFilters, value: string) => {
     setTempFilters((prev) => ({ ...prev, [key]: value === "" ? "" : (value as any) }));
@@ -79,9 +90,16 @@ export default function Page() {
           <Link href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
             Painel de Gestão
           </Link>
-          <Link href="/" className="text-purple-400 font-normal hover:text-purple-500">
+          <button
+            type="button"
+            onClick={() => {
+              logout();
+              router.push('/logingestor');
+            }}
+            className="text-purple-400 font-normal hover:text-purple-500"
+          >
             Sair
-          </Link>
+          </button>
         </div>
       </nav>
 
@@ -219,6 +237,8 @@ export default function Page() {
             <div className="flex flex-col gap-4">
               {isLoading ? (
                 <div className="text-center py-10 italic text-gray-400">Atualizando lista...</div>
+              ) : error ? (
+                <div className="text-center py-10 text-red-500">{error}</div>
               ) : filteredDemands.length > 0 ? (
                 filteredDemands.map((demand) => (
                   <DemandCard

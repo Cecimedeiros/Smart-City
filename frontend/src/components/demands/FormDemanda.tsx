@@ -1,9 +1,10 @@
-'use client'
+"'use client'"
 
 import { useState, useRef } from 'react'
 import { useDemandStore } from '@/stores/useDemandStore'
-import { Demand } from '@/types/demand'
+import { DemandCategory, DemandRegion } from '@/types/demand'
 import { useRouter } from "next/navigation"
+import { ApiError } from '@/lib/api'
 
 const CATEGORIAS = [
   "Iluminação Pública", "Manutenção de vias", "Saneamento", 
@@ -26,13 +27,15 @@ const PROBLEMAS_POR_CATEGORIA: Record<string, string[]> = {
 
 export function FormDemanda() {
   const router = useRouter()
-  const addDemand = useDemandStore((state) => state.addDemand)
-  const userEmail = useDemandStore((state) => state.userEmail) 
+  const createDemand = useDemandStore((state) => state.createDemand)
+  const token = useDemandStore((state) => state.token)
   
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [images, setImages] = useState<(string | null)[]>([null, null, null])
   const [targetIndex, setTargetIndex] = useState<number>(0)
+  const [loading, setLoading] = useState(false)
+  const [erro, setErro] = useState('')
 
   const [formData, setFormData] = useState({
     problema: '', 
@@ -65,35 +68,40 @@ export function FormDemanda() {
     setImages(newImages)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErro('')
+
+    if (!token) {
+      alert("⚠️ Faça login para registrar uma denúncia!")
+      router.push("/login")
+      return
+    }
     
     if (!formData.problema || !formData.categoria || !formData.regiao || !formData.endereco || !formData.descricao) {
       alert("⚠️ Preencha todos os campos obrigatórios!")
       return
     }
 
-    const novaDenuncia: Demand = {
-      id: Math.random().toString(36).substring(2, 9),
-      problema: formData.problema as any, 
-      location: formData.endereco,
-      category: formData.categoria as any,
-      region: formData.regiao as any,
-      status: "Aberta", 
-      priority: "Media", 
-      description: formData.descricao,
-      createdAt: new Date().toLocaleDateString('pt-BR'),
-      fotoUrl: images[0] || "", 
-      endereco: formData.endereco,
-      
-      solicitante: userEmail || "Usuário Anônimo", 
-      dataRegistro: new Date().toLocaleString('pt-BR'),
-      detalhes: formData.descricao,
-    }
+    setLoading(true)
 
-    addDemand(novaDenuncia)
-    alert("✅ Demanda salva com sucesso!")
-    router.push("/telaUsuario")
+    try {
+      await createDemand({
+        titulo: formData.problema,
+        categoria: formData.categoria as DemandCategory,
+        regiao: formData.regiao as DemandRegion,
+        descricao: formData.descricao,
+        endereco: formData.endereco,
+      })
+
+      alert("✅ Denúncia salva com sucesso!")
+      router.push("/telaUsuario")
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : "Erro ao salvar denúncia"
+      setErro(message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -189,10 +197,12 @@ export function FormDemanda() {
 
         <button 
           type="submit" 
-          className="w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 shadow-lg"
+          disabled={loading}
+          className="w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Salvar Denúncia
+          {loading ? "Salvando..." : "Salvar Denúncia"}
         </button>
+        {erro && <p className="text-sm text-red-500 text-center">{erro}</p>}
       </div>
     </form>
   )

@@ -3,23 +3,31 @@
 import { useState } from "react";
 import { ChakraProvider, Box, Button, Input, Text, VStack, Heading } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; 
-import { useDemandStore } from "@/stores/useDemandStore"; 
+import { useRouter } from "next/navigation";
+import { useDemandStore } from "@/stores/useDemandStore";
+import { ApiError } from "@/lib/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const router = useRouter(); 
-  const login = useDemandStore((state) => state.login); 
+  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const login = useDemandStore((state) => state.login);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); 
-    
-    login(email); 
-    
-    console.log("Login efetuado e salvo no store:", email);
-    
-    router.push("/telaUsuario");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
+
+    try {
+      await login(email, senha, "cidadao");
+      router.push("/telaUsuario");
+    } catch (err) {
+      setErro(err instanceof ApiError ? err.message : "Erro ao fazer login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,13 +46,8 @@ export default function LoginPage() {
         </Box>
 
         <Box position="relative" bg="white" p={8} rounded="2xl" shadow="2xl" w="full" maxW="400px" zIndex="10" mx={4}>
-          <VStack gap={6} as="form" onSubmit={handleSubmit}> 
+          <VStack gap={6} as="form" onSubmit={handleSubmit}>
             <Heading size="lg" color="purple.700" textAlign="center">Smart City</Heading>
-            
-            <VStack w="full" gap={3}>
-              <Button type="button" w="full" bg="purple.600" color="white">Entrar com Certificado Digital</Button>
-              <Button type="button" w="full" bg="purple.500" color="white">Entrar com gov.br</Button>
-            </VStack>
 
             <Text fontSize="sm" textAlign="center" color="gray.600">
               Faça login em sua conta. Ou{" "}
@@ -53,39 +56,46 @@ export default function LoginPage() {
               </Link>
             </Text>
 
+            {erro && (
+              <Text fontSize="sm" color="red.500" textAlign="center" w="full">
+                {erro}
+              </Text>
+            )}
+
             <VStack w="full" gap={4}>
               <Box w="full">
                 <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Email</Text>
-                <Input 
-                  required 
-                  type="email" 
-                  placeholder="seu@email.com" 
-                  bg="purple.50" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
+                <Input
+                  required
+                  type="email"
+                  placeholder="seu@email.com"
+                  bg="purple.50"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Box>
               <Box w="full">
                 <Text fontSize="sm" mb={1} fontWeight="medium" color="gray.700">Senha</Text>
-                <Input 
-                  required 
-                  type="password" 
-                  placeholder="••••••••" 
-                  bg="purple.50" 
-                  value={senha} 
-                  onChange={(e) => setSenha(e.target.value)} 
+                <Input
+                  required
+                  type="password"
+                  placeholder="••••••••"
+                  bg="purple.50"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
                 />
               </Box>
             </VStack>
 
-            <Button 
-              type="submit" 
-              w="full" 
-              size="lg" 
-              bg="purple.600" 
-              color="white" 
-              fontWeight="bold" 
+            <Button
+              type="submit"
+              w="full"
+              size="lg"
+              bg="purple.600"
+              color="white"
+              fontWeight="bold"
               _hover={{ bg: "purple.700" }}
+              isLoading={loading}
             >
               ENTRAR
             </Button>

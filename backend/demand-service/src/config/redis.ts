@@ -1,0 +1,37 @@
+import { createClient, RedisClientType } from 'redis';
+
+export const REDIS_CHANNEL = 'smartcity:denuncia-status';
+export const REDIS_QUEUE = 'smartcity:event-queue';
+
+let publisher: RedisClientType | null = null;
+
+export async function getRedisPublisher(): Promise<RedisClientType> {
+  if (!publisher) {
+    publisher = createClient({ url: process.env.REDIS_URL ?? 'redis://localhost:6379' });
+    publisher.on('error', (err) => console.error('[demand] Redis:', err.message));
+    await publisher.connect();
+  }
+  return publisher;
+}
+
+export interface DenunciaStatusEvent {
+  type: 'DENUNCIA_STATUS_ALTERADO';
+  denunciaId: number;
+  statusAnterior: string;
+  statusNovo: string;
+  gestorId: number;
+  timestamp: string;
+}
+
+export async function publishDenunciaStatusEvent(event: Omit<DenunciaStatusEvent, 'type' | 'timestamp'>) {
+  const payload: DenunciaStatusEvent = {
+    type: 'DENUNCIA_STATUS_ALTERADO',
+    ...event,
+    timestamp: new Date().toISOString(),
+  };
+
+  const message = JSON.stringify(payload);
+  const redis = await getRedisPublisher();
+  await redis.lPush(REDIS_QUEUE, message);
+  await redis.publish(REDIS_CHANNEL, message);
+}

@@ -17,6 +17,10 @@ export default function TelaUsuarioPage() {
 
   const filters = useDemandStore((state) => state.filters)
   const isLoading = useDemandStore((state) => state.isLoading)
+  const error = useDemandStore((state) => state.error)
+  const token = useDemandStore((state) => state.token)
+  const userName = useDemandStore((state) => state.userName)
+  const logout = useDemandStore((state) => state.logout)
   const setFilters = useDemandStore((state) => state.setFilters)
   const resetFilters = useDemandStore((state) => state.resetFilters)
   const getFilteredDemands = useDemandStore((state) => state.getFilteredDemands)
@@ -26,8 +30,12 @@ export default function TelaUsuarioPage() {
 
   useEffect(() => {
     setIsMounted(true)
+    if (!token) {
+      router.push("/login")
+      return
+    }
     fetchDemands()
-  }, [fetchDemands])
+  }, [fetchDemands, token, router])
 
   const filteredDemands = getFilteredDemands()
 
@@ -63,13 +71,17 @@ export default function TelaUsuarioPage() {
           </h1>
         </Link>
         <div className="flex gap-4 items-center">
-          <span className="text-sm font-medium text-purple-700">Usuário</span>
-          <Link 
-            href="/" 
+          <span className="text-sm font-medium text-purple-700">{userName ?? "Usuário"}</span>
+          <button
+            type="button"
+            onClick={() => {
+              logout()
+              router.push("/login")
+            }}
             className="text-sm text-gray-600 hover:text-red-500 cursor-pointer transition-colors font-semibold"
           >
             Sair
-          </Link>
+          </button>
         </div>
       </header> 
 
@@ -161,6 +173,8 @@ export default function TelaUsuarioPage() {
                 <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-3" />
                 Buscando denúncias...
               </div>
+            ) : error ? (
+              <div className="text-center py-10 text-red-500">{error}</div>
             ) : filteredDemands.length > 0 ? (
               filteredDemands.map((demand) => (
                 <DemandCard

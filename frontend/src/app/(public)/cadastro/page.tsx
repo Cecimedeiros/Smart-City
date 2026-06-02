@@ -3,48 +3,55 @@
 import { useState } from "react";
 import { Button } from "@/components/UI/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { authService } from "@/Services/authService";
+import { ApiError } from "@/lib/api";
 
 export default function CadastroPage() {
+  const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const [tipoUsuario, setTipoUsuario] =
-    useState<"cidadao" | "gestor">("cidadao");
+  const [tipoUsuario, setTipoUsuario] = useState<"cidadao" | "gestor">("cidadao");
   const [codigoAcesso, setCodigoAcesso] = useState("");
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
 
   const inputStyle =
     "w-full px-3 py-2 border border-purple-300 rounded-lg text-sm " +
     "focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600 " +
     "hover:border-purple-400 placeholder:text-gray-400 bg-purple-50";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErro("");
 
     if (senha !== confirmarSenha) {
-      alert("As senhas não coincidem!");
+      setErro("As senhas não coincidem!");
       return;
     }
 
     if (tipoUsuario === "gestor" && !codigoAcesso) {
-      alert("Código de acesso é obrigatório para gestores!");
+      setErro("Código de acesso é obrigatório para gestores!");
       return;
     }
 
     setLoading(true);
 
-    setTimeout(() => {
-      console.log({ nome, email, senha, tipoUsuario, codigoAcesso });
-
-      alert("Cadastro desabilitado temporariamente");
+    try {
+      await authService.register(nome, email, senha, tipoUsuario);
+      alert("Conta criada com sucesso! Faça login para continuar.");
+      router.push(tipoUsuario === "gestor" ? "/logingestor" : "/login");
+    } catch (err) {
+      setErro(err instanceof ApiError ? err.message : "Erro ao criar conta");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
     <div className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden">
-      
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/recife.jpg')" }}
@@ -59,16 +66,9 @@ export default function CadastroPage() {
       />
 
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
-        <div className="text-2xl font-bold text-white opacity-60">
-          Smart City
-        </div>
-
+        <div className="text-2xl font-bold text-white opacity-60">Smart City</div>
         <Link href="/">
-          <Button
-            variant="outline"
-            size="md"
-            className="text-white border-white"
-          >
+          <Button variant="outline" size="md" className="text-white border-white">
             ← Voltar
           </Button>
         </Link>
@@ -76,19 +76,20 @@ export default function CadastroPage() {
 
       <div className="relative z-10 w-full max-w-sm mx-4 mt-20">
         <div className="bg-white rounded-2xl shadow-xl px-8 py-8">
-
           <h1 className="text-2xl font-bold text-center text-purple-600 mb-6">
             Criar conta
           </h1>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {erro && (
+            <p className="text-sm text-red-500 text-center mb-4">{erro}</p>
+          )}
 
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">
-                Nome completo
-              </label>
+              <label className="text-sm font-medium text-gray-700">Nome completo</label>
               <input
                 type="text"
+                required
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 className={inputStyle}
@@ -96,11 +97,10 @@ export default function CadastroPage() {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">
-                Email
-              </label>
+              <label className="text-sm font-medium text-gray-700">Email</label>
               <input
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputStyle}
@@ -108,11 +108,10 @@ export default function CadastroPage() {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">
-                Senha
-              </label>
+              <label className="text-sm font-medium text-gray-700">Senha</label>
               <input
                 type="password"
+                required
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 className={inputStyle}
@@ -120,11 +119,10 @@ export default function CadastroPage() {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700">
-                Confirmar senha
-              </label>
+              <label className="text-sm font-medium text-gray-700">Confirmar senha</label>
               <input
                 type="password"
+                required
                 value={confirmarSenha}
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 className={inputStyle}
@@ -163,16 +161,9 @@ export default function CadastroPage() {
               />
             )}
 
-            <Link href="/telaUsuario">
-              <Button 
-                type="button" 
-                className="w-full mt-2" 
-                disabled={loading}
-              >
-                {loading ? "Criando..." : "Criar Conta"}
-              </Button>
-            </Link>
-
+            <Button type="submit" className="w-full mt-2" disabled={loading}>
+              {loading ? "Criando..." : "Criar Conta"}
+            </Button>
           </form>
         </div>
       </div>
