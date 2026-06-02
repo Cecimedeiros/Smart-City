@@ -28,9 +28,7 @@ const demandaValida = {
 const idsParaLimpar: number[] = [];
 
 beforeAll(async () => {
-  // Cria usuários de teste diretamente no banco para satisfazer a FK cidadaos → usuarios
-  // O demand-service não tem o model Usuario no schema (serviços separados),
-  // então usamos SQL direto como ponte cross-service no ambiente local
+  // demand-service não tem o model Usuario — SQL direto para satisfazer a FK no ambiente local
   const [cidadaoRow] = await prisma.$queryRaw<{ id: number }[]>`
     INSERT INTO usuarios (nome, email, senha, papel)
     VALUES ('Cidadao TS02', 'ts02.cidadao@test.com', 'hash', 'CIDADAO')
@@ -144,16 +142,8 @@ describe('TS02 - Persistência de nova demanda urbana', () => {
       idsParaLimpar.push(res.body.id_denuncia);
     });
 
-    /*
-     * Concorrência — teste com requisições paralelas (Promise.all)
-     *
-     * Dois POSTs simultâneos do mesmo cidadão chegam ao servidor.
-     * O upsert no repositório garante que apenas um registro de cidadão
-     * seja criado, mesmo com as duas requisições correndo ao mesmo tempo.
-     *
-     * Mecanismo: Promise.all — paralelismo de I/O no event loop do Node.js
-     * Problema resolvido: race condition no findOrCreate do cidadão
-     */
+    // Concorrência: Promise.all dispara dois POSTs ao mesmo tempo —
+    // valida que o upsert não cria cidadão duplicado sob carga paralela.
     it('lida com duas criações simultâneas do mesmo cidadão sem duplicar o registro', async () => {
       const [res1, res2] = await Promise.all([
         request(app)

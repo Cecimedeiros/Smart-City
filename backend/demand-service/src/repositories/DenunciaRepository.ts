@@ -1,12 +1,7 @@
 import { PrismaClient, Categorias, Regioes, NivelPrioridade } from '@prisma/client';
 
+// Instância única — Prisma reutiliza o pool de conexões automaticamente.
 const prisma = new PrismaClient();
-
-/*
- * Otimização — connection pooling
- * PrismaClient reutiliza conexões do pool automaticamente.
- * Uma única instância aqui evita overhead de conexão por requisição.
- */
 
 export type CreateDenunciaInput = {
   titulo: string;
@@ -22,15 +17,8 @@ export type CreateDenunciaInput = {
   cidadaoId: number;
 };
 
-/*
- * Concorrência — upsert atômico
- *
- * Se dois requests do mesmo usuário chegarem simultaneamente, o upsert
- * garante que apenas um registro seja criado no banco (operação atômica).
- * Sem isso, dois INSERTs paralelos gerariam violação de unique constraint.
- *
- * Otimização: upsert é uma única query vs SELECT + INSERT separados.
- */
+// Concorrência: upsert atômico evita duplicata quando dois requests
+// do mesmo cidadão chegam simultaneamente — mais eficiente que SELECT + INSERT.
 export async function findOrCreateCidadao(usuarioId: number) {
   return prisma.cidadao.upsert({
     where: { usuario_id: usuarioId },

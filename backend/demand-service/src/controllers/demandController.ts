@@ -3,10 +3,7 @@ import { Categorias, Regioes, NivelPrioridade } from '@prisma/client';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import * as demandService from '../services/demandService';
 
-/*
- * Otimização — validação no controller antes de chegar ao banco
- * Rejeita enum inválido sem abrir conexão com o Prisma.
- */
+// Otimização: valida enums antes de chegar ao banco — rejeita entrada inválida sem query.
 const CATEGORIAS = Object.values(Categorias);
 const REGIOES    = Object.values(Regioes);
 const PRIORIDADES = Object.values(NivelPrioridade);
