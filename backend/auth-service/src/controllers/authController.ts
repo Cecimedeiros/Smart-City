@@ -13,10 +13,6 @@ export async function register(req: Request, res: Response, next: NextFunction) 
       return res.status(400).json({ error: 'papel deve ser "cidadao" ou "gestor"' });
     }
 
-<<<<<<< HEAD
-    const papel = tipo === 'gestor' ? 'GESTOR' : 'CIDADAO';
-=======
->>>>>>> 5daa218ea61fc5f1f309a8a7d9cc18de38d87e2f
     const result = await authService.register(nome, email, senha, papel);
     return res.status(201).json(result);
   } catch (err) {
