@@ -14,37 +14,41 @@ interface PaginatedResponse<T> {
 }
 
 export const demandService = {
-  async getMyDemands(token: string, solicitante = ''): Promise<Demand[]> {
+  async getMyDemands(token?: string, solicitante = ''): Promise<Demand[]> {
+    // Teste 1: Coloque o /demands de volta para ver se o Gateway exige o prefixo completo
     const res = await apiFetch<PaginatedResponse<ApiDenuncia>>(
       DEMAND_API_URL,
-      '/demands/feed?page=1&limit=100', 
+      '/feed?page=1&limit=100',
       { token }
     );
     return mapDenunciasFromApi(res.data, solicitante);
   },
 
-  async getAllForGestor(token: string): Promise<Demand[]> {
+  async getAllForGestor(token?: string): Promise<Demand[]> {
+    // Antes: '/gestor/demands...' -> Agora: '/gestor...'
     const res = await apiFetch<PaginatedResponse<ApiDenuncia>>(
       DEMAND_API_URL,
-      '/gestor/demands?page=1&limit=100',
+      '/gestor?page=1&limit=100',
       { token }
     );
     return mapDenunciasFromApi(res.data);
   },
 
-  async getById(token: string, id: string, solicitante = ''): Promise<Demand> {
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/demands/${id}`, { token });
+  async getById(token?: string, id?: string, solicitante = ''): Promise<Demand> {
+    // Antes: `/demands/${id}` -> Agora: `/${id}`
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/${id}`, { token });
     return mapDenunciaFromApi(data, solicitante);
   },
 
-  async getByIdForGestor(token: string, id: string): Promise<Demand> {
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/gestor/demands/${id}`, { token });
+  async getByIdForGestor(token?: string, id?: string): Promise<Demand> {
+    // Antes: `/gestor/demands/${id}` -> Agora: `/gestor/${id}`
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/gestor/${id}`, { token });
     return mapDenunciaFromApi(data);
   },
 
   async create(
-    token: string,
-    input: {
+    token?: string,
+    input?: {
       titulo: string;
       categoria: DemandCategory;
       regiao: DemandRegion;
@@ -54,8 +58,9 @@ export const demandService = {
     },
     solicitante = ''
   ): Promise<Demand> {
-    const payload = buildCreatePayload(input);
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, '/demands', {
+    const payload = buildCreatePayload(input!);
+    // Antes: '/demands' -> Agora: '/'
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, '/', {
       method: 'POST',
       token,
       body: JSON.stringify(payload),
@@ -63,14 +68,15 @@ export const demandService = {
     return mapDenunciaFromApi(data, solicitante);
   },
 
-  async updateStatus(token: string, id: string, status: DemandStatus): Promise<Demand> {
+  async updateStatus(token?: string, id?: string, status?: DemandStatus): Promise<Demand> {
+    // Antes: `/demands/${id}/status` -> Agora: `/${id}/status`
     const result = await apiFetch<{ denuncia: ApiDenuncia }>(
       DEMAND_API_URL,
-      `/demands/${id}/status`,
+      `/${id}/status`,
       {
         method: 'PATCH',
         token,
-        body: JSON.stringify({ status: mapStatusToApi(status) }),
+        body: JSON.stringify({ status: mapStatusToApi(status!) }),
       }
     );
     return mapDenunciaFromApi(result.denuncia);

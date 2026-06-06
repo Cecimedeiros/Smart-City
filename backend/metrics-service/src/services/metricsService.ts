@@ -46,7 +46,13 @@ export async function aggregateMetrics(): Promise<MetricsKpis> {
 }
 
 export async function refreshMetricsCache(): Promise<MetricsKpis> {
-  const metrics = await withRetry(() => aggregateMetrics());
+  // timeout de 5s — se o Prisma travar, rejeita
+  const metrics = await Promise.race([
+    withRetry(() => aggregateMetrics()),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('refreshMetricsCache timeout')), 5000)
+    ),
+  ]);
 
   const redis = await getRedisClient();
   await redis.setEx(METRICS_CACHE_KEY, CACHE_TTL_SECONDS, JSON.stringify(metrics));

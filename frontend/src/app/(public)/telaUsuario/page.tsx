@@ -26,21 +26,27 @@ export default function TelaUsuarioPage() {
   const getFilteredDemands = useDemandStore((state) => state.getFilteredDemands)
   const fetchDemands = useDemandStore((state) => state.fetchDemands)
 
+  const _hasHydrated = useDemandStore((state) => state._hasHydrated)
   const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
-    if (!token) {
-      router.push("/login")
-      return
+  }, [])
+
+  useEffect(() => {
+    if (isMounted && _hasHydrated) {
+      if (!token) {
+        router.push("/login")
+        return
+      }
+      fetchDemands()
     }
-    fetchDemands()
-  }, [fetchDemands, token, router])
+  }, [isMounted, _hasHydrated, token, router, fetchDemands])
 
   const filteredDemands = getFilteredDemands()
 
-  if (!isMounted) {
-    return <div className="min-h-screen bg-neutral-100" />
+  if (!isMounted || !_hasHydrated) {
+    return <div className="min-h-screen bg-neutral-100 flex items-center justify-center text-gray-500">Carregando dados...</div>
   }
 
   const getOptions = (key: FilterKeys) => {

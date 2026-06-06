@@ -9,8 +9,8 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-rate-limit": "^7.1.5",
-    "http-proxy-middleware": "^2.0.6",
+    "express-rate-limit": "^7.5.1",
+    "http-proxy-middleware": "^2.0.9",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {

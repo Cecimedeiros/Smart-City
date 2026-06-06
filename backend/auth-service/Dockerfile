@@ -12,4 +12,5 @@ RUN npm run build
 
 EXPOSE 3001
 
-CMD ["node", "dist/server.js"]
+# CMD ["node", "dist/server.js"]
+CMD npx prisma db push --schema=./prisma/schema.prisma && npm run dev

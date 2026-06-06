@@ -248,7 +248,7 @@ export const useDemandStore = create<DemandStore>()(
     }),
     {
       name: "smart-city-storage-v2",
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage), 
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },

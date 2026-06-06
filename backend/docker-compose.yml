@@ -13,7 +13,7 @@ services:
     volumes:
       - auth_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d db_auth"]
+      test: ["CMD-SHELL", "pg_isready -U squad22 -d db_auth"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -31,7 +31,7 @@ services:
     volumes:
       - demand_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d db_demand"]
+      test: ["CMD-SHELL", "pg_isready -U squad22 -d db_demand"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -56,7 +56,6 @@ services:
       - .env.local
     environment:
       PORT: 3001
-      DATABASE_URL_AUTH: postgresql://postgres:postgres@auth-db:5432/db_auth
     ports:
       - "3001:3001"
     depends_on:
@@ -71,7 +70,6 @@ services:
       - .env.local
     environment:
       PORT: 3002
-      DATABASE_URL_DEMAND: postgresql://postgres:postgres@demand-db:5432/db_demand
       REDIS_URL: redis://redis:6379
     ports:
       - "3002:3002"
@@ -89,7 +87,6 @@ services:
       - .env.local
     environment:
       PORT: 3003
-      DATABASE_URL_DEMAND: postgresql://postgres:postgres@demand-db:5432/db_demand
       REDIS_URL: redis://redis:6379
     ports:
       - "3003:3003"

@@ -16,10 +16,17 @@ export interface RegisterResponse {
 
 export const authService = {
   async login(email: string, senha: string): Promise<AuthResponse> {
-    return apiFetch<AuthResponse>(AUTH_API_URL, '/auth/login', {
+    const resposta = await apiFetch<AuthResponse>(AUTH_API_URL, '/login', {
       method: 'POST',
       body: JSON.stringify({ email, senha }),
     });
+
+    // 👉 MÁGICA DO F5: Guarda o token no navegador assim que o login dá certo
+    if (resposta && resposta.token) {
+      localStorage.setItem('@SmartCity:token', resposta.token);
+    }
+
+    return resposta;
   },
 
   async register(
@@ -28,7 +35,7 @@ export const authService = {
     senha: string,
     tipo: 'cidadao' | 'gestor'
   ): Promise<RegisterResponse> {
-    return apiFetch<RegisterResponse>(AUTH_API_URL, '/auth/register', {
+    return apiFetch<RegisterResponse>(AUTH_API_URL, '/register', {
       method: 'POST',
       body: JSON.stringify({ nome, email, senha, papel: tipo }),
     });

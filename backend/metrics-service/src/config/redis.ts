@@ -10,7 +10,7 @@ let subscriber: RedisClientType | null = null;
 export async function getRedisClient(): Promise<RedisClientType> {
   if (!client) {
     client = createClient({ url: process.env.REDIS_URL ?? 'redis://localhost:6379' });
-    client.on('error', (err) => console.error('[metrics] Redis:', err.message));
+    client.on('error', (err) => console.error('[metrics] Redis client:', err.message));
     await client.connect();
   }
   return client;

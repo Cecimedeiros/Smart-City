@@ -1,14 +1,10 @@
-export const AUTH_API_URL =
-  process.env.NEXT_PUBLIC_AUTH_API_URL ?? 'http://localhost:3001';
-
-export const DEMAND_API_URL =
-  process.env.NEXT_PUBLIC_DEMAND_API_URL ?? 'http://localhost:3002/demandas';
-
-export const METRICS_API_URL =
-  process.env.NEXT_PUBLIC_METRICS_API_URL ?? 'http://localhost:3003';
-
 export const API_GATEWAY_URL =
   process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'http://localhost:8080';
+
+// 👉 CORRIGIDO: Agora tudo passa pelos prefixos do API Gateway
+export const AUTH_API_URL = `${API_GATEWAY_URL}/auth`;
+export const DEMAND_API_URL = `${API_GATEWAY_URL}/demands`;
+export const METRICS_API_URL = `${API_GATEWAY_URL}/metrics`;
 
 export class ApiError extends Error {
   status: number;
@@ -29,7 +25,22 @@ export async function apiFetch<T>(
   path: string,
   options: ApiFetchOptions = {}
 ): Promise<T> {
-  const { token, headers, ...rest } = options;
+  let { token, headers, ...rest } = options;
+
+  // 👉 CORRIGIDO PARA O ZUSTAND PERSIST:
+  if (!token && typeof window !== 'undefined') {
+    try {
+      // 1. Pega a string grandona que o Zustand salvou
+      const storageJson = localStorage.getItem('smart-city-storage-v2');
+      if (storageJson) {
+        // 2. Transforma em objeto e navega até o token que está dentro de "state"
+        const parsed = JSON.parse(storageJson);
+        token = parsed?.state?.token || undefined;
+      }
+    } catch (e) {
+      console.error("Erro ao ler token do Zustand:", e);
+    }
+  }
 
   const response = await fetch(`${baseUrl}${path}`, {
     ...rest,
