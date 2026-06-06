@@ -2,7 +2,7 @@ export const AUTH_API_URL =
   process.env.NEXT_PUBLIC_AUTH_API_URL ?? 'http://localhost:3001';
 
 export const DEMAND_API_URL =
-  process.env.NEXT_PUBLIC_DEMAND_API_URL ?? 'http://localhost:3002';
+  process.env.NEXT_PUBLIC_DEMAND_API_URL ?? 'http://localhost:3002/demandas';
 
 export const METRICS_API_URL =
   process.env.NEXT_PUBLIC_METRICS_API_URL ?? 'http://localhost:3003';

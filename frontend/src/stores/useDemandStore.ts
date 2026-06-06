@@ -76,7 +76,7 @@ export const useDemandStore = create<DemandStore>()(
         try {
           const result = await authService.login(email, senha);
 
-          if (expectedRole && result.role !== expectedRole) {
+          if (expectedRole && result.papel !== expectedRole) {
             throw new ApiError(
               expectedRole === "gestor"
                 ? "Esta conta não possui perfil de gestor"
@@ -87,7 +87,7 @@ export const useDemandStore = create<DemandStore>()(
 
           set({
             token: result.token,
-            role: result.role,
+            role: result.papel,
             userEmail: email,
             userName: result.nome,
             isLoading: false,

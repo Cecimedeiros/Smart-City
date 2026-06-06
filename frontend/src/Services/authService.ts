@@ -2,7 +2,7 @@ import { apiFetch, AUTH_API_URL } from '@/lib/api';
 
 export interface AuthResponse {
   token: string;
-  role: 'cidadao' | 'gestor';
+  papel: 'cidadao' | 'gestor';
   userId: number;
   nome: string;
 }
@@ -11,7 +11,7 @@ export interface RegisterResponse {
   id: number;
   nome: string;
   email: string;
-  tipo: string;
+  papel: string;
 }
 
 export const authService = {
@@ -30,7 +30,7 @@ export const authService = {
   ): Promise<RegisterResponse> {
     return apiFetch<RegisterResponse>(AUTH_API_URL, '/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ nome, email, senha, tipo }),
+      body: JSON.stringify({ nome, email, senha, papel: tipo }),
     });
   },
 };
