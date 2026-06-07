@@ -44,7 +44,7 @@ export const metricsService = {
     byCategory: Record<string, number>;
     byRegion: Record<string, number>;
   }> {
-    const raw = await apiFetch<MetricsKpis>(METRICS_API_URL, '/metrics', { token });
+    const raw = await apiFetch<MetricsKpis>(METRICS_API_URL, '', { token });
     return {
       total: raw.total,
       byCategory: mapLabels(raw.byCategory, CATEGORY_LABELS),

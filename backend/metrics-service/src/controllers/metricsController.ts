@@ -4,7 +4,7 @@ import { getMetrics, refreshMetricsCache } from '../services/metricsService';
 
 export async function getKpis(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    if (req.user?.role !== 'gestor') {
+    if (req.user?.papel !== 'gestor') {
       return res.status(403).json({ error: 'Acesso negado para este perfil' });
     }
 
@@ -17,7 +17,7 @@ export async function getKpis(req: AuthRequest, res: Response, next: NextFunctio
 
 export async function refreshKpis(req: AuthRequest, res: Response, next: NextFunction) {
   try {
-    if (req.user?.role !== 'gestor') {
+    if (req.user?.papel !== 'gestor') {
       return res.status(403).json({ error: 'Acesso negado para este perfil' });
     }
 

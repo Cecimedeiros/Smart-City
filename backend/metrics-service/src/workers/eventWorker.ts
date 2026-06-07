@@ -1,4 +1,4 @@
-import { getRedisClient, getRedisSubscriber, REDIS_CHANNEL, REDIS_QUEUE } from '../config/redis';
+import { getRedisQueueClient, getRedisSubscriber, REDIS_CHANNEL, REDIS_QUEUE } from '../config/redis';
 import { refreshMetricsCache } from '../services/metricsService';
 import { withRetry } from '../utils/retry';
 
@@ -21,7 +21,7 @@ export async function startEventSubscriber() {
 }
 
 export async function startQueueWorker() {
-  const redis = await getRedisClient();
+  const redis = await getRedisQueueClient();
 
   (async function poll() {
     while (true) {
