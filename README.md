@@ -61,14 +61,14 @@ Responsável por:
 
 ## 🚀 Funcionalidades do MVP
 
-- [ ] Cadastro e autenticação de usuários;
-- [ ] Criação e listagem de demandas urbanas;
-- [ ] Visualização detalhada de cada demanda;
-- [ ] Sistema de filtros avançados (prioridade, categoria, região  e status);
-- [ ] Atualização manual de status (exclusivo para gestores);
-- [ ] Visualizações em formato de Lista;
-- [ ] Painel administrativo para gestores (Métricas e KPIs);
-- [ ] Integração com API *fake* para simulação de dados.
+- [x] Cadastro e autenticação de usuários;
+- [x] Criação e listagem de demandas urbanas;
+- [x] Visualização detalhada de cada demanda;
+- [x] Sistema de filtros avançados (prioridade, categoria, região  e status);
+- [x] Atualização manual de status (exclusivo para gestores);
+- [x] Visualizações em formato de Lista;
+- [x] Painel administrativo para gestores (Métricas e KPIs);
+- [x] Integração com API para simulação de dados.
 
 ---
 
@@ -197,11 +197,11 @@ npm run dev
 
 ### Backend (FastAPI)
 ```bash
-cd Back-SmartCity
-python -m venv .venv
-.venv\Scripts\activate      # Windows
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+cd D:\Desktop\Smart-City\backend
+copy .env.example .env.local
+docker compose --env-file .env.local up -d --build
+docker compose --env-file .env.local exec auth-service npx prisma migrate deploy
+docker compose --env-file .env.local exec demand-service npx prisma migrate deploy
 ```
 > Disponível em http://localhost:8000
 
