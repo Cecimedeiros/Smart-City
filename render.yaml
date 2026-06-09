@@ -18,6 +18,7 @@ services:
     name: smartcity-redis
     plan: free
     maxmemoryPolicy: noeviction
+    ipAllowList: []
 
   - type: web
     name: smartcity-auth
