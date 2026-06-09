@@ -1,4 +1,4 @@
-"'use client'"
+'use client'
 
 import { useState, useRef } from 'react'
 import { useDemandStore } from '@/stores/useDemandStore'
@@ -195,13 +195,24 @@ export function FormDemanda() {
           ))}
         </div>
 
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? "Salvando..." : "Salvar Denúncia"}
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <button 
+            type="button"
+            onClick={() => router.back()}
+            className="w-full sm:w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:shadow-md border border-gray-300 active:scale-95 text-center"
+          >
+            Voltar
+          </button>
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full sm:w-2/3 bg-purple-600 text-white font-bold py-4 rounded-xl uppercase tracking-wider transition-all duration-200 cursor-pointer hover:bg-purple-700 hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Salvando..." : "Salvar Denúncia"}
+          </button>
+        </div>
+        
         {erro && <p className="text-sm text-red-500 text-center">{erro}</p>}
       </div>
     </form>

@@ -17,7 +17,7 @@ export const demandService = {
   async getMyDemands(token?: string, solicitante = ''): Promise<Demand[]> {
     const res = await apiFetch<PaginatedResponse<ApiDenuncia>>(
       DEMAND_API_URL,
-      '/demands/feed?page=1&limit=100',
+      '/feed?page=1&limit=100',
       { token }
     );
     return mapDenunciasFromApi(res.data, solicitante);
@@ -26,14 +26,14 @@ export const demandService = {
   async getAllForGestor(token?: string): Promise<Demand[]> {
     const res = await apiFetch<PaginatedResponse<ApiDenuncia>>(
       DEMAND_API_URL,
-      '/gestor/demands?page=1&limit=100',
+      '/gestor/demands?page=1&limit=100', 
       { token }
     );
     return mapDenunciasFromApi(res.data);
   },
 
   async getById(token?: string, id?: string, solicitante = ''): Promise<Demand> {
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/demands/${id}`, { token });
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/${id}`, { token }); 
     return mapDenunciaFromApi(data, solicitante);
   },
 
@@ -55,7 +55,7 @@ export const demandService = {
     solicitante = ''
   ): Promise<Demand> {
     const payload = buildCreatePayload(input!);
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, '/demands', {
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, '', {
       method: 'POST',
       token,
       body: JSON.stringify(payload),
@@ -66,7 +66,7 @@ export const demandService = {
   async updateStatus(token?: string, id?: string, status?: DemandStatus): Promise<Demand> {
     const result = await apiFetch<{ denuncia: ApiDenuncia }>(
       DEMAND_API_URL,
-      `/demands/${id}/status`,
+      `/${id}/status`, 
       {
         method: 'PATCH',
         token,
