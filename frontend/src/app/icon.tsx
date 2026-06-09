@@ -16,7 +16,7 @@ export default function Icon() {
           borderRadius: 24,
         }}
       >
-        SC
+        RR
       </div>
     ),
     {

@@ -24,7 +24,7 @@ export default function HomePage() {
             <Flex direction="column" height="full" py={20}>
 
               <Heading as="h1" fontSize="35px" fontWeight="bold" letterSpacing="tight">
-                Smart City
+                RESOLVE
               </Heading>
 
               <Flex flex="1" align="center" justify="space-between" wrap="wrap">

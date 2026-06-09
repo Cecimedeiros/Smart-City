@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Smart City",
-  description: "Plataforma para registro e acompanhamento de demandas urbanas.",
+  title: "RESOLVE",
+  description: "Plataforma para Registro Eletrônico de Solicitações e Ocorrências com Verificação e Encaminhamento de demandas urbanas.",
 };
 
 export default function RootLayout({

@@ -38,7 +38,7 @@ export default function LoginGestorPage() {
 
         <Box as="nav" position="absolute" top="0" left="0" right="0" display="flex" justifyContent="space-between" alignItems="center" px={{ base: 8, md: 16 }} py={{ base: 6, md: 10 }} zIndex="30">
           <Link href="/" passHref>
-            <Text fontSize="2xl" fontWeight="bold" color="white" opacity="0.7" cursor="pointer" _hover={{ opacity: 1 }} transition="all 0.3s">Smart City</Text>
+            <Text fontSize="2xl" fontWeight="bold" color="white" opacity="0.7" cursor="pointer" _hover={{ opacity: 1 }} transition="all 0.3s">RESOLVE</Text>
           </Link>
           <Button variant="outline" color="white" borderColor="white" px={6} _hover={{ bg: "white", color: "purple.600", transform: "translateY(-2px)" }} transition="all 0.2s">
             <Link href="/">← Voltar</Link>
@@ -47,7 +47,7 @@ export default function LoginGestorPage() {
 
         <Box position="relative" bg="white" p={8} rounded="2xl" shadow="2xl" w="full" maxW="400px" zIndex="10" mx={4}>
           <VStack gap={6} as="form" onSubmit={handleSubmit}>
-            <Heading size="lg" color="purple.700" textAlign="center">Smart City</Heading>
+            <Heading size="lg" color="purple.700" textAlign="center">RESOLVE</Heading>
 
             <Text fontSize="sm" textAlign="center" color="gray.600">
               Faça login em sua conta de gestor. Ou{" "}

@@ -10,7 +10,7 @@ export default function Page() {
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm">
         <Link href="/page">
           <h1 className="text-2xl font-bold text-purple-600 cursor-pointer hover:opacity-80 transition-opacity">
-            Smart City
+            RESOLVE
           </h1>
         </Link>
         <div className="flex items-center gap-4">

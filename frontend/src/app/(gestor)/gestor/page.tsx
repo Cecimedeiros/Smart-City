@@ -64,7 +64,7 @@ export default function Page() {
     <div className="min-h-screen bg-gray-50">
   
       <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-sm border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-purple-600">Smart City</h1>
+        <h1 className="text-2xl font-bold text-purple-600">RESOLVE</h1>
         <div className="flex items-center gap-4">
           <Link href="/gestor/dashboard" className="text-purple-600 font-bold mr-4 hover:text-purple-700">
             Painel de gestão

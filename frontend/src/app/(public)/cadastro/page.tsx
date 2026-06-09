@@ -66,7 +66,7 @@ export default function CadastroPage() {
       />
 
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center py-4 px-8 z-30">
-        <div className="text-2xl font-bold text-white opacity-60">Smart City</div>
+        <div className="text-2xl font-bold text-white opacity-60">RESOLVE</div>
         <Link href="/">
           <Button variant="outline" size="md" className="text-white border-white">
             ← Voltar
