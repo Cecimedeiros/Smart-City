@@ -1,5 +1,5 @@
 <h1 align="center">
-  🏙️ Sistema de Gerenciamento de Demandas do Estado
+  🏙️ RESOLVE - Plataforma de Registro Eletrônico de Solicitações e Ocorrências com Verificação e Encaminhamento de Demandas Urbanas
 </h1>
 
 <p align="center">
@@ -10,14 +10,14 @@
 </p>
 
 <p align="center">
-  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores privados, responsáveis por executar a resolução de problemas públicos.
+  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores, responsáveis por executar a resolução de problemas públicos.
 </p>
 
 ---
 
 ## 🌍 Visão Geral
 
-A plataforma busca melhorar a comunicação entre o cidadão e a gestão privada, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
+A plataforma busca melhorar a comunicação entre o cidadão e a gestão responsável, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
 
 ### 🎯 O Problema Central
 A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão e reduz a eficiência no atendimento à população.
@@ -87,10 +87,10 @@ O painel administrativo acompanha, no mínimo:
 |---|---|
 | **Página Inicial (Cidadão)** | Destaque para o fluxo do cidadão, listagem de demandas, sistema de filtros e acesso à área do gestor. |
 | **Página Inicial (Gestor)** | Listagem geral, filtros avançados, acesso ao painel administrativo e ações de edição/atualização de status. |
-| **Formulário de Demanda** | Coleta de dados da ocorrência (local, descrição, categoria, canal, etc.). |
+| **Formulário de Demanda** | Coleta de dados da ocorrência (local, descrição, categoria, imagem, etc.). |
 | **Detalhes da Demanda** | Visualização completa de todos os dados de um registro específico. |
 | **Painel Administrativo** | Dashboard focado em métricas operacionais para os gestores. |
-| **Sistema de Filtros** | Combinação de filtros por tipo, região, status, data, canal e prioridade. |
+| **Sistema de Filtros** | Combinação de filtros por categoria, região, status e prioridade. |
 
 ### 🥈 Prioridade Secundária
 | Tela | Descrição |
@@ -114,7 +114,12 @@ O painel administrativo acompanha, no mínimo:
 | Ferramenta Utilizada | Material | Links |
 | :--- | :--- | :---
 | **Figma** | Protótipo | [Acesse aqui](https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1) |
-| **BRmodelo** | Modelagem conceitual | [Acesse aqui](https://github.com/Cecimedeiros/Smart-City/blob/main/public/images/ModelagemConceitual.png) |
+| **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
+| **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
+| **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/modeloConceitualDemand.png) |
+| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/modeloLogicoDemand.png) |
+| **Arquitetura** | Desenho da Arquitetura em Microsserviços | [Acesse aqui]() |
+
 
 ---
 
