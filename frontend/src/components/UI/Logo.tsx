@@ -8,7 +8,7 @@ export default function Logo({ variant = "white" }: LogoProps) {
   return (
     <Link href="/page">
       <span className={`text-2xl font-bold tracking-tight cursor-pointer ${color}`}>
-        Smart City
+        RESOLVE
       </span>
     </Link>
   );

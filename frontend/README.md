@@ -1,5 +1,5 @@
 <h1 align="center">
-  🏙️ Plataforma de Gestão de Demandas Urbanas (Smart City)
+  🏙️ Plataforma de Registro Eletrônico de Solicitações e Ocorrências com Verificação e Encaminhamento (RESOLVE)
 </h1>
 
 <p align="center">
@@ -10,17 +10,17 @@
 </p>
 
 <p align="center">
-  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores públicos.
+  Uma aplicação web para centralizar o registro de demandas urbanas, facilitar o acompanhamento das solicitações e oferecer mais visibilidade para os gestores.
 </p>
 
 ---
 
 ## 🌍 Visão Geral
 
-A plataforma busca melhorar a comunicação entre o cidadão e a gestão pública, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
+A plataforma busca melhorar a comunicação entre o cidadão e a gestão responsável, reduzindo a dispersão de informações e apoiando a tomada de decisão com dados operacionais em tempo real.
 
 ### 🎯 O Problema Central
-A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão pública e reduz a eficiência no atendimento à população.
+A ausência de uma plataforma centralizada para registro, rastreabilidade e priorização de demandas urbanas dificulta a tomada de decisão por parte da gestão responsável e reduz a eficiência no atendimento à população.
 
 ### 🏛️ Alinhamento com Políticas Públicas
 A proposta dialoga com as diretrizes de transformação digital no setor público, em especial a **Lei nº 14.129/2021 (Lei do Governo Digital)**, estabelecendo princípios como:
@@ -61,14 +61,13 @@ Responsável por:
 
 ## 🚀 Funcionalidades do MVP
 
-- [ ] Cadastro e autenticação de usuários;
-- [ ] Criação e listagem de demandas urbanas;
-- [ ] Visualização detalhada de cada demanda;
-- [ ] Sistema de filtros avançados (data, categoria, local, canal, prioridade e status);
-- [ ] Atualização manual de status (exclusivo para gestores);
-- [ ] Visualizações em formato de Lista e **Kanban**;
-- [ ] Painel administrativo para gestores (Métricas e KPIs);
-- [ ] Integração com API *fake* para simulação de dados.
+- [x] Cadastro e autenticação de usuários;
+- [x] Criação e listagem de demandas urbanas;
+- [x] Visualização detalhada de cada demanda;
+- [x] Sistema de filtros avançados (categoria, região, prioridade e status);
+- [x] Atualização manual de status (exclusivo para gestores);
+- [x] Painel administrativo para gestores (Métricas e KPIs);
+- [x] Integração com API *fake* para simulação de dados.
 
 ---
 
@@ -120,56 +119,63 @@ A proposta prioriza uma estrutura simples, escalável e de fácil manutenção, 
 ```text
 src/
   app/
-    (public)/
-      page.tsx
-      login/page.tsx
-      cadastro/page.tsx
-      demandas/
-        nova/page.tsx
-        [id]/page.tsx
     (gestor)/
-      gestor/
+    (public)/
+      cadastro/
         page.tsx
-        dashboard/page.tsx
-        kanban/page.tsx
-        demandas/[id]/page.tsx
+      demandas/
+        [id]/
+          page.tsx
+        nova/
+          page.tsx
+      login/
+        page.tsx
+        provider.tsx
+      logingestor/
+        page.tsx
+        provider.tsx
+      telaUsuario/
+        page.tsx
+      page.tsx
+    globals.css
+    icon.tsx
     layout.tsx
-    providers.tsx
-
+    page.tsx
   components/
-    auth/
+    Auth/
+      page.tsx
     demands/
-    dashboard/
-    layout/
-
-  services/
-    api.ts
-    auth.service.ts
-    demands.service.ts
-    dashboard.service.ts
-
-  stores/
-    auth.store.ts
-    filter.store.ts
-
+      FormDemanda.tsx
+    UI/
+      BackgroundContainer.tsx
+      Button.tsx
+      DemandBadge.tsx
+      DemandCard.tsx
+      DemandDetails.tsx
+      DemandFilters.tsx
+      Logo.tsx
+      PriorityBadge.tsx
+      provider.tsx
+      Select.tsx
+      StatusBadge.tsx
+  constants/
+    demanda.ts
   hooks/
-    useAuth.ts
     useDemands.ts
-    useDashboard.ts
-
-  types/
-    auth.ts
-    demand.ts
-    dashboard.ts
-    api.ts
-
   lib/
-    constants.ts
-    formatters.ts
-    guards.ts
-
+    api.ts
   mocks/
     fake-data.ts
+  Services/
+    authService.ts
+    demandService.ts
+    metricsService.ts
+  stores/
+    useDemandStore.ts
+  types/
+    demand.ts
+  utils/
+    demandMapper.ts
 
 ```
 
@@ -178,7 +184,6 @@ src/
 👩‍💻 Equipe de Desenvolvimento
 
 - Beatriz Paredes
-- Catarina Loureiro
 - Cecília Medeiros
 - Isabella Batista
 - Jose Leandro De Morais Alves Luz

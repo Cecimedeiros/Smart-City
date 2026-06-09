@@ -25,59 +25,116 @@ O projeto segue uma arquitetura de **microsserviços**, onde cada serviço é in
 
 ```
 backend/
-├── auth-service/               # Serviço de autenticação (porta 3001)
+├── api-gateway/
 │   ├── src/
-│   │   ├── server.ts
+│   │   ├── middlewares/
+│   │   │   └── .gitkeep
+│   │   ├── routes/
+│   │   │   └── .gitkeep
+│   │   └── server.ts
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+├── auth-service/
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   └── schema.prisma
+│   ├── src/
 │   │   ├── controllers/
 │   │   │   └── authController.ts
-│   │   ├── services/
-│   │   │   └── authService.ts
-│   │   ├── routes/
-│   │   │   └── authRoutes.ts
-│   │   └── middlewares/
-│   │       ├── authMiddleware.ts
-│   │       └── errorMiddleware.ts
-│   └── package.json
-│
-├── demand-service/             # Serviço de demandas (porta 3002)
-│   ├── src/
-│   │   ├── server.ts
-│   │   ├── controllers/
-│   │   │   └── demandController.ts
-│   │   ├── services/
-│   │   │   └── demandService.ts
-│   │   ├── repositories/
-│   │   │   ├── denunciaRepository.ts
-│   │   │   └── historicoRepository.ts
-│   │   ├── routes/
-│   │   │   └── demandRoutes.ts
 │   │   ├── middlewares/
 │   │   │   ├── authMiddleware.ts
 │   │   │   └── errorMiddleware.ts
-│   │   └── prisma/
-│   │       ├── schema.prisma
-│   │       └── migrations/
-│   └── package.json
-│
-├── metrics-service/            # Serviço de métricas (porta 3003)
+│   │   ├── repository/
+│   │   ├── routes/
+│   │   │   ├── authRoutes.ts
+│   │   │   └── healthRoutes.ts
+│   │   ├── services/
+│   │   │   └── authService.ts
+│   │   ├── tests/
+│   │   │   └── TS01_autenticacao.test.ts
+│   │   ├── app.ts
+│   │   └── server.ts
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── package-lock.json
+│   ├── package.json
+│   └── tsconfig.json
+├── demand-service/
+│   ├── prisma/
+│   │   ├── migrations/
+│   │   └── schema.prisma
 │   ├── src/
-│   │   ├── server.ts
+│   │   ├── config/
+│   │   │   └── redis.ts
+│   │   ├── controllers/
+│   │   │   ├── cidadaoController.ts
+│   │   │   ├── demandController.ts
+│   │   │   └── gestorController.ts
+│   │   ├── lib/
+│   │   │   └── prisma.ts
+│   │   ├── middlewares/
+│   │   │   ├── authMiddleware.ts
+│   │   │   ├── errorMiddleware.ts
+│   │   │   └── roleMiddleware.ts
+│   │   ├── repositories/
+│   │   │   └── DenunciaRepository.ts
+│   │   ├── routes/
+│   │   │   ├── demandRoutes.ts
+│   │   │   └── healthRoutes.ts
+│   │   ├── services/
+│   │   │   ├── demandService.ts
+│   │   │   └── denunciaService.ts
+│   │   ├── tests/
+│   │   │   ├── setup.ts
+│   │   │   ├── TS02_persistencia_demanda.bdd.test.ts
+│   │   │   ├── TS02_persistencia_demanda.test.ts
+│   │   │   └── TS04_filtros_avancados.test.ts
+│   │   ├── utils/
+│   │   │   ├── httpError.ts
+│   │   │   ├── pagination.ts
+│   │   │   └── retry.ts
+│   │   ├── app.ts
+│   │   └── server.ts
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── vitest.config.ts
+├── metrics-service/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── cron.ts
+│   │   │   └── redis.ts
 │   │   ├── controllers/
 │   │   │   └── metricsController.ts
+│   │   ├── lib/
+│   │   │   └── prisma.ts
+│   │   ├── middlewares/
+│   │   │   ├── authMiddleware.ts
+│   │   │   └── errorMiddleware.ts
+│   │   ├── routes/
+│   │   │   ├── healthRoutes.ts
+│   │   │   └── metricsRoutes.ts
 │   │   ├── services/
 │   │   │   └── metricsService.ts
-│   │   ├── routes/
-│   │   │   └── metricsRoutes.ts
-│   │   ├── middlewares/
-│   │   │   └── errorMiddleware.ts
-│   │   └── config/
-│   │       ├── redis.ts
-│   │       └── cron.ts
+│   │   ├── utils/
+│   │   │   └── retry.ts
+│   │   ├── workers/
+│   │   │   └── eventWorker.ts
+│   │   └── server.ts
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── package-lock.json
 │   └── package.json
-│
-└── docker-compose.yml          # PostgreSQL + Redis + 3 serviços
+├── docs/
+└── docker-compose.yml         # PostgreSQL + Redis + 3 serviços
 ```
-
 ---
 
 ## Responsabilidades de cada serviço
