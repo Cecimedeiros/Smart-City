@@ -3,7 +3,7 @@ FROM node:20-alpine
 RUN apk add --no-cache openssl libc6-compat
 WORKDIR /app
 
-COPY package.json ./
+COPY package*.json ./
 RUN npm install
 
 COPY . .
@@ -12,5 +12,4 @@ RUN npm run build
 
 EXPOSE 3002
 
-# CMD ["node", "dist/server.js"]
-CMD npx prisma db push --schema=./prisma/schema.prisma && npm run dev
+CMD ["sh", "-c", "npx prisma db push --schema=./prisma/schema.prisma && node dist/server.js"]

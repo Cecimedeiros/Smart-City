@@ -7,7 +7,11 @@ let publisher: RedisClientType | null = null;
 
 export async function getRedisPublisher(): Promise<RedisClientType> {
   if (!publisher) {
-    publisher = createClient({ url: process.env.REDIS_URL ?? 'redis://localhost:6379' });
+    publisher = createClient({
+      url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+      // Para não travar o event loop quando Redis está offline
+      socket: { reconnectStrategy: (retries) => (retries > 3 ? false : retries * 200) },
+    });
     publisher.on('error', (err) => console.error('[demand] Redis:', err.message));
     await publisher.connect();
   }

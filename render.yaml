@@ -1,0 +1,100 @@
+databases:
+  - name: smartcity-auth-db
+    plan: free
+    databaseName: db_auth
+
+  - name: smartcity-demand-db
+    plan: free
+    databaseName: db_demand
+
+envVarGroups:
+  - name: smartcity-shared
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+
+services:
+  - type: redis
+    name: smartcity-redis
+    plan: free
+    maxmemoryPolicy: noeviction
+
+  - type: web
+    name: smartcity-auth
+    runtime: docker
+    dockerfilePath: ./backend/auth-service/Dockerfile
+    dockerContext: ./backend/auth-service
+    plan: free
+    envVars:
+      - key: DATABASE_URL_AUTH
+        fromDatabase:
+          name: smartcity-auth-db
+          property: connectionString
+      - fromGroup: smartcity-shared
+      - key: PORT
+        value: 3001
+
+  - type: web
+    name: smartcity-demand
+    runtime: docker
+    dockerfilePath: ./backend/demand-service/Dockerfile
+    dockerContext: ./backend/demand-service
+    plan: free
+    envVars:
+      - key: DATABASE_URL_DEMAND
+        fromDatabase:
+          name: smartcity-demand-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: smartcity-redis
+          type: redis
+          property: connectionString
+      - fromGroup: smartcity-shared
+      - key: PORT
+        value: 3002
+
+  - type: web
+    name: smartcity-metrics
+    runtime: docker
+    dockerfilePath: ./backend/metrics-service/Dockerfile
+    dockerContext: ./backend/metrics-service
+    plan: free
+    envVars:
+      - key: DATABASE_URL_DEMAND
+        fromDatabase:
+          name: smartcity-demand-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: smartcity-redis
+          type: redis
+          property: connectionString
+      - fromGroup: smartcity-shared
+      - key: PORT
+        value: 3003
+
+  - type: web
+    name: smartcity-gateway
+    runtime: docker
+    dockerfilePath: ./backend/api-gateway/Dockerfile
+    dockerContext: ./backend/api-gateway
+    plan: free
+    envVars:
+      - key: AUTH_SERVICE_URL
+        fromService:
+          name: smartcity-auth
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: DEMAND_SERVICE_URL
+        fromService:
+          name: smartcity-demand
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: METRICS_SERVICE_URL
+        fromService:
+          name: smartcity-metrics
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: PORT
+        value: 8080

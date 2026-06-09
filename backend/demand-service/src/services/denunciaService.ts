@@ -223,12 +223,18 @@ export async function updateDenunciaStatus(
   });
 
   try {
-    await publishDenunciaStatusEvent({
-      denunciaId,
-      statusAnterior: denunciaExistente.status,
-      statusNovo: novoStatus,
-      gestorId,
-    });
+    // Timeout de 3s: se Redis offline, não bloqueia — transação já confirmada
+    await Promise.race([
+      publishDenunciaStatusEvent({
+        denunciaId,
+        statusAnterior: denunciaExistente.status,
+        statusNovo: novoStatus,
+        gestorId,
+      }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Redis timeout')), 3000)
+      ),
+    ]);
   } catch (err) {
     console.error('[demand] Falha ao publicar evento (transação já confirmada):', err);
   }
