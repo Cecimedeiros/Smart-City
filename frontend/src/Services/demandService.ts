@@ -26,7 +26,7 @@ export const demandService = {
   async getAllForGestor(token?: string): Promise<Demand[]> {
     const res = await apiFetch<PaginatedResponse<ApiDenuncia>>(
       DEMAND_API_URL,
-      '/gestor/demands?page=1&limit=100', 
+      '/demands/gestor?page=1&limit=100',
       { token }
     );
     return mapDenunciasFromApi(res.data);
@@ -38,7 +38,7 @@ export const demandService = {
   },
 
   async getByIdForGestor(token?: string, id?: string): Promise<Demand> {
-    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/gestor/demands/${id}`, { token });
+    const data = await apiFetch<ApiDenuncia>(DEMAND_API_URL, `/demands/gestor/${id}`, { token });
     return mapDenunciaFromApi(data);
   },
 
@@ -66,7 +66,7 @@ export const demandService = {
   async updateStatus(token?: string, id?: string, status?: DemandStatus): Promise<Demand> {
     const result = await apiFetch<{ denuncia: ApiDenuncia }>(
       DEMAND_API_URL,
-      `/demands/${id}/status`,
+      `/demands/gestor/${id}/status`,
       {
         method: 'PATCH',
         token,
