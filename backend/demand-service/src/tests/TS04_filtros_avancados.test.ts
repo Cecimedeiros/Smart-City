@@ -2,12 +2,12 @@
 //
 // PRÉ-REQUISITOS:
 //   • PostgreSQL do demand-service rodando e acessível via DATABASE_URL_DEMAND
-//   • Redis rodando (demand-service importa redis no config/redis.ts)
+//   • Redis rodando (demand-service imports redis no config/redis.ts)
 //   • Migrations aplicadas (prisma migrate deploy)
 //   • Variável JWT_SECRET definida (ou usa padrão 'smartcity-dev-secret')
 //
 // ENDPOINTS TESTADOS:
-//   GET /demandas/demands          → listMinhasDenuncias  (cidadão)
+//   GET /demandas/demands      → listMinhasDenuncias  (cidadão)
 //   GET /demandas/demands/feed     → listarFeedDenuncias  (cidadão)
 //   GET /demandas/gestor/demands   → listarTodasDenuncias (gestor)
 //
@@ -49,11 +49,7 @@ const dadosSeed: Array<{
   descricao: string;
   prioridade: NivelPrioridade;
   status: StatusDenuncia;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
+  endereco: string; // 👈 UNIFICADO: Tipo ajustado aqui
 }> = [
   {
     titulo: 'TS04 Poste apagado',
@@ -62,7 +58,7 @@ const dadosSeed: Array<{
     descricao: 'Poste apagado na rua X',
     prioridade: NivelPrioridade.ALTA,
     status: StatusDenuncia.ABERTA,
-    numero: '1', cep: '50000-000', bairro: 'Boa Viagem', cidade: 'Recife', rua: 'Av. Boa Viagem',
+    endereco: 'Av. Boa Viagem, 1 - Boa Viagem, Recife - CEP: 50000-000', // 👈 Strings unificadas
   },
   {
     titulo: 'TS04 Buraco na via',
@@ -71,7 +67,7 @@ const dadosSeed: Array<{
     descricao: 'Buraco grande na rua Y',
     prioridade: NivelPrioridade.MEDIA,
     status: StatusDenuncia.EM_ANALISE,
-    numero: '2', cep: '55000-000', bairro: 'Centro', cidade: 'Caruaru', rua: 'Rua Central',
+    endereco: 'Rua Central, 2 - Centro, Caruaru - CEP: 55000-000',
   },
   {
     titulo: 'TS04 Lixo acumulado',
@@ -80,7 +76,7 @@ const dadosSeed: Array<{
     descricao: 'Lixo acumulado na esquina',
     prioridade: NivelPrioridade.BAIXA,
     status: StatusDenuncia.RESOLVIDA,
-    numero: '3', cep: '56000-000', bairro: 'Bairro Alto', cidade: 'Petrolina', rua: 'Rua das Flores',
+    endereco: 'Rua das Flores, 3 - Bairro Alto, Petrolina - CEP: 56000-000',
   },
   {
     titulo: 'TS04 Falta de saneamento',
@@ -89,7 +85,7 @@ const dadosSeed: Array<{
     descricao: 'Falta saneamento básico na rua Z',
     prioridade: NivelPrioridade.ALTA,
     status: StatusDenuncia.ABERTA,
-    numero: '4', cep: '55100-000', bairro: 'Vila Nova', cidade: 'Palmares', rua: 'Av. Principal',
+    endereco: 'Av. Principal, 4 - Vila Nova, Palmares - CEP: 55100-000',
   },
   {
     titulo: 'TS04 Câmera quebrada',
@@ -98,7 +94,7 @@ const dadosSeed: Array<{
     descricao: 'Câmera de segurança com defeito',
     prioridade: NivelPrioridade.MEDIA,
     status: StatusDenuncia.ABERTA,
-    numero: '5', cep: '50100-000', bairro: 'Pina', cidade: 'Recife', rua: 'Rua do Pina',
+    endereco: 'Rua do Pina, 5 - Pina, Recife - CEP: 50100-000',
   },
 ];
 
@@ -140,11 +136,7 @@ beforeAll(async () => {
         descricao: dado.descricao,
         prioridade: dado.prioridade,
         status: dado.status,
-        numero: dado.numero,
-        cep: dado.cep,
-        bairro: dado.bairro,
-        cidade: dado.cidade,
-        rua: dado.rua,
+        endereco: dado.endereco, // 👈 Enviando a propriedade única para o Prisma
         cidadao_id: cidadaoId,
       },
     });
@@ -257,16 +249,11 @@ describe('TS04 - Filtros avançados combinados', () => {
 
   // ────────────────────────────────────────────────────────────────────────────
   // FILTROS AVANÇADOS — NÃO suportados pelo backend atual
-  //
-  // listAllDenuncias e listDenunciasByCidadao não aceitam query params de filtro.
-  // Os testes abaixo documentam o comportamento esperado para quando o backend
-  // implementar os query params (categoria, status, regiao, prioridade).
   // ────────────────────────────────────────────────────────────────────────────
 
   describe('Cenário: Filtro por categoria', () => {
 
     it.skip(
-      // SKIP: listAllDenuncias ignora ?categoria — nenhum `where.categoria` é construído
       'Given denúncias de categorias diferentes, When GET /demandas/demands/feed com ?categoria=ILUMINACAO_PUBLICA, Then retorna apenas da categoria filtrada',
       async () => {
         const res = await request(app)
@@ -286,7 +273,6 @@ describe('TS04 - Filtros avançados combinados', () => {
   describe('Cenário: Filtro por status', () => {
 
     it.skip(
-      // SKIP: listAllDenuncias ignora ?status — nenhum `where.status` é construído
       'Given denúncias com status diferentes, When GET /demandas/demands/feed com ?status=ABERTA, Then retorna apenas as abertas',
       async () => {
         const res = await request(app)
@@ -306,7 +292,6 @@ describe('TS04 - Filtros avançados combinados', () => {
   describe('Cenário: Filtro por região', () => {
 
     it.skip(
-      // SKIP: listAllDenuncias ignora ?regiao — nenhum `where.regiao` é construído
       'Given denúncias de regiões diferentes, When GET /demandas/demands/feed com ?regiao=AGRESTE, Then retorna apenas do Agreste',
       async () => {
         const res = await request(app)
@@ -326,7 +311,6 @@ describe('TS04 - Filtros avançados combinados', () => {
   describe('Cenário: Filtro por prioridade', () => {
 
     it.skip(
-      // SKIP: listAllDenuncias ignora ?prioridade — nenhum `where.prioridade` é construído
       'Given denúncias com prioridades diferentes, When GET /demandas/demands/feed com ?prioridade=ALTA, Then retorna apenas as de prioridade alta',
       async () => {
         const res = await request(app)
@@ -346,7 +330,6 @@ describe('TS04 - Filtros avançados combinados', () => {
   describe('Cenário: Múltiplos filtros combinados', () => {
 
     it.skip(
-      // SKIP: nenhum query param de filtro é suportado — query params extras são silenciosamente ignorados
       'Given denúncias variadas, When aplica categoria + status ao mesmo tempo, Then retorna apenas registros que atendem ambos os filtros',
       async () => {
         const res = await request(app)
@@ -374,7 +357,6 @@ describe('TS04 - Filtros avançados combinados', () => {
     it(
       'Given cidadão sem demandas cadastradas, When GET /demandas/demands, Then retorna data vazio com total = 0',
       async () => {
-        // Cidadão novo, sem nenhuma demanda criada
         const [novoRow] = await prisma.$queryRaw<{ id: number }[]>`
           INSERT INTO usuarios (nome, email, senha, papel)
           VALUES ('Sem Demandas TS04', 'ts04.semdemanda@test.com', 'hash', 'CIDADAO')
@@ -400,11 +382,8 @@ describe('TS04 - Filtros avançados combinados', () => {
     );
 
     it.skip(
-      // SKIP: para testar total=0 por filtro seria necessário ?categoria=X sem registros dessa categoria
-      // Isso requer suporte a query params de filtro no backend
       'Given denúncias cadastradas, When aplica filtro que não corresponde a nenhum registro, Then retorna data vazio com total = 0',
       async () => {
-        // Exemplo: combinação improvável de filtros que não deve ter resultado no seed
         const res = await request(app)
           .get('/demandas/demands/feed?categoria=FISCALIZACAO&status=EM_ANALISE&regiao=OUTRA')
           .set('Authorization', `Bearer ${tokenCidadao}`);

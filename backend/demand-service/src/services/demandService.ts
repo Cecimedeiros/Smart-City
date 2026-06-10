@@ -7,11 +7,7 @@ export type CreateDemandInput = {
   regiao: Regioes;
   descricao: string;
   prioridade?: NivelPrioridade;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
+  endereco: string;
 };
 
 export async function createDemand(usuarioId: number, data: CreateDemandInput) {

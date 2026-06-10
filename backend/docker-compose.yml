@@ -1,40 +1,40 @@
 services:
 
-  auth-db:
-    image: postgres:15-alpine
-    container_name: smartcity_auth_db
-    restart: always
-    env_file:
-      - .env.local
-    environment:
-      POSTGRES_DB: db_auth
-    ports:
-      - "5432:5432"
-    volumes:
-      - auth_postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U squad22 -d db_auth"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+  # auth-db:
+  #   image: postgres:15-alpine
+  #   container_name: smartcity_auth_db
+  #   restart: always
+  #   env_file:
+  #     - .env.local
+  #   environment:
+  #     POSTGRES_DB: db_auth
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - auth_postgres_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U squad22 -d db_auth"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
 
-  demand-db:
-    image: postgres:15-alpine
-    container_name: smartcity_demand_db
-    restart: always
-    env_file:
-      - .env.local
-    environment:
-      POSTGRES_DB: db_demand
-    ports:
-      - "5433:5432"
-    volumes:
-      - demand_postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U squad22 -d db_demand"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+  # demand-db:
+  #   image: postgres:15-alpine
+  #   container_name: smartcity_demand_db
+  #   restart: always
+  #   env_file:
+  #     - .env.local
+  #   environment:
+  #     POSTGRES_DB: db_demand
+  #   ports:
+  #     - "5433:5432"
+  #   volumes:
+  #     - demand_postgres_data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U squad22 -d db_demand"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
 
   redis:
     image: redis:7-alpine
@@ -47,7 +47,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+  
   auth-service:
     build: ./auth-service
     container_name: smartcity_auth
@@ -56,11 +56,10 @@ services:
       - .env.local
     environment:
       PORT: 3001
+      # Repassa a variável do arquivo .env.local para dentro do container
+      DATABASE_URL_AUTH: ${DATABASE_URL_AUTH}
     ports:
       - "3001:3001"
-    depends_on:
-      auth-db:
-        condition: service_healthy
 
   demand-service:
     build: ./demand-service
@@ -71,11 +70,11 @@ services:
     environment:
       PORT: 3002
       REDIS_URL: redis://redis:6379
+      # Repassa a variável do arquivo .env.local para dentro do container
+      DATABASE_URL_DEMAND: ${DATABASE_URL_DEMAND}
     ports:
       - "3002:3002"
     depends_on:
-      demand-db:
-        condition: service_healthy
       redis:
         condition: service_healthy
 
@@ -91,8 +90,6 @@ services:
     ports:
       - "3003:3003"
     depends_on:
-      demand-db:
-        condition: service_healthy
       redis:
         condition: service_healthy
 

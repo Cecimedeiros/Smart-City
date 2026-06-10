@@ -14,12 +14,9 @@ export interface CreateDenunciaInput {
   categoria: Categorias;
   regiao: Regioes;
   descricao: string;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
+  endereco: string;
   prioridade?: NivelPrioridade;
+  imagens?: string[];
 }
 
 const CATEGORIAS_VALIDAS = new Set<string>(Object.values(Categorias));
@@ -53,15 +50,12 @@ export function validateCreateDenunciaInput(body: Record<string, unknown>): Crea
     categoria,
     regiao,
     descricao,
-    numero,
-    cep,
-    bairro,
-    cidade,
-    rua,
+    endereco,
     prioridade,
+    imagens,
   } = body;
 
-  const camposObrigatorios = { titulo, categoria, regiao, descricao, numero, cep, bairro, cidade, rua };
+  const camposObrigatorios = { titulo, categoria, regiao, descricao, endereco };
   const faltando = Object.entries(camposObrigatorios)
     .filter(([, valor]) => valor === undefined || valor === null || valor === '')
     .map(([campo]) => campo);
@@ -86,10 +80,8 @@ export function validateCreateDenunciaInput(body: Record<string, unknown>): Crea
     throw httpError('descricao deve ser uma string', 400);
   }
 
-  for (const campo of ['numero', 'cep', 'bairro', 'cidade', 'rua'] as const) {
-    if (typeof body[campo] !== 'string') {
-      throw httpError(`${campo} deve ser uma string`, 400);
-    }
+  if (typeof endereco !== 'string') {
+    throw httpError('endereco deve ser uma string', 400);
   }
 
   if (prioridade !== undefined) {
@@ -103,17 +95,22 @@ export function validateCreateDenunciaInput(body: Record<string, unknown>): Crea
     categoria: categoria as Categorias,
     regiao: regiao as Regioes,
     descricao,
-    numero: numero as string,
-    cep: cep as string,
-    bairro: bairro as string,
-    cidade: cidade as string,
-    rua: rua as string,
+    endereco,
     prioridade: prioridade as NivelPrioridade | undefined,
+    imagens: Array.isArray(imagens) ? (imagens as string[]) : undefined,
   };
 }
 
 export async function createDenuncia(usuarioId: number, input: CreateDenunciaInput) {
   const cidadaoId = await resolveCidadaoId(usuarioId);
+
+  const imagensData = input.imagens && input.imagens.length > 0
+    ? {
+        create: input.imagens.map((strFoto) => ({
+          caminho_file: strFoto,
+        }))
+      }
+    : undefined;
 
   return prisma.denuncia.create({
     data: {
@@ -121,14 +118,11 @@ export async function createDenuncia(usuarioId: number, input: CreateDenunciaInp
       categoria: input.categoria,
       regiao: input.regiao,
       descricao: input.descricao,
-      numero: input.numero,
-      cep: input.cep,
-      bairro: input.bairro,
-      cidade: input.cidade,
-      rua: input.rua,
+      endereco: input.endereco,
       prioridade: input.prioridade ?? NivelPrioridade.MEDIA,
       status: StatusDenuncia.ABERTA,
       cidadao_id: cidadaoId,
+      imagens: imagensData,
     },
     include: {
       imagens: true,
@@ -223,7 +217,6 @@ export async function updateDenunciaStatus(
   });
 
   try {
-    // Timeout de 3s: se Redis offline, não bloqueia — transação já confirmada
     await Promise.race([
       publishDenunciaStatusEvent({
         denunciaId,
@@ -236,7 +229,7 @@ export async function updateDenunciaStatus(
       ),
     ]);
   } catch (err) {
-    console.error('[demand] Falha ao publicar evento (transação já confirmada):', err);
+    console.error('[demand] Falha ao publicação de evento:', err);
   }
 
   return resultado;
@@ -293,4 +286,88 @@ export function parseDenunciaId(idParam: string): number {
   }
 
   return id;
+}
+
+export function validatePrioridadeInput(prioridade: unknown): NivelPrioridade {
+  if (typeof prioridade !== 'string') {
+    throw httpError('A prioridade deve ser um texto (string).', 400);
+  }
+  const prioridadeTratada = prioridade
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase();
+
+  if (!PRIORIDADES_VALIDAS.has(prioridadeTratada)) {
+    throw httpError(
+      `Prioridade inválida. Valores aceitos (independente de maiúsculas/acentos): Alta, Média, Baixa`,
+      400
+    );
+  }
+
+  return prioridadeTratada as NivelPrioridade;
+}
+
+export async function updateDenunciaPrioridade(
+  usuarioId: number,
+  denunciaId: number,
+  novaPrioridade: NivelPrioridade
+) {
+  console.log("=== INICIANDO UPDATE DE PRIORIDADE ===");
+  console.log("-> ID do Usuário Recebido:", usuarioId);
+  console.log("-> ID da Denúncia Recebido:", denunciaId);
+  console.log("-> Nova Prioridade Recebida:", novaPrioridade);
+
+  const gestorId = await resolveGestorId(usuarioId);
+  console.log("-> ID do Gestor Resolvido no Banco:", gestorId);
+
+  const denunciaExistente = await prisma.denuncia.findUnique({
+    where: { id_denuncia: denunciaId },
+  });
+
+  console.log("-> Denúncia encontrada no banco?:", denunciaExistente ? "SIM" : "NÃO");
+  
+  if (denunciaExistente) {
+    console.log("-> Prioridade ATUAL no banco:", denunciaExistente.prioridade);
+  }
+
+  if (!denunciaExistente) {
+    throw httpError('Denúncia não encontrada', 404);
+  }
+
+  if (denunciaExistente.prioridade === novaPrioridade) {
+    console.log("⚠️ Parando: A prioridade já é igual à nova!");
+    throw httpError('A denúncia já possui este nível de prioridade', 400);
+  }
+
+  try {
+    console.log("-> Tentando abrir a transação com o Supabase...");
+    const resultado = await prisma.$transaction(async (tx) => {
+      const denunciaAtualizada = await tx.denuncia.update({
+        where: { id_denuncia: denunciaId },
+        data: { prioridade: novaPrioridade },
+      });
+
+      console.log("-> [Prisma] Tabela denuncia atualizada com sucesso!");
+
+      const historico = await tx.historico.create({
+        data: {
+          status: denunciaAtualizada.status,
+          prioridade: novaPrioridade,
+          denuncia_id: denunciaId,
+          gestor_id: gestorId,
+        },
+      });
+
+      console.log("-> [Prisma] Tabela historico criada com sucesso!");
+
+      return { denuncia: denunciaAtualizada, historico };
+    });
+
+    console.log("=== UPDATE CONCLUÍDO COM SUCESSO COMFIRMADO PELO BANCO ===");
+    return resultado;
+
+  } catch (error: any) {
+    console.error("❌ ERRO CAPTURADO DENTRO DA TRANSAÇÃO:", error);
+    throw error;
+  }
 }

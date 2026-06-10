@@ -1,6 +1,5 @@
 import { PrismaClient, Categorias, Regioes, NivelPrioridade } from '@prisma/client';
 
-// Instância única — Prisma reutiliza o pool de conexões automaticamente.
 const prisma = new PrismaClient();
 
 export type CreateDenunciaInput = {
@@ -9,16 +8,10 @@ export type CreateDenunciaInput = {
   regiao: Regioes;
   descricao: string;
   prioridade: NivelPrioridade;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
+  endereco: string;
   cidadaoId: number;
 };
 
-// Concorrência: upsert atômico evita duplicata quando dois requests
-// do mesmo cidadão chegam simultaneamente — mais eficiente que SELECT + INSERT.
 export async function findOrCreateCidadao(usuarioId: number) {
   return prisma.cidadao.upsert({
     where: { usuario_id: usuarioId },
@@ -35,11 +28,7 @@ export async function createDenuncia(data: CreateDenunciaInput) {
       regiao: data.regiao,
       descricao: data.descricao,
       prioridade: data.prioridade,
-      numero: data.numero,
-      cep: data.cep,
-      bairro: data.bairro,
-      cidade: data.cidade,
-      rua: data.rua,
+      endereco: data.endereco,
       cidadao_id: data.cidadaoId,
     },
   });

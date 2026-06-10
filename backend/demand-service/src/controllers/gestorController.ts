@@ -39,3 +39,20 @@ export async function atualizarStatusDenuncia(req: AuthRequest, res: Response, n
     next(err);
   }
 }
+
+export async function atualizarPrioridadeDenuncia(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const denunciaId = denunciaService.parseDenunciaId(req.params.id);
+    const novaPrioridade = denunciaService.validatePrioridadeInput(req.body.prioridade);
+
+    const resultado = await denunciaService.updateDenunciaPrioridade(
+      req.user!.userId,
+      denunciaId,
+      novaPrioridade
+    );
+
+    return res.json(resultado);
+  } catch (err) {
+    next(err);
+  }
+}

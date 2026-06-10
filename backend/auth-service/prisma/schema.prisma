@@ -1,10 +1,12 @@
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL_AUTH")
+  url      = env("DATABASE_URL_AUTH")
+  schemas  = ["public"]
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 model Usuario {
@@ -15,9 +17,12 @@ model Usuario {
   papel Papel  @default(CIDADAO)
 
   @@map("usuarios")
+  @@schema("public")
 }
 
 enum Papel {
   CIDADAO
   GESTOR
+
+  @@schema("public")
 }
