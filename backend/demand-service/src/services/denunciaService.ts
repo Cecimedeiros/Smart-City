@@ -101,7 +101,7 @@ export function validateCreateDenunciaInput(body: Record<string, unknown>): Crea
   };
 }
 
-export async function createDenuncia(usuarioId: number, input: CreateDenunciaInput) {
+export async function createDenuncia(usuarioId: number, input: CreateDenunciaInput, nomeSolicitante?: string) {
   const cidadaoId = await resolveCidadaoId(usuarioId);
 
   const imagensData = input.imagens && input.imagens.length > 0
@@ -122,6 +122,7 @@ export async function createDenuncia(usuarioId: number, input: CreateDenunciaInp
       prioridade: input.prioridade ?? NivelPrioridade.MEDIA,
       status: StatusDenuncia.ABERTA,
       cidadao_id: cidadaoId,
+      nome_solicitante: nomeSolicitante ?? null,
       imagens: imagensData,
     },
     include: {

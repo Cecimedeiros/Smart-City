@@ -6,7 +6,7 @@ import { parsePagination } from '../utils/pagination';
 export async function createDenuncia(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const input = denunciaService.validateCreateDenunciaInput(req.body);
-    const denuncia = await denunciaService.createDenuncia(req.user!.userId, input);
+    const denuncia = await denunciaService.createDenuncia(req.user!.userId, input, req.user!.nome);
     return res.status(201).json(denuncia);
   } catch (err) {
     next(err);
@@ -26,7 +26,7 @@ export async function listMinhasDenuncias(req: AuthRequest, res: Response, next:
 export async function listarFeedDenuncias(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const pagination = parsePagination(req.query as Record<string, unknown>);
-    const resultado = await denunciaService.listDenunciasByCidadao(req.user!.userId, pagination);
+    const resultado = await denunciaService.listAllDenuncias(pagination);
     return res.json(resultado);
   } catch (err) {
     next(err);
