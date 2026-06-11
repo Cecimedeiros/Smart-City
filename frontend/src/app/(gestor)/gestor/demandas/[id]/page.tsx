@@ -6,7 +6,7 @@ import { Button } from '@/components/UI/Button';
 import { DemandDetails } from '@/components/UI/DemandDetails';
 import { useEffect, useState } from 'react';
 import Link from "next/link";
-import { Demand, DemandStatus } from '@/types/demand';
+import { Demand, DemandPriority, DemandStatus } from '@/types/demand';
 import { ApiError } from '@/lib/api';
 
 export default function DemandDetailsManagerPage() {
@@ -22,6 +22,7 @@ export default function DemandDetailsManagerPage() {
   const logout = useDemandStore((state) => state.logout);
   const fetchDemandById = useDemandStore((state) => state.fetchDemandById);
   const updateDemandStatus = useDemandStore((state) => state.updateDemandStatus);
+  const updateDemandPriority = useDemandStore((state) => state.updateDemandPriority);
   const isLoading = useDemandStore((state) => state.isLoading);
 
   useEffect(() => {
@@ -40,12 +41,29 @@ export default function DemandDetailsManagerPage() {
 
   const handleStatusChange = async (newStatus: DemandStatus) => {
     setErro('');
+    setDemand((prev) => prev ? { ...prev, status: newStatus } : prev);
     try {
       await updateDemandStatus(demandId, newStatus);
       const updated = await fetchDemandById(demandId);
       setDemand(updated);
     } catch (err) {
       setErro(err instanceof ApiError ? err.message : 'Erro ao atualizar status');
+      const rollback = await fetchDemandById(demandId);
+      setDemand(rollback);
+    }
+  };
+
+  const handlePriorityChange = async (newPriority: DemandPriority) => {
+    setErro('');
+    setDemand((prev) => prev ? { ...prev, priority: newPriority } : prev);
+    try {
+      await updateDemandPriority(demandId, newPriority);
+      const updated = await fetchDemandById(demandId);
+      setDemand(updated);
+    } catch (err) {
+      setErro(err instanceof ApiError ? err.message : 'Erro ao atualizar prioridade');
+      const rollback = await fetchDemandById(demandId);
+      setDemand(rollback);
     }
   };
 
@@ -118,6 +136,7 @@ export default function DemandDetailsManagerPage() {
             onBack={handleBack}
             isManager={true}
             onStatusChange={handleStatusChange}
+            onPriorityChange={handlePriorityChange}
           />
         </div>
       </div>

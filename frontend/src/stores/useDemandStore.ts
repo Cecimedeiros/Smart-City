@@ -26,6 +26,7 @@ interface DemandStore {
   getDemandById: (id: string) => Demand | undefined;
   setSelectedDemand: (demand: Demand | null) => void;
   updateDemandStatus: (id: string, newStatus: DemandStatus) => Promise<void>;
+  updateDemandPriority: (id: string, newPriority: DemandPriority) => Promise<void>;
   fetchDemands: () => Promise<void>;
   fetchMetrics: () => Promise<void>;
   fetchDemandById: (id: string) => Promise<Demand | null>;
@@ -36,6 +37,7 @@ interface DemandStore {
     descricao: string;
     endereco: string;
     prioridade?: DemandPriority;
+    imagens?: string[];
   }) => Promise<Demand>;
   setFilters: (filters: Partial<DemandFilters>) => void;
   resetFilters: () => void;
@@ -142,6 +144,14 @@ export const useDemandStore = create<DemandStore>()(
         if (role === "gestor") {
           await get().fetchMetrics();
         }
+      },
+
+      updateDemandPriority: async (id, newPriority) => {
+        const { token } = get();
+        if (!token) throw new ApiError("Usuário não autenticado", 401);
+
+        const updated = await demandService.updatePriority(token, id, newPriority);
+        get().updateDemand(id, { priority: updated.priority });
       },
 
       setFilters: (newFilters) =>

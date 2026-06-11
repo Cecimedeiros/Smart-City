@@ -63,7 +63,8 @@ export default function Page() {
     (a, b) => (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3)
   );
   
-  const stats = apiMetrics ?? getDemandStats();
+  const hasActiveFilters = !!(filters.status || filters.category || filters.region || filters.priority);
+  const stats = hasActiveFilters ? getDemandStats() : (apiMetrics ?? getDemandStats());
 
   const handleFilterChange = (key: keyof DemandFilters, value: string) => {
     setTempFilters((prev) => ({ ...prev, [key]: value === "" ? "" : (value as any) }));

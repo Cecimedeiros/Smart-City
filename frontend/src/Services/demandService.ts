@@ -5,6 +5,7 @@ import {
   mapDenunciaFromApi,
   mapDenunciasFromApi,
   mapStatusToApi,
+  mapPriorityToApi,
 } from '@/utils/demandMapper';
 import { Demand, DemandCategory, DemandPriority, DemandRegion, DemandStatus } from '@/types/demand';
 
@@ -51,6 +52,7 @@ export const demandService = {
       descricao: string;
       endereco: string;
       prioridade?: DemandPriority;
+      imagens?: string[];
     },
     solicitante = ''
   ): Promise<Demand> {
@@ -71,6 +73,19 @@ export const demandService = {
         method: 'PATCH',
         token,
         body: JSON.stringify({ status: mapStatusToApi(status!) }),
+      }
+    );
+    return mapDenunciaFromApi(result.denuncia);
+  },
+
+  async updatePriority(token?: string, id?: string, priority?: DemandPriority): Promise<Demand> {
+    const result = await apiFetch<{ denuncia: ApiDenuncia }>(
+      DEMAND_API_URL,
+      `/gestor/${id}/prioridade`,
+      {
+        method: 'PATCH',
+        token,
+        body: JSON.stringify({ prioridade: mapPriorityToApi(priority!) }),
       }
     );
     return mapDenunciaFromApi(result.denuncia);

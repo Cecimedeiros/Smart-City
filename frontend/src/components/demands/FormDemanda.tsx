@@ -33,6 +33,7 @@ export function FormDemanda() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const [images, setImages] = useState<(string | null)[]>([null, null, null])
+  const [imagesBase64, setImagesBase64] = useState<(string | null)[]>([null, null, null])
   const [targetIndex, setTargetIndex] = useState<number>(0)
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
@@ -53,10 +54,14 @@ export function FormDemanda() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
-      const url = URL.createObjectURL(file)
-      const newImages = [...images]
-      newImages[targetIndex] = url 
-      setImages(newImages)
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const base64 = ev.target?.result as string
+        const idx = targetIndex
+        setImages((prev) => { const n = [...prev]; n[idx] = base64; return n })
+        setImagesBase64((prev) => { const n = [...prev]; n[idx] = base64; return n })
+      }
+      reader.readAsDataURL(file)
       e.target.value = ""
     }
   }
@@ -66,6 +71,9 @@ export function FormDemanda() {
     const newImages = [...images]
     newImages[indexToRemove] = null
     setImages(newImages)
+    const newBase64 = [...imagesBase64]
+    newBase64[indexToRemove] = null
+    setImagesBase64(newBase64)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,12 +94,15 @@ export function FormDemanda() {
     setLoading(true)
 
     try {
+      const imagensEnviar = imagesBase64.filter((img): img is string => img !== null)
+
       await createDemand({
         titulo: formData.problema,
         categoria: formData.categoria as DemandCategory,
         regiao: formData.regiao as DemandRegion,
         descricao: formData.descricao,
         endereco: formData.endereco,
+        imagens: imagensEnviar.length > 0 ? imagensEnviar : undefined,
       })
 
       alert("✅ Denúncia salva com sucesso!")

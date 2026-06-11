@@ -126,6 +126,7 @@ export interface CreateDenunciaPayload {
   descricao: string;
   endereco: string;
   prioridade?: string;
+  imagens?: string[];
 }
 
 export function buildCreatePayload(input: {
@@ -135,6 +136,7 @@ export function buildCreatePayload(input: {
   descricao: string;
   endereco: string;
   prioridade?: DemandPriority;
+  imagens?: string[];
 }): CreateDenunciaPayload {
   return {
     titulo: input.titulo.slice(0, 50),
@@ -143,5 +145,6 @@ export function buildCreatePayload(input: {
     descricao: input.descricao,
     endereco: input.endereco,
     ...(input.prioridade ? { prioridade: mapPriorityToApi(input.prioridade) } : {}),
+    ...(input.imagens ? { imagens: input.imagens } : {}),
   };
 }
