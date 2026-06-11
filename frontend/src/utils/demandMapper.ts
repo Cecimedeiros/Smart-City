@@ -15,12 +15,8 @@ export interface ApiDenuncia {
   status: string;
   prioridade: string;
   data_registro: string;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
-  imagens?: Array<{ caminho_file: string; legenda: string }>;
+  endereco: string;
+  imagens?: Array<{ caminho_file: string }>;
 }
 
 const CATEGORIA_TO_API: Record<DemandCategory, string> = {
@@ -75,7 +71,7 @@ const PRIORIDADE_FROM_API: Record<string, DemandPriority> = {
 };
 
 function formatEndereco(denuncia: ApiDenuncia): string {
-  return `${denuncia.rua}, ${denuncia.numero} - ${denuncia.bairro}, ${denuncia.cidade} - CEP ${denuncia.cep}`;
+  return denuncia.endereco;
 }
 
 function formatDataRegistro(data: string): string {
@@ -128,11 +124,7 @@ export interface CreateDenunciaPayload {
   categoria: string;
   regiao: string;
   descricao: string;
-  numero: string;
-  cep: string;
-  bairro: string;
-  cidade: string;
-  rua: string;
+  endereco: string;
   prioridade?: string;
 }
 
@@ -149,11 +141,7 @@ export function buildCreatePayload(input: {
     categoria: mapCategoryToApi(input.categoria),
     regiao: mapRegionToApi(input.regiao),
     descricao: input.descricao,
-    rua: input.endereco,
-    numero: 'S/N',
-    cep: '00000-000',
-    bairro: 'Não informado',
-    cidade: 'Recife',
+    endereco: input.endereco,
     ...(input.prioridade ? { prioridade: mapPriorityToApi(input.prioridade) } : {}),
   };
 }
