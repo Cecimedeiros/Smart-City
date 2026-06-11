@@ -40,6 +40,8 @@ async function checkService(name: string, url: string) {
   }
 }
 
+app.get('/ping', (_req, res) => res.json({ status: 'ok' }));
+
 // Rota de Health Check do Gateway e dos Serviços
 app.get('/health', async (_req, res) => {
   const services = await Promise.all([
