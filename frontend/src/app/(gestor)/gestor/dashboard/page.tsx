@@ -62,6 +62,16 @@ export default function Page() {
   const filteredDemands = getFilteredDemands().slice().sort(
     (a, b) => (PRIORITY_ORDER[a.priority] ?? 3) - (PRIORITY_ORDER[b.priority] ?? 3)
   );
+
+  const ALL_CATEGORIES = [
+    'Iluminação Pública', 'Manutenção de vias', 'Saneamento',
+    'Coleta de lixo', 'Fiscalização', 'Segurança',
+    'Sinalização de Trânsito', 'Outros Empecilhos',
+  ];
+  const ALL_REGIONS = [
+    'Região Metropolitana do Recife', 'Zona da Mata',
+    'Agreste', 'Sertão', 'Outra',
+  ];
   
   const hasActiveFilters = !!(filters.status || filters.category || filters.region || filters.priority);
   const stats = hasActiveFilters ? getDemandStats() : (apiMetrics ?? getDemandStats());
@@ -120,26 +130,24 @@ export default function Page() {
             <div className="bg-purple-600 rounded-xl p-6 text-white">
               <p className="text-lg font-bold mb-4 text-white/70">Demandas por categoria</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                {Object.keys(stats.byCategory).length > 0 ? (
-                  Object.entries(stats.byCategory).map(([cat, count]) => (
-                    <div key={cat} className="flex items-center justify-between gap-1">
-                      <span className="truncate">{cat}</span>
-                      <span className="font-bold shrink-0">{count}</span>
-                    </div>
-                  ))
-                ) : <p>Nenhum dado</p>}
+                {ALL_CATEGORIES.map((cat) => (
+                  <div key={cat} className="flex items-center justify-between gap-1">
+                    <span className="truncate">{cat}</span>
+                    <span className="font-bold shrink-0">{stats.byCategory[cat] ?? 0}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="bg-purple-600 rounded-xl p-6 text-white">
               <p className="text-lg font-bold mb-4 text-white/70">Demandas por região</p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                 {Object.entries(stats.byRegion).map(([reg, count]) => (
-                    <div key={reg} className="flex items-center justify-between gap-1">
-                      <span className="truncate">{reg}</span>
-                      <span className="font-bold shrink-0">{count}</span>
-                    </div>
-                  ))}
+                {ALL_REGIONS.map((reg) => (
+                  <div key={reg} className="flex items-center justify-between gap-1">
+                    <span className="truncate">{reg}</span>
+                    <span className="font-bold shrink-0">{stats.byRegion[reg] ?? 0}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

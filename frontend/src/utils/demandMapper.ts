@@ -92,6 +92,7 @@ export function mapDenunciaFromApi(denuncia: ApiDenuncia, solicitante = ''): Dem
     description: denuncia.descricao,
     createdAt: formatDataRegistro(denuncia.data_registro),
     fotoUrl: denuncia.imagens?.[0]?.caminho_file ?? '',
+    imagens: denuncia.imagens?.map((img) => img.caminho_file).filter(Boolean) ?? [],
     endereco,
     solicitante,
     dataRegistro: formatDataRegistro(denuncia.data_registro),

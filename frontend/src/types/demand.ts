@@ -27,6 +27,7 @@ export interface Demand {
   description?: string;
   createdAt?: string;
   fotoUrl?: string;
+  imagens?: string[];
   endereco: string;
   solicitante: string;
   dataRegistro: string;

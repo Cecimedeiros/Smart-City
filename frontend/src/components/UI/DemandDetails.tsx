@@ -45,18 +45,31 @@ export function DemandDetails({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-6">
        
-        <div className="flex flex-col items-center">
-          <p className="text-sm font-semibold text-gray-700 mb-2">Foto anexada:</p>
-          <div className="bg-gray-100 border border-gray-200 rounded-md h-48 w-full flex items-center justify-center text-gray-400 overflow-hidden">
-            {demand.fotoUrl ? (
-              <img src={demand.fotoUrl} alt={demand.problema} className="w-full h-full object-cover" />
-            ) : (
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-sm font-semibold text-gray-700 mb-2">Foto(s) anexada(s):</p>
+          {demand.imagens && demand.imagens.length > 0 ? (
+            <>
+              <div className="bg-gray-100 border border-gray-200 rounded-md h-48 w-full overflow-hidden">
+                <img src={demand.imagens[0]} alt={demand.problema} className="w-full h-full object-cover" />
+              </div>
+              {demand.imagens.length > 1 && (
+                <div className="flex gap-2 w-full">
+                  {demand.imagens.slice(1).map((url, i) => (
+                    <div key={i} className="flex-1 h-20 bg-gray-100 border border-gray-200 rounded-md overflow-hidden">
+                      <img src={url} alt={`Foto ${i + 2}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="bg-gray-100 border border-gray-200 rounded-md h-48 w-full flex items-center justify-center text-gray-400">
               <div className="text-center">
                 <span className="text-2xl block">📷</span>
                 <span className="text-xs">Sem imagem</span>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4 text-sm text-gray-800">
