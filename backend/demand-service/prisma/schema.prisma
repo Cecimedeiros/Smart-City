@@ -38,8 +38,8 @@ model Denuncia {
   data_registro DateTime        @default(now())
   
   // 👉 MODIFICADO: Unificado os 5 campos antigos em um só campo de endereço completo
-  endereco          String
-  nome_solicitante  String?
+  endereco           String
+  email_solicitante  String?
 
   cidadao_id    Int
   cidadao       Cidadao         @relation(fields: [cidadao_id], references: [id_cidadao])

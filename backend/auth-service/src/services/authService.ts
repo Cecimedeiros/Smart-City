@@ -54,7 +54,7 @@ export async function login(email: string, senha: string) {
   }
 
   const papel = usuario.papel.toLowerCase() as 'cidadao' | 'gestor';
-  const token = jwt.sign({ userId: usuario.id, papel, nome: usuario.nome }, SECRET, { expiresIn: '24h' });
+  const token = jwt.sign({ userId: usuario.id, papel, email: usuario.email }, SECRET, { expiresIn: '24h' });
 
   return { token, papel, userId: usuario.id, nome: usuario.nome };
 }
