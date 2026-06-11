@@ -94,6 +94,9 @@ export const useDemandStore = create<DemandStore>()(
             userName: result.nome,
             isLoading: false,
             error: null,
+            demands: [],
+            selectedDemand: null,
+            apiMetrics: null,
           });
         } catch (err) {
           const message =
