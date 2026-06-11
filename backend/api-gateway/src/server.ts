@@ -42,6 +42,15 @@ async function checkService(name: string, url: string) {
 
 app.get('/ping', (_req, res) => res.json({ status: 'ok' }));
 
+app.get('/warmup', async (_req, res) => {
+  Promise.allSettled([
+    fetch(`${AUTH_URL}/health`),
+    fetch(`${DEMAND_URL}/health`),
+    fetch(`${METRICS_URL}/health`),
+  ]);
+  res.json({ status: 'warming up' });
+});
+
 // Rota de Health Check do Gateway e dos Serviços
 app.get('/health', async (_req, res) => {
   const services = await Promise.all([
