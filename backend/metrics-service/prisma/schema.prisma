@@ -1,10 +1,12 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_DEMAND")
+  schemas  = ["demand"]
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 model Denuncia {
@@ -24,6 +26,7 @@ model Denuncia {
   @@index([prioridade])
   @@index([regiao])
   @@map("denuncias")
+  @@schema("demand")
 }
 
 enum Categorias {
@@ -35,6 +38,8 @@ enum Categorias {
   SEGURANCA
   SINALIZACAO_DE_TRANSITO
   OUTROS_EMPECILHOS
+
+  @@schema("demand")
 }
 
 enum Regioes {
@@ -43,16 +48,22 @@ enum Regioes {
   AGRESTE
   SERTAO
   OUTRA
+
+  @@schema("demand")
 }
 
 enum StatusDenuncia {
   ABERTA
   EM_ANALISE
   RESOLVIDA
+
+  @@schema("demand")
 }
 
 enum NivelPrioridade {
   ALTA
   MEDIA
   BAIXA
+
+  @@schema("demand")
 }
