@@ -1,4 +1,4 @@
-# Smart City — Backend
+# RESOLVE — Backend
 
 API REST construída com **Express**, **PostgreSQL**, **Redis** e arquitetura de **microsserviços**.
 

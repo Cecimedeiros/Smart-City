@@ -116,9 +116,9 @@ O painel administrativo acompanha, no mínimo:
 | **Figma** | Protótipo | [Acesse aqui](https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1) |
 | **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
 | **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
-| **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/modeloConceitualDemand.png) |
-| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/modeloLogicoDemand.png) |
-| **Arquitetura** | Desenho da Arquitetura em Microsserviços | [Acesse aqui]() |
+| **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/ModeloConceitualDemand.png) |
+| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/ModeloLogicoDemand.png) |
+| **LucidChart** | Desenho da Arquitetura em Microsserviços | [Acesse aqui](public/images/Arquitetura_microsservicos.png) |
 
 
 ---
@@ -133,7 +133,7 @@ npm run dev
 ```
 > Disponível em http://localhost:3000
 
-### Backend (FastAPI)
+### Backend
 ```bash
 cd D:\Desktop\Smart-City\backend
 copy .env.example .env.local
