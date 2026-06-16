@@ -178,7 +178,7 @@ Técnicas rigorosas foram implementadas para proteger a memória, o tempo de res
 | Ferramenta Utilizada | Material | Links |
 | :--- | :--- | :---
 | **Figma** | Protótipo | [Acesse aqui](https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1) |
-| **Documentação Técnica** | **Detalhamento da API** | **[Acesse aqui](https://docs.google.com/document/d/1cBQJqHy_E8-vSfgepg6v97NprsUd_zqekr1v5WUOfjE/edit?usp=sharing) |
+| **Documentação Técnica** | **Detalhamento da API** | [Acesse aqui](https://docs.google.com/document/d/1cBQJqHy_E8-vSfgepg6v97NprsUd_zqekr1v5WUOfjE/edit?usp=sharing) |
 | **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
 | **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
 | **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/ModeloConceitualDemand.png) |
