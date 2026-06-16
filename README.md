@@ -137,6 +137,31 @@ Para garantir a escalabilidade e a separação de responsabilidades exigida pelo
 
 ---
 
+##  Arquitetura Avançada: Concorrência, Paralelismo e Otimização
+
+A arquitetura da plataforma **RESOLVE** foi desenhada para operar como um sistema distribuído de alta disponibilidade e resiliência. Abaixo estão mapeados os padrões implementados na infraestrutura e no código:
+
+###  Concorrência (Event-Driven & Background Jobs)
+A aplicação tira proveito do Event Loop do Node.js e de uma arquitetura orientada a eventos para não bloquear a thread principal durante processamentos pesados:
+
+* **Mensageria e Filas (Redis):** O `demand-service` não trava a requisição aguardando a atualização das métricas. Ao alterar um status, ele delega a tarefa disparando eventos de forma assíncrona (`lPush` na fila `smartcity:event-queue` e `publish` no canal `smartcity:denuncia-status`) e devolve a resposta imediatamente ao gestor.
+* **Workers em Segundo Plano:** O `metrics-service` possui *workers* dedicados (`startEventSubscriber` e `startQueueWorker`) que escutam ativamente o Redis. Eles processam as atualizações de KPIs em background, lidando com falhas através de políticas de *retry* (`withRetry`).
+* **Agregação Assíncrona (`Promise.all`):** No cálculo de métricas, múltiplas consultas de leitura (total, categorias, regiões e status) são disparadas simultaneamente. O Node.js gerencia essas requisições concorrentemente, reduzindo o tempo de carregamento do dashboard.
+
+###  Paralelismo (Processamento Distribuído)
+O paralelismo real do sistema é alcançado através da sua infraestrutura, tirando proveito de múltiplos recursos computacionais:
+
+* **Ecossistema de Microsserviços (Docker):** O `api-gateway` (porta 8080), `auth-service` (3001), `demand-service` (3002) e `metrics-service` (3003) operam como processos independentes. Eles rodam simultaneamente, dividindo a carga de CPU do servidor host.
+* **Execução no Banco de Dados:** Quando o back-end dispara as requisições concorrentes de métricas, o PostgreSQL executa essas queries de leitura pesada paralelamente em seus próprios processos internos.
+
+###  Otimização, Resiliência e Segurança
+Técnicas rigorosas foram implementadas para proteger a memória, o tempo de resposta e a estabilidade do servidor:
+
+* **Camada de Cache (Redis):** KPIs processados são cacheados com um *Time To Live* (TTL) de 5 minutos. Isso blinda o banco de dados contra centenas de consultas analíticas repetitivas quando múltiplos gestores acessam o painel ao mesmo tempo.
+* **Rate Limiting (API Gateway):** O proxy de entrada (porta 8080) possui um limitador estrito de **200 requisições a cada 15 minutos por IP**. Essa barreira previne que picos de uso repentinos ou ataques de negação de serviço (DDoS) saturem os microsserviços.
+* **Mecanismos de Fail-Safe e Timeout:** A renovação do cache de métricas utiliza um `Promise.race` com um limite de 5 segundos. Isso garante que a aplicação rejeite a operação rapidamente caso o banco de dados trave, evitando que o sistema inteiro congele esperando uma resposta infinita.
+* **Health Checks Ativos:** O Gateway possui uma rota `/health` que realiza chamadas concorrentes (`Promise.all`) para validar o status de todos os microsserviços, reportando a integridade da infraestrutura em tempo real.
+
 ## 🔗 Links Úteis
 
 | Ferramenta Utilizada | Material | Links |
