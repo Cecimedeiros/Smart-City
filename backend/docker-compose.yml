@@ -74,6 +74,3 @@ services:
       - demand-service
       - metrics-service
 
-volumes:
-  auth_postgres_data:
-  demand_postgres_data:

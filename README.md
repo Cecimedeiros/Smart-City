@@ -186,7 +186,7 @@ Técnicas rigorosas foram implementadas para proteger a memória, o tempo de res
 | **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
 | **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
 | **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/ModeloConceitualDemand.png) |
-| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/ModeloLogicoDemandv2.png) |
+| **BRmodelo** | Modelagem lógica - Demand | [Acesse aqui](public/images/ModeloLogicoDemandv2.png) |
 | **LucidChart** | Desenho da Arquitetura em Microsserviços | [Acesse aqui](public/images/Arquitetura_microsservicos.png) |
 
 
@@ -202,15 +202,19 @@ npm run dev
 ```
 > Disponível em http://localhost:3000
 
-### Backend
+### Backend e Banco de Dados
 ```bash
-cd D:\Desktop\Smart-City\backend
+cd backend
 copy .env.example .env.local
 docker compose --env-file .env.local up -d --build
+
+docker compose --env-file .env.local exec auth-service npx prisma generate
 docker compose --env-file .env.local exec auth-service npx prisma migrate deploy
+
+docker compose --env-file .env.local exec demand-service npx prisma generate
 docker compose --env-file .env.local exec demand-service npx prisma migrate deploy
 ```
-> Disponível em http://localhost:8000
+> Disponível em http://localhost:8080
 
 ---
 
