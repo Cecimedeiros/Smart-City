@@ -110,30 +110,18 @@ O painel administrativo acompanha, no mínimo:
 ---
 
 #### 📡 Documentação da API
+A plataforma RESOLVE utiliza um API Gateway como ponto central de entrada (Porta 8080), que gerencia o tráfego e a segurança entre o frontend e os microsserviços internos.
 
-A plataforma **RESOLVE** utiliza um **API Gateway** como ponto central de entrada (Porta 8080), que gerencia o tráfego e a segurança entre o frontend e os microsserviços internos.
-
-*   **Ponto Único de Entrada:** `http://localhost:8080`
-*   **Padronização:** Todas as trocas de dados são realizadas via **JSON**.
+* **Ponto Único de Entrada:** `http://localhost:8080`
+* **Padronização:** Todas as trocas de dados são realizadas via JSON.
 
 | Serviço | Método | Endpoint | Descrição |
 | :--- | :--- | :--- | :--- |
-| **Sistema** | GET | `/health` | Verifica a saúde e disponibilidade dos serviços. |
-| **Autenticação** | POST | `/auth/login` | Autentica o usuário e gera o token de acesso (JWT). |
-| **Demandas** | GET | `/demands` | Lista todas as demandas (com suporte a filtros avançados). |
-| **Demandas** | POST | `/demands` | Registra uma nova ocorrência urbana no sistema. |
-| **Métricas** | GET | `/metrics` | Retorna KPIs e indicadores operacionais para o gestor. |
-
-##### 🏗️ Estrutura e Camadas do Backend
-Para garantir a escalabilidade e a separação de responsabilidades exigida pelo projeto, cada microsserviço é organizado da seguinte forma:
-
-1.  **Routes:** Identificam o endpoint e direcionam para o controller correto.
-2.  **Controllers:** Processam a entrada de dados e gerenciam a resposta da requisição.
-3.  **Services:** Contêm as regras de negócio e lógica da plataforma RESOLVE.
-4.  **Prisma/Repository:** Camada de persistência que interage diretamente com o banco de dados.
-
----
-> 💡 **Nota Técnica:** Para especificações detalhadas de payloads (corpo da requisição), cabeçalhos e tratamento de erros, consulte o documento técnico de API disponível na raiz deste repositório.
+| **Monitoramento** | `GET` | `/health` | Verifica a saúde e disponibilidade dos serviços. |
+| **Autenticação** | `POST` | `/auth/login` | Autentica o usuário e gera o token de acesso (JWT). |
+| **Demandas** | `GET` | `/demands` | Lista todas as demandas (com suporte a filtros avançados). |
+| **Demandas** | `POST` | `/demands` | Registra uma nova ocorrência urbana no sistema. |
+| **Métricas** | `GET` | `/metrics` | Retorna KPIs e indicadores operacionais para o gestor. |
 
 ---
 
@@ -182,7 +170,7 @@ Técnicas rigorosas foram implementadas para proteger a memória, o tempo de res
 | Ferramenta Utilizada | Material | Links |
 | :--- | :--- | :---
 | **Figma** | Protótipo | [Acesse aqui](https://www.figma.com/design/5qGAuNGrMKdG7AgXjG77YX/Smart-City?node-id=0-1&t=ew4wGee8wgaJ4qCo-1) |
-| **Documentação Técnica** | **Detalhamento da API** | [Acesse aqui](https://docs.google.com/document/d/1cBQJqHy_E8-vSfgepg6v97NprsUd_zqekr1v5WUOfjE/edit?usp=sharing) |
+| **Postman** | Documentação Pública da API | [Acesse aqui](https://documenter.getpostman.com/view/40719566/2sBXwtrADd) |
 | **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
 | **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
 | **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/ModeloConceitualDemand.png) |
