@@ -150,6 +150,8 @@ A aplicação tira proveito do Event Loop do Node.js e de uma arquitetura orient
 * **Timeout no Publish do Redis (`Promise.race`):** Ao publicar um evento de mudança de status no Redis, o `demand-service` disputa a operação contra um temporizador de 3 segundos. Caso o Redis demore ou falhe, a corrida rejeita a promise e loga o erro — sem travar a thread que já devolveu a resposta HTTP ao gestor.
 * **Controle de Concorrência com Transações (`prisma.$transaction`):** As operações de atualização de status e de prioridade de uma demanda são executadas dentro de uma transação atômica. A gravação na tabela `denuncias` e a criação do registro em `historicos` acontecem como uma unidade indivisível — se qualquer etapa falhar, tudo é revertido, prevenindo inconsistências quando múltiplas requisições concorrentes chegam ao mesmo tempo.
 * **Limite de Reconexão do Redis com Backoff Progressivo:** A configuração do cliente Redis define uma estratégia de reconexão com no máximo 3 tentativas, aplicando um atraso progressivo entre elas (`retries * 200ms` — ou seja, 200ms, 400ms e 600ms). Após esgotar as tentativas, a conexão é encerrada em vez de tentar indefinidamente. Isso evita rajadas de reconexão que sobrecarregariam o servidor Redis em caso de falha.
+* **Nível de Isolamento de Transação (Read Committed)** Por padrão, as transações do Prisma (prisma.$transaction) no PostgreSQL operam sob o nível de isolamento Read Committed. Isso garante concorrência segura que se, por exemplo, dois gestores tentarem atualizar o status da mesma denúncia ao mesmo tempo, o banco garante que a segunda transação só lerá os dados após a primeira dar commit, evitando o Dirty Reads. 
+* **Mecanismo de Lock Implícito:** Durante a execução de um prisma.denuncia.update dentro do bloco de transação, o PostgreSQL aplica um bloqueio exclusivo de linha. Isso impede que requisições concorrentes alterem o registro da denúncia no exato milissegundo em que o histórico está sendo gerado, blindando o sistema contra Race Conditions. 
 
 ###  Paralelismo (Processamento Distribuído)
 O paralelismo real do sistema é alcançado através da sua infraestrutura, tirando proveito de múltiplos recursos computacionais:
@@ -158,6 +160,7 @@ O paralelismo real do sistema é alcançado através da sua infraestrutura, tira
 * **Execução no Banco de Dados:** Quando o back-end dispara as requisições concorrentes de métricas, o PostgreSQL executa essas queries de leitura pesada paralelamente em seus próprios processos internos.
 * **Listagens Paginadas com Contagem Paralela (`Promise.all`):** Nas funções `listDenunciasByCidadao` e `listAllDenuncias` do `demand-service`, a contagem total de registros (`COUNT`) e a busca paginada (`findMany`) são disparadas simultaneamente com `Promise.all`. O banco executa ambas as queries em paralelo, reduzindo o tempo de resposta de cada listagem em comparação com execução sequencial.
 * **Aquecimento de Serviços Não-Bloqueante (`Promise.allSettled`):** O `api-gateway` expõe um endpoint `/warmup` que dispara pings simultâneos para os três microsserviços sem aguardar nenhuma resposta (*fire-and-forget*). O uso de `Promise.allSettled` garante que a falha de um serviço não impeça o retorno imediato do gateway — o cliente recebe `200` enquanto os processos são acordados em paralelo.
+* **Workers Paralelos do PostgreSQL:** O PostgreSQL do Supabase é configurado para alocar múltiplos Background Workers para executar varreduras e agregações paralelas na CPU do servidor de banco de dados. Quando o metrics-service dispara as queries analíticas, o banco pode dividir a tabela denuncias em blocos e processar a contagem por categorias em paralelo, utilizando múltiplos núcleos de processamento do servidor.
 
 ###  Otimização, Resiliência e Segurança
 Técnicas rigorosas foram implementadas para proteger a memória, o tempo de resposta e a estabilidade do servidor:
@@ -172,6 +175,7 @@ Técnicas rigorosas foram implementadas para proteger a memória, o tempo de res
 * **Atualização Local sem Re-fetch Total:** Ao alterar o status ou a prioridade de uma demanda, a interface atualiza apenas o registro afetado no estado local (Zustand) com base na resposta da API, sem disparar um novo carregamento de todas as demandas. Isso reduz o número de requisições desnecessárias e mantém a interface responsiva.
 * **Persistência Seletiva no Frontend (`partialize`):** O estado global do Zustand utiliza a opção `partialize` para persistir no `localStorage` apenas os dados essenciais de sessão (`token`, `role`, `userEmail`, `userName`). Dados volumosos e potencialmente desatualizados como `demands`, `filters` e `apiMetrics` são **excluídos da persistência**, evitando leitura de cache obsoleto e consumo desnecessário de armazenamento local.
 * **Monitoramento Ativo contra Cold Start (UptimeRobot + `/warmup`):** Um monitor externo (UptimeRobot) acessa o endpoint `/warmup` do gateway a cada 5 minutos, mantendo todos os microsserviços do Render em execução contínua. Sem esse mecanismo, o plano gratuito hiberna os serviços após 15 minutos de inatividade, causando cold starts de aproximadamente 30 segundos para o próximo usuário que acessar a plataforma.
+* **Minimização de Escrita via Enums Nativos:** A otimização do armazenamento e da paginação no banco é impulsionada pelo uso de CREATE TYPE ... AS ENUM nas tabelas. Ao invés de trafegar strings longas de texto (como 'REGIAO_METROPOLITANA_DO_RECIFE'), o PostgreSQL armazena internamente esses valores como identificadores numéricos de 4 bytes, reduzindo drasticamente o tamanho do índice em memória e acelerando o tempo de varredura das listagens paginadas.
 
 ## 🔗 Links Úteis
 
@@ -182,7 +186,7 @@ Técnicas rigorosas foram implementadas para proteger a memória, o tempo de res
 | **BRmodelo** | Modelagem conceitual - Auth | [Acesse aqui](public/images/modeloConceitualAuth.png) |
 | **BRmodelo** | Modelagem lógica - Auth | [Acesse aqui](public/images/modeloLogicoAuth.png) |
 | **BRmodelo** | Modelagem conceitual - Demand | [Acesse aqui](public/images/ModeloConceitualDemand.png) |
-| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/ModeloLogicoDemand.png) |
+| **BRmodelo** | Modelagem lógica - Deman | [Acesse aqui](public/images/ModeloLogicoDemandv2.png) |
 | **LucidChart** | Desenho da Arquitetura em Microsserviços | [Acesse aqui](public/images/Arquitetura_microsservicos.png) |
 
 
