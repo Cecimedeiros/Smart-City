@@ -5,33 +5,34 @@ import rateLimit from 'express-rate-limit';
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://smart-city-vhvq.vercel.app');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-});
-
 const AUTH_URL = process.env.AUTH_SERVICE_URL ?? 'http://localhost:3001';
 const DEMAND_URL = process.env.DEMAND_SERVICE_URL ?? 'http://localhost:3002';
 const METRICS_URL = process.env.METRICS_SERVICE_URL ?? 'http://localhost:3003';
 
+// Configuração de CORS
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  next();
+});
+
+app.options('*', (_req, res) => res.sendStatus(204));
+
+// Rate Limiter para segurança da API
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 200, 
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 200, // Limite de 200 requisições por IP
     standardHeaders: true,
     legacyHeaders: false,
   })
 );
 
+// Função auxiliar modificada para testar a saúde dos microsserviços usando os caminhos corretos
 async function checkService(name: string, url: string) {
   try {
+    // Voltando para o /health seco, já que o microsserviço não usa prefixo interno
     const res = await fetch(`${url}/health`);
     return { name, status: res.ok ? 'ok' : 'error', code: res.status };
   } catch {
@@ -50,6 +51,7 @@ app.get('/warmup', async (_req, res) => {
   res.json({ status: 'warming up' });
 });
 
+// Rota de Health Check do Gateway e dos Serviços
 app.get('/health', async (_req, res) => {
   const services = await Promise.all([
     checkService('auth-service', AUTH_URL),
@@ -65,20 +67,16 @@ app.get('/health', async (_req, res) => {
   });
 });
 
+// Proxy para o Serviço de Autenticação
 app.use(
   '/auth',
   createProxyMiddleware({
     target: AUTH_URL,
     changeOrigin: true,
-    onProxyRes: function (proxyRes, req, res) {
-      proxyRes.headers['Access-Control-Allow-Origin'] = 'https://smart-city-vhvq.vercel.app';
-      proxyRes.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
-      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS';
-      proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
-    },
   })
 );
 
+// Proxy para o Serviço de Métricas
 app.use(
   '/metrics',
   createProxyMiddleware({
@@ -87,13 +85,14 @@ app.use(
   })
 );
 
+// Proxy para o Serviço de Demandas (Ajustado para preservar o prefixo esperado pelo microsserviço)
 app.use(
   '/demands',
   createProxyMiddleware({
     target: DEMAND_URL,
     changeOrigin: true,
     pathRewrite: {
-      '^/demands': '/demandas', 
+      '^/demands': '/demandas', // ← era '', agora mapeia certo
     },
   })
 );
