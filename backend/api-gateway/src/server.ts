@@ -70,6 +70,12 @@ app.use(
   createProxyMiddleware({
     target: AUTH_URL,
     changeOrigin: true,
+    onProxyRes: function (proxyRes, req, res) {
+      proxyRes.headers['Access-Control-Allow-Origin'] = 'https://smart-city-vhvq.vercel.app';
+      proxyRes.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization';
+      proxyRes.headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, PUT, DELETE, OPTIONS';
+      proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
+    },
   })
 );
 
