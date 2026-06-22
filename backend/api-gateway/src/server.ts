@@ -5,10 +5,6 @@ import rateLimit from 'express-rate-limit';
 
 const app = express();
 
-const AUTH_URL = process.env.AUTH_SERVICE_URL ?? 'http://localhost:3001';
-const DEMAND_URL = process.env.DEMAND_SERVICE_URL ?? 'http://localhost:3002';
-const METRICS_URL = process.env.METRICS_SERVICE_URL ?? 'http://localhost:3003';
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://smart-city-vhvq.vercel.app');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -21,7 +17,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.options('*', (_req, res) => res.sendStatus(204));
+const AUTH_URL = process.env.AUTH_SERVICE_URL ?? 'http://localhost:3001';
+const DEMAND_URL = process.env.DEMAND_SERVICE_URL ?? 'http://localhost:3002';
+const METRICS_URL = process.env.METRICS_SERVICE_URL ?? 'http://localhost:3003';
 
 app.use(
   rateLimit({
@@ -34,7 +32,6 @@ app.use(
 
 async function checkService(name: string, url: string) {
   try {
-    
     const res = await fetch(`${url}/health`);
     return { name, status: res.ok ? 'ok' : 'error', code: res.status };
   } catch {
