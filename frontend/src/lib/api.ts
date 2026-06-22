@@ -1,7 +1,6 @@
 export const API_GATEWAY_URL =
-  process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://smartcity-gateway.onrender.com';
+  process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://smart-city-production-16f9.up.railway.app';
 
-// 👉 CORRIGIDO: Agora tudo passa pelos prefixos do API Gateway
 export const AUTH_API_URL = `${API_GATEWAY_URL}/auth`;
 export const DEMAND_API_URL = `${API_GATEWAY_URL}/demands`;
 export const METRICS_API_URL = `${API_GATEWAY_URL}/metrics`;
@@ -27,13 +26,11 @@ export async function apiFetch<T>(
 ): Promise<T> {
   let { token, headers, ...rest } = options;
 
-  // 👉 CORRIGIDO PARA O ZUSTAND PERSIST:
   if (!token && typeof window !== 'undefined') {
     try {
-      // 1. Pega a string grandona que o Zustand salvou
       const storageJson = localStorage.getItem('smart-city-storage-v2');
       if (storageJson) {
-        // 2. Transforma em objeto e navega até o token que está dentro de "state"
+        
         const parsed = JSON.parse(storageJson);
         token = parsed?.state?.token || undefined;
       }
