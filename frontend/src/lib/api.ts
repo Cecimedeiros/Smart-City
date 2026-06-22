@@ -1,7 +1,6 @@
 export const API_GATEWAY_URL =
-  process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://smartcity-gateway.onrender.com';
+  process.env.NEXT_PUBLIC_API_GATEWAY_URL ?? 'https://smart-city-6.onrender.com';
 
-// 👉 CORRIGIDO: Agora tudo passa pelos prefixos do API Gateway
 export const AUTH_API_URL = `${API_GATEWAY_URL}/auth`;
 export const DEMAND_API_URL = `${API_GATEWAY_URL}/demands`;
 export const METRICS_API_URL = `${API_GATEWAY_URL}/metrics`;
